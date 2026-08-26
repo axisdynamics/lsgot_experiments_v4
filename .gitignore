@@ -1,0 +1,23 @@
+# Documento interno de procedencia (rutas absolutas de la máquina local) — no publicar
+FUENTES.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Embeddings/trayectorias crudas — nunca deben terminar en este repo
+# (v_identidad.npy es un vector derivado de 21KB, no un embedding crudo — no cae bajo *.npz)
+*.npz
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs / caches de corridas
+*.log
+cache_*/
