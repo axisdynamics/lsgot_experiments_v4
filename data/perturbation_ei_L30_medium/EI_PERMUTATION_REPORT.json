@@ -1,0 +1,266 @@
+{
+  "tau_tokens": {
+    "axis": {
+      "50": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 20.7,
+        "mean_orthogonal": 21.9,
+        "delta": -1.1999999999999993,
+        "p_value": 0.351,
+        "cohens_d": -0.15037144093189325,
+        "interpretation": "negligible"
+      },
+      "128": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 18.8,
+        "mean_orthogonal": 18.2,
+        "delta": 0.6000000000000014,
+        "p_value": 0.392,
+        "cohens_d": 0.09991239595339964,
+        "interpretation": "negligible"
+      },
+      "200": {
+        "n_along": 18,
+        "n_orthogonal": 19,
+        "mean_along": 16.77777777777778,
+        "mean_orthogonal": 16.526315789473685,
+        "delta": 0.2514619883040936,
+        "p_value": 0.477,
+        "cohens_d": 0.03351681423603494,
+        "interpretation": "negligible"
+      }
+    },
+    "axis_pec_only": {
+      "50": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 24.45,
+        "mean_orthogonal": 21.45,
+        "delta": 3.0,
+        "p_value": 0.148,
+        "cohens_d": 0.3404939550539066,
+        "interpretation": "small"
+      },
+      "128": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 19.4,
+        "mean_orthogonal": 18.2,
+        "delta": 1.1999999999999993,
+        "p_value": 0.271,
+        "cohens_d": 0.1946657053569149,
+        "interpretation": "negligible"
+      },
+      "200": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 17.3,
+        "mean_orthogonal": 17.55,
+        "delta": -0.25,
+        "p_value": 0.48,
+        "cohens_d": -0.030428141273783176,
+        "interpretation": "negligible"
+      }
+    }
+  },
+  "displacement_l2": {
+    "axis": {
+      "50": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 469.19177398681643,
+        "mean_orthogonal": 439.32106018066406,
+        "delta": 29.870713806152366,
+        "p_value": 0.158,
+        "cohens_d": 0.3202534528756982,
+        "interpretation": "small"
+      },
+      "128": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 475.1494903564453,
+        "mean_orthogonal": 450.3304382324219,
+        "delta": 24.819052124023415,
+        "p_value": 0.203,
+        "cohens_d": 0.2459583739865239,
+        "interpretation": "small"
+      },
+      "200": {
+        "n_along": 18,
+        "n_orthogonal": 19,
+        "mean_along": 478.86776055230035,
+        "mean_orthogonal": 451.9730112176192,
+        "delta": 26.894749334681137,
+        "p_value": 0.103,
+        "cohens_d": 0.4051936182526407,
+        "interpretation": "small"
+      }
+    },
+    "axis_pec_only": {
+      "50": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 498.8449142456055,
+        "mean_orthogonal": 479.77416229248047,
+        "delta": 19.07075195312501,
+        "p_value": 0.229,
+        "cohens_d": 0.20679802423311652,
+        "interpretation": "small"
+      },
+      "128": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 504.3735641479492,
+        "mean_orthogonal": 486.71421966552737,
+        "delta": 17.65934448242183,
+        "p_value": 0.199,
+        "cohens_d": 0.2657295695028779,
+        "interpretation": "small"
+      },
+      "200": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 476.61036529541013,
+        "mean_orthogonal": 456.51823272705076,
+        "delta": 20.092132568359375,
+        "p_value": 0.244,
+        "cohens_d": 0.23305733003607856,
+        "interpretation": "small"
+      }
+    }
+  },
+  "sampen_delta": {
+    "axis": {
+      "50": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": -0.05277671159194751,
+        "mean_orthogonal": -0.037717044355108885,
+        "delta": -0.015059667236838624,
+        "p_value": 0.401,
+        "cohens_d": -0.06877823267938707,
+        "interpretation": "negligible"
+      },
+      "128": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": -0.05515481917254632,
+        "mean_orthogonal": -0.10870549483626972,
+        "delta": 0.0535506756637234,
+        "p_value": 0.312,
+        "cohens_d": 0.12842520884907707,
+        "interpretation": "negligible"
+      },
+      "200": {
+        "n_along": 18,
+        "n_orthogonal": 19,
+        "mean_along": -4.3044782232777345,
+        "mean_orthogonal": 0.9827875608598022,
+        "delta": -5.287265784137537,
+        "p_value": 0.043,
+        "cohens_d": -0.5799104307763759,
+        "interpretation": "medium"
+      }
+    },
+    "axis_pec_only": {
+      "50": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": -0.05619414516182854,
+        "mean_orthogonal": -0.04710137294871898,
+        "delta": -0.009092772213109557,
+        "p_value": 0.433,
+        "cohens_d": -0.04541891850083241,
+        "interpretation": "negligible"
+      },
+      "128": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 0.19377460617472245,
+        "mean_orthogonal": 0.10983549780749739,
+        "delta": 0.08393910836722505,
+        "p_value": 0.19,
+        "cohens_d": 0.2491733393600357,
+        "interpretation": "small"
+      },
+      "200": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 1.0629578776849056,
+        "mean_orthogonal": 0.15917933679173216,
+        "delta": 0.9037785408931734,
+        "p_value": 0.394,
+        "cohens_d": 0.1325012941822555,
+        "interpretation": "negligible"
+      }
+    }
+  },
+  "w1_norms_post": {
+    "axis": {
+      "50": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 9.283817380145914,
+        "mean_orthogonal": 10.335539878919286,
+        "delta": -1.0517224987733726,
+        "p_value": 0.23,
+        "cohens_d": -0.22927538051746213,
+        "interpretation": "small"
+      },
+      "128": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 12.855371683835983,
+        "mean_orthogonal": 10.324028527736663,
+        "delta": 2.53134315609932,
+        "p_value": 0.146,
+        "cohens_d": 0.32853829136215296,
+        "interpretation": "small"
+      },
+      "200": {
+        "n_along": 18,
+        "n_orthogonal": 19,
+        "mean_along": 11.134276314387245,
+        "mean_orthogonal": 11.978494170913123,
+        "delta": -0.8442178565258782,
+        "p_value": 0.346,
+        "cohens_d": -0.12738955600978685,
+        "interpretation": "negligible"
+      }
+    },
+    "axis_pec_only": {
+      "50": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 10.461995071114846,
+        "mean_orthogonal": 10.085934522313979,
+        "delta": 0.3760605488008668,
+        "p_value": 0.384,
+        "cohens_d": 0.0635814092484568,
+        "interpretation": "negligible"
+      },
+      "128": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 10.084664988517762,
+        "mean_orthogonal": 12.000938248634338,
+        "delta": -1.9162732601165757,
+        "p_value": 0.138,
+        "cohens_d": -0.35485404086309974,
+        "interpretation": "small"
+      },
+      "200": {
+        "n_along": 20,
+        "n_orthogonal": 20,
+        "mean_along": 16.03232560838972,
+        "mean_orthogonal": 15.998838288443432,
+        "delta": 0.033487319946287286,
+        "p_value": 0.502,
+        "cohens_d": 0.00299261610790878,
+        "interpretation": "negligible"
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "axis": {
+    "baseline": 20,
+    "perturbed_t50": 20,
+    "perturbed_t128": 20,
+    "perturbed_t200": 20
+  },
+  "generic_long": {
+    "baseline": 20,
+    "perturbed_t50": 20,
+    "perturbed_t128": 20,
+    "perturbed_t200": 20
+  },
+  "generic_short": {
+    "baseline": 20,
+    "perturbed_t50": 20,
+    "perturbed_t128": 20,
+    "perturbed_t200": 20
+  },
+  "vanilla": {
+    "baseline": 20,
+    "perturbed_t50": 20,
+    "perturbed_t128": 20,
+    "perturbed_t200": 20
+  },
+  "axis_short": {
+    "baseline": 20,
+    "perturbed_t50": 20,
+    "perturbed_t128": 20,
+    "perturbed_t200": 20
+  },
+  "chileatiende": {
+    "baseline": 19,
+    "perturbed_t50": 19,
+    "perturbed_t128": 18,
+    "perturbed_t200": 18
+  },
+  "automata_neutro": {
+    "baseline": 19,
+    "perturbed_t50": 17,
+    "perturbed_t128": 15,
+    "perturbed_t200": 14
+  },
+  "chileatiende_sia": {
+    "baseline": 19,
+    "perturbed_t50": 19,
+    "perturbed_t128": 19,
+    "perturbed_t200": 19
+  },
+  "chileatiende_sia_v2": {
+    "baseline": 19,
+    "perturbed_t50": 19,
+    "perturbed_t128": 19,
+    "perturbed_t200": 19
+  },
+  "axis_pec_only": {
+    "baseline": 19,
+    "perturbed_t50": 19,
+    "perturbed_t128": 19,
+    "perturbed_t200": 19
+  }
+}
