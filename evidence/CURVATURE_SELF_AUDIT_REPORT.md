@@ -5,7 +5,9 @@
 `REPORTE_FASE0.md` (auditoría pre-registrada sobre un panel hermano: Gemma-4-E4B/-it,
 DeepSeek-R1-Distill-Qwen-7B, Qwen2.5-7B-Instruct) nunca se había corrido sobre el
 panel de este paper.
-**Scripts:** `scripts/audit_curvatura/` (adaptados de `MIA-experiments/fase0/scripts/`)
+**Scripts:** `scripts/audit_curvatura/` (adaptados de `MIA-experiments/fase0/scripts/`;
+`exp03b_ollivier_splithalf.py` requiere `GraphRicciCurvature` + `POT`, no en el
+entorno base — ver `pip install GraphRicciCurvature POT`)
 **Datos:** `data/sia_extended_v5/_graphs.json` (grafos k-NN ya construidos, incluido
 en este repo) + embeddings crudos externos (excluidos por tamaño, ver README.md)
 
@@ -68,6 +70,42 @@ consistente con lo que ya muestran PR, RQA y v̂ en el resto del paper — no es
 hallazgo nuevo, es una confirmación independiente de que esta familia de métricas
 no debería usarse como evidencia de identidad, ni siquiera secundaria.
 
+## 1b. La métrica que se pretendía calcular desde el origen: Ollivier-Ricci genuina
+
+Dado §0, la pregunta obvia es si el propio Ollivier-Ricci — nunca corrido en este
+proyecto, pese a estar citado desde `lsgot_3` — muestra algo distinto. Se corrió
+con `GraphRicciCurvature.OllivierRicci` (Ni, Lin, Gao, Gu & Saucan — implementación
+de referencia, transporte óptimo exacto vía LP, método `OTD`), `alpha=0.5` (el
+mismo que §2.3 de `lsgot_4.md` ya citaba sin haberlo usado nunca), sobre los
+mismos grafos k-NN y el mismo protocolo de split-half (`exp03b_ollivier_splithalf.py`).
+
+**Aviso de conversión de peso:** `_graphs.json` guarda `weight = 1/(1+cos_dist)`
+(similitud). `OllivierRicci` espera una distancia de grafo para Dijkstra/transporte.
+Se reconstruyó `cos_dist = 1/weight - 1` antes de construir cada grafo — sin esta
+conversión el resultado sale invertido.
+
+| Par | W₁ observado (Ollivier) | vs. piso de A | vs. piso de B | Veredicto |
+|---|---|---|---|---|
+| `axis_pec_only` vs `automata_neutro` | 0.723 | pct 0.0%, ×64.3 | pct 10.7%, ×2.2 | señal fuerte |
+| `automata_neutro` vs `vanilla` | 0.733 | pct 10.1%, ×2.3 | pct 0.0%, ×84.0 | señal fuerte |
+| **`axis_pec_only` vs `vanilla`** (identidad pura) | **0.024** | **pct 0.3%, ×2.1** | **pct 0.0%, ×2.7** | **señal, fuera del ruido** |
+| `axis` vs `vanilla` | 0.020 | pct 5.7%, ×1.9 | pct 0.6%, ×2.3 | marginal/señal |
+
+Curvatura media por condición: `axis` −0.216, `axis_pec_only` −0.221, `vanilla`
+−0.198 (las tres cercanas entre sí) vs **`automata_neutro` −0.681** (mucho más
+hiperbólica/divergente — restricción sigue siendo el efecto dominante).
+
+**Esto revisa, no invierte, la lectura de §1.** Bajo Ollivier-Ricci genuina, la
+comparación de identidad pura (`axis_pec_only` vs `vanilla`) **sí sale del piso
+de ruido** — algo que Forman-Ricci, tal como estaba implementada, no detectaba en
+absoluto (91.8%/94.6% percentil, 0.4-0.5× la mediana). La curvatura discreta
+"real" no es ciega a la identidad; la que el proyecto venía calculando por error
+sí lo era. Restricción sigue siendo, con ambas fórmulas, el efecto de mayor
+magnitud (`automata_neutro` domina en curvatura media y en W₁ absoluto), pero
+ya no es correcto decir que la curvatura "solo ve restricción" — esa era una
+propiedad de Forman-Ricci específicamente, no de la curvatura discreta en general.
+Ver §2 para si esto sobrevive frente a los baselines simples.
+
 ## 2. Exp 0.2 análogo — ¿la curvatura detecta algo que los baselines simples no?
 
 **Método:** para los mismos 4 pares, se compara Forman-Ricci W₁ contra: distancia
@@ -90,6 +128,16 @@ método, que `REPORTE_FASE0.md` §Exp 0.2 encontró en el panel hermano (12/12
 comparaciones, baselines ganan). La curvatura no aporta nada que la distancia de
 centroides o un probe lineal no capturen ya, más barato y sin las 4 aristas/ciclos
 por trayectoria que exige el cómputo de Forman.
+
+**Esto no cambia con Ollivier-Ricci (§1b).** Los baselines no dependen de qué
+fórmula de curvatura se use — ya detectaban las 4 comparaciones con AUC=1.000
+antes de correr Ollivier. La diferencia que trae §1b no es "curvatura le gana a
+los baselines en identidad" — los baselines seguían ganando esa carrera de todos
+modos — es que la curvatura, bien calculada, **deja de estar completamente ciega**
+a la identidad. Dos hallazgos distintos: (1) los baselines simples siguen siendo
+más baratos y al menos igual de sensibles que cualquiera de las dos curvaturas;
+(2) Forman-Ricci específicamente subestimaba la identidad de un modo que Ollivier
+no.
 
 ## 3. Exp 0.1 análogo — confound de primer token (nivel proxy, sin GPU)
 
@@ -171,14 +219,26 @@ paper — pero sigue siendo el único hueco que separa "tranquilizador" de
 2. **Forman-Ricci en este panel: señal real pero es de restricción, no de
    identidad** — sostiene ruido para `automata_neutro`, cae en el piso de ruido
    split-half para la comparación de identidad pura (`axis_pec_only` vs
-   `vanilla`). Confirma, no contradice, el resto del paper.
-3. **Los baselines simples ganan en 4/4 comparaciones** (probe AUC=1.000 en las
-   cuatro) — mismo patrón que el panel hermano. La curvatura no agrega nada sobre
-   este panel tampoco.
-4. **El confound de primer token es real (Jaccard hasta 0.00) pero, a nivel
+   `vanilla`).
+3. **Ollivier-Ricci genuina (§1b), corrida por primera vez en este proyecto,
+   matiza el punto 2:** con la fórmula que el paper siempre dijo usar,
+   `axis_pec_only` vs `vanilla` sí sale del piso de ruido (pct=0.3%/0.0%). La
+   curvatura discreta bien calculada no es ciega a la identidad — Forman-Ricci
+   específicamente sí lo era. Restricción sigue siendo el efecto de mayor
+   magnitud bajo ambas fórmulas (`automata_neutro` −0.68 de curvatura media,
+   muy por debajo del resto).
+4. **Los baselines simples ganan en 4/4 comparaciones frente a cualquiera de
+   las dos curvaturas** (probe AUC=1.000 en las cuatro, no depende de qué
+   fórmula se compare) — mismo patrón que el panel hermano. Punto 3 no cambia
+   esto: los baselines seguían ganando la carrera con Forman y siguen
+   ganándola con Ollivier: lo que cambió es si la curvatura en sí "ve" o no la
+   identidad, no si le gana a los baselines.
+5. **El confound de primer token es real (Jaccard hasta 0.00) pero, a nivel
    proxy, no destruye ningún efecto de `‖v1‖` en este panel** — al revés que en
    el panel hermano, donde sí lo hacía. Tranquilizador, no definitivo (falta el
    control con token forzado, §5).
-5. Con esto, el paper conserva su tratamiento de Δκ/W₁ como evidencia secundaria
-   no cargante — la auto-auditoría lo confirma en vez de obligar a retirar nada
-   ya escrito. El único cambio de fondo que sí hace falta es el de nombre (§4).
+6. Con esto, el paper conserva su tratamiento de Δκ/W₁ como evidencia
+   secundaria no cargante frente a la batería primaria (los baselines siguen
+   ganando) — pero el matiz de "solo ve restricción" debe corregirse a
+   "Forman-Ricci solo veía restricción; Ollivier-Ricci, la fórmula que se
+   pretendía usar, ve ambos factores, con restricción dominando en magnitud".

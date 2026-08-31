@@ -21,7 +21,8 @@ de este panel. Cada fila indica el estado actual y por qué. No reemplaza a
 |---|---|---|
 | **Recuperación gatillada por cableado** (τ, recovery_id, Fréchet) | El patrón cualitativo completo en Gemma — reforzado esta ronda con la Figura 1 (meseta de realineación) | Nunca se corrió en Qwen3 — la mitad dinámica del argumento sigue siendo de un solo modelo |
 | **Subespacio identidad↔restricción** (E-J) | La separación identidad-vs-restricción es la mayor del panel en ángulo, en **ambos** modelos (34.1° Gemma, 40.7° Qwen3) | La jerarquía — quién es "el más distinto" — se invierte: `automata_neutro` en Gemma, identidad en Qwen3 |
-| **Δκ/W₁ (ahora Forman-Ricci, no Ollivier)** | Señal real para restricción (×3.5-17 sobre ruido split-half); confirmado que sigue sin superar baselines simples (4/4), igual que en el panel hermano | Nunca fue evidencia primaria; la auto-auditoría de esta ronda solo confirma que la decisión de excluirla era correcta |
+| **Δκ/W₁, Forman-Ricci** (lo que el proyecto siempre calculó) | Señal real para restricción (×3.5-17 sobre ruido split-half); sigue sin superar baselines simples (4/4) | Ciega a la identidad pura (`axis_pec_only` vs `vanilla` cae en ruido, 0.4-0.5× mediana) |
+| **Δκ/W₁, Ollivier-Ricci genuina** (lo que el paper siempre dijo calcular, corrida por primera vez esta ronda) | **No** es ciega a la identidad — `axis_pec_only` vs `vanilla` sale del ruido (pct=0.3%/0.0%); restricción sigue dominando en magnitud (curvatura media −0.68 vs −0.20) | Los baselines simples le siguen ganando la carrera igual (probe AUC=1.000 en las 4, no depende de qué curvatura se compare) |
 
 ## 3. Corregido, no retirado — el hallazgo sigue en pie con otro número o nombre
 
@@ -52,10 +53,17 @@ de este panel. Cada fila indica el estado actual y por qué. No reemplaza a
 
 ## 6. Lectura de conjunto
 
-Nada de lo que se corrigió esta ronda cambió una conclusión — cambió una
-cifra (d=8.89→5.52) o un nombre (Ollivier→Forman). Las tres señales de
-identidad centrales (v̂ media, t=0, dinámica temporal) sobrevivieron cada
-control al que se las sometió, incluida la auto-auditoría de curvatura y la
+Casi nada de lo que se corrigió esta ronda cambió una conclusión — cambió una
+cifra (d=8.89→5.52) o un nombre (Ollivier→Forman). La excepción real es la
+curvatura: corregir el nombre llevó a preguntarse qué mide la fórmula que se
+pretendía usar desde el origen, y esa sí es información nueva — Ollivier-Ricci
+genuina detecta identidad donde Forman-Ricci no veía nada (§2). No cambia
+ninguna conclusión del paper (Δκ/W₁ sigue sin ser evidencia primaria, los
+baselines simples le siguen ganando), pero sí corrige el motivo por el que se
+excluye: no es que la curvatura sea ciega a la identidad en general, es que la
+fórmula mal implementada lo era. Las tres señales de identidad centrales (v̂
+media, t=0, dinámica temporal) sobrevivieron cada control al que se las
+sometió, incluida la auto-auditoría de curvatura (en sus dos versiones) y la
 replicación cross-modelo. Lo que sigue genuinamente abierto es angosto pero
 real: causalidad (E-K), el control definitivo de primer token, y si la
 mitad dinámica del argumento (recuperación gatillada por cableado)
