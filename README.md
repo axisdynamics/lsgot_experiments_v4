@@ -11,7 +11,10 @@ decenas de MB por condición, cientos de MB en total) — solo respuestas de
 texto, JSON de resultados agregados y estadísticos ya computados. Para
 reproducir desde cero, ver `scripts/` y la sección "Cómo reproducir" abajo.
 
-Repositorio complementario, no reemplazado por este: [`lsgot_experiments`](https://github.com/axisdynamics/lsgot_experiments)
+**Este repositorio:** [`axisdynamics/lsgot_experiments_v4`](https://github.com/axisdynamics/lsgot_experiments_v4).
+
+Repositorio complementario, no reemplazado por este (nombre parecido, no
+confundir): [`lsgot_experiments`](https://github.com/axisdynamics/lsgot_experiments)
 — el corpus MIA vs SIA cruzando 6 sustratos (incluye el control de
 longitud E1 y el panel H4_rev original de 4 grupos, anterior a las
 condiciones de este repo).
@@ -21,10 +24,13 @@ condiciones de este repo).
 ## Qué mide cada carpeta
 
 ```
-paper/       lsgot_4.md (reformulación) y lsgot_3.md (paper anterior, referenciado como antecedente)
-evidence/    reportes — diseño factorial, resultados por experimento, auditoría metodológica, validación cross-modelo
-data/        JSON agregados por experimento (sin *.npz): respuestas, curvatura, RQA/Hurst/PR, τ/recovery_rate, Fréchet
-scripts/     pipeline de extracción, perturbación y análisis estadístico
+paper/                    lsgot_4.md (reformulación), lsgot_3.md (antecedente), figures/ (Figura 1)
+evidence/                 reportes — diseño factorial, resultados por experimento, auditoría metodológica, validación cross-modelo
+data/                     JSON agregados por experimento (sin *.npz): respuestas, curvatura, RQA/Hurst/PR, τ/recovery_rate, Fréchet
+scripts/                  extracción, perturbación y análisis estadístico
+scripts/fase0/            E-L, E-H2, E-J, E-F2 (panel Gemma limpio) + resultados ya computados
+scripts/fase2_exploracion/ A1-A5, exploración adicional sobre los embeddings ya extraídos
+scripts/fase3_qwen3/      extracción y análisis de la validación cross-modelo en Qwen3-32B
 ```
 
 ## Diseño experimental
@@ -77,6 +83,21 @@ atractor direccional**: perturbar a lo largo de esa dirección no produce
 recuperación diferencial frente a perturbar ortogonalmente (`EI_PERMUTATION_REPORT.md`,
 null result en las 6 condiciones probadas).
 
+Esta tercera pieza no es una sola medición: **tres análisis independientes
+del mismo v̂ convergen** — la media de la trayectoria libre (arriba), la
+proyección en t=0 (antes de generar el primer token, `EL_REPORT.md`,
+d=+5.75 a +9.78), y la forma de p(t) en el tiempo (`EH2_REPORT.md`):
+identidad se activa en ráfagas largas y sostenidas (7.9-8.8 tokens, 85-87%
+del tiempo positivo) mientras `automata_neutro` oscila en ráfagas cortas y
+esporádicas (2.8 tokens, 49%) alrededor de una media casi nula.
+
+Sobre la recuperación (τ, punto 2): la cifra gruesa esconde una meseta que
+no cierra. Trackear la misma cantidad de la que se extrae τ, pero como
+curva continua en vez de un único umbral, muestra que `automata_neutro` se
+estanca 6-10 puntos porcentuales por debajo de `axis`/`vanilla` y nunca
+cierra esa brecha en ninguno de los tres puntos de inyección — ver Figura 1
+en `paper/lsgot_4.md` §3.3 (`paper/figures/recovery_realignment_curve.png`).
+
 Esta disociación **replica en Qwen3-32B** (arquitectura distinta — GQA +
 QK-norm, 64 capas, tokenizer distinto), con efectos incluso mayores
 (d=+12.97 en t=0), sin re-balancear las condiciones por longitud de token.
@@ -101,10 +122,10 @@ sostener ninguna conclusión de `lsgot_4.md`. Ver `paper/lsgot_4.md` §3.4 y §7
 ## Cómo reproducir
 
 Los scripts se incluyen **verbatim** (mismos que corrieron para producir la
-evidencia en `evidence/` y `data/`) para auditoría metodológica — no todos
-corren de punta a punta contra lo incluido en este repo, porque dos de
-ellos requieren los `.npz` de embeddings crudos que se excluyeron
-deliberadamente por tamaño.
+evidencia en `evidence/` y `data/`) para auditoría metodológica — la mayoría
+no corre de punta a punta contra lo incluido en este repo, porque requieren
+los `.npz` de embeddings/trayectorias crudas que se excluyeron
+deliberadamente por tamaño (ver lista completa abajo).
 
 **Corre tal cual, sin GPU, contra los datos incluidos:**
 ```bash
