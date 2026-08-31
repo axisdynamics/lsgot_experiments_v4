@@ -1,4 +1,4 @@
-# LSGOT — Identidad vs. densidad de restricción (Gemma-4-31B-it, SIA)
+# LSGOT — Identidad vs. densidad de restricción (Gemma-4-31B-it, SIA; validado cross-modelo en Qwen3-32B)
 
 Subconjunto curado de evidencia, scripts y resultados agregados que sostiene
 `paper/lsgot_4.md` — una reformulación de `paper/lsgot_3.md` sobre un solo
