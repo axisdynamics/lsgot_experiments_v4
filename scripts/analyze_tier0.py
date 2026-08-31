@@ -31,9 +31,12 @@ from tier0_metrics import (  # noqa: E402
 from statistical_tests import GeometricStatisticalTests  # noqa: E402
 
 DEFAULT_RESULTS_DIR = "results_local/sia_extended_v5"
+# chileatiende / chileatiende_sia excluidas: confound de repetición de
+# markup HTML en el prompt (ver
+# evidence/CHILEATIENDE_MARKUP_CONFOUND_REPORT.md, T11).
 DEFAULT_GROUPS = [
     "axis", "generic_long", "generic_short", "vanilla", "axis_short",
-    "chileatiende", "automata_neutro", "chileatiende_sia", "axis_pec_only",
+    "automata_neutro", "axis_pec_only",
 ]
 TIER0_FIELDS = [
     "hurst", "determinism", "laminarity", "trapping_time",
@@ -45,12 +48,6 @@ COMPARISON_PAIRS = [
     ("automata_neutro", "vanilla"),
     ("axis", "automata_neutro"),
     ("axis", "axis_pec_only"),
-    # agregado 2026-08-26: chileatiende no tenía comparación formal contra
-    # nada en identity_projection — solo se veía su media cruda.
-    ("chileatiende", "vanilla"),
-    ("axis", "chileatiende"),
-    ("chileatiende", "automata_neutro"),
-    ("chileatiende_sia", "vanilla"),
 ]
 
 

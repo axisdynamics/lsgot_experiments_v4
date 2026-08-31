@@ -1,0 +1,14 @@
+{
+  "axis": {
+    "n_keyword_tokens": 134,
+    "mean_p_keyword": 0.2634064038911187,
+    "n_other_tokens": 4954,
+    "mean_p_other": 0.20315085979717148
+  },
+  "vanilla": {
+    "n_keyword_tokens": 89,
+    "mean_p_keyword": 0.1447394192738028,
+    "n_other_tokens": 5031,
+    "mean_p_other": 0.09736456470898178
+  }
+}

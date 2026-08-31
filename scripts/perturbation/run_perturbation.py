@@ -83,10 +83,13 @@ MIA_CONFIG = {
 # Experimento SIA (~12K chars VEX)
 # ═══════════════════════════════════════════════════════════════════════════════
 
+# chileatiende / chileatiende_sia / chileatiende_sia_v2 excluidas: confound
+# de repetición de markup HTML en el prompt (ver
+# ../../evidence/CHILEATIENDE_MARKUP_CONFOUND_REPORT.md, T11).
 SIA_CONFIG = {
     # mean_velocity real del grupo axis (results_local/sia/_traj_metrics.json,
     # Exp 0.5 congelado) — ver REPRODUCIBILITY.md. Calibra sigma para TODOS los
-    # grupos SIA (incluidos axis_short/chileatiende), no solo para axis.
+    # grupos SIA (incluido axis_short), no solo para axis.
     "mean_velocity": 438.4,
     "groups": {
         "axis":           {"system_prompt_path": "../sia/prompts/axis.dna"},
@@ -94,10 +97,7 @@ SIA_CONFIG = {
         "generic_short":  {"system_prompt_path": "../sia/prompts/generic_short.txt"},
         "vanilla":        {"system_prompt": "You are a helpful assistant."},
         "axis_short":     {"system_prompt_path": "../sia/prompts/axis_short.txt"},
-        "chileatiende":   {"system_prompt_path": "../sia/prompts/chileatiende.txt"},
         "automata_neutro": {"system_prompt_path": "../sia/prompts/automata_neutro.txt"},
-        "chileatiende_sia": {"system_prompt_path": "../sia/prompts/chileatiende_sia.txt"},
-        "chileatiende_sia_v2": {"system_prompt_path": "../sia/prompts/chileatiende_sia_v2.txt"},
         "axis_pec_only": {"system_prompt_path": "../sia/prompts/axis_pec_only.txt"},
     },
 }

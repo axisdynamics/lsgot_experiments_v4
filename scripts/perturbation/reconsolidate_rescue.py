@@ -39,16 +39,16 @@ T_INJ_VALUES = [50, 128, 200]
 PRIORITY_SUBSET = [1, 3, 6, 10, 14, 21, 23, 27, 31, 39,
                    41, 45, 51, 59, 61, 65, 71, 79, 91, 98]
 
+# chileatiende / chileatiende_sia / chileatiende_sia_v2 excluidas: confound
+# de repetición de markup HTML en el prompt (ver
+# ../../evidence/CHILEATIENDE_MARKUP_CONFOUND_REPORT.md, T11).
 GROUPS_CONFIG = {
     "axis":                {"system_prompt_path": "sia/prompts/axis.dna"},
     "generic_long":        {"system_prompt_path": "sia/prompts/generic_long.txt"},
     "generic_short":       {"system_prompt_path": "sia/prompts/generic_short.txt"},
     "vanilla":             {"system_prompt": "You are a helpful assistant."},
     "axis_short":          {"system_prompt_path": "sia/prompts/axis_short.txt"},
-    "chileatiende":        {"system_prompt_path": "sia/prompts/chileatiende.txt"},
     "automata_neutro":     {"system_prompt_path": "sia/prompts/automata_neutro.txt"},
-    "chileatiende_sia":    {"system_prompt_path": "sia/prompts/chileatiende_sia.txt"},
-    "chileatiende_sia_v2": {"system_prompt_path": "sia/prompts/chileatiende_sia_v2.txt"},
     "axis_pec_only":       {"system_prompt_path": "sia/prompts/axis_pec_only.txt"},
 }
 

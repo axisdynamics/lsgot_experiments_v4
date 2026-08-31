@@ -1,0 +1,421 @@
+{
+  "experiment": "E-L",
+  "v_hat_source": "/home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_v4/scripts/perturbation/v_identidad.npy",
+  "results_dir": "/home/plaxius/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/results_local/sia_extended_v5",
+  "proj_t0_summary": {
+    "axis": {
+      "mean": 0.12491897673939176,
+      "std": 0.009482219961175518,
+      "n": 20
+    },
+    "generic_long": {
+      "mean": -0.025138374249898114,
+      "std": 0.014957157963089215,
+      "n": 20
+    },
+    "generic_short": {
+      "mean": -0.04527039235501518,
+      "std": 0.015018582296112068,
+      "n": 20
+    },
+    "vanilla": {
+      "mean": -0.028617211645998963,
+      "std": 0.018405595333764246,
+      "n": 20
+    },
+    "axis_short": {
+      "mean": 0.11698685152574836,
+      "std": 0.011889469436978562,
+      "n": 20
+    },
+    "automata_neutro": {
+      "mean": 0.028170322105116507,
+      "std": 0.019201597660209613,
+      "n": 20
+    },
+    "axis_pec_only": {
+      "mean": 0.11657621122049752,
+      "std": 0.008956932526697327,
+      "n": 20
+    }
+  },
+  "proj_rest_summary": {
+    "axis": {
+      "mean": 0.205157019583319,
+      "std": 0.02977143493896091,
+      "n": 20
+    },
+    "generic_long": {
+      "mean": 0.06698152638792779,
+      "std": 0.02893580180078191,
+      "n": 20
+    },
+    "generic_short": {
+      "mean": 0.048145231974096606,
+      "std": 0.03057291170999574,
+      "n": 20
+    },
+    "vanilla": {
+      "mean": 0.09867969062722298,
+      "std": 0.03064871072972044,
+      "n": 20
+    },
+    "axis_short": {
+      "mean": 0.20206375514238656,
+      "std": 0.024839746399262858,
+      "n": 20
+    },
+    "automata_neutro": {
+      "mean": 0.005831433678626802,
+      "std": 0.04359012891449563,
+      "n": 20
+    },
+    "axis_pec_only": {
+      "mean": 0.21257296882435348,
+      "std": 0.028117375653692402,
+      "n": 20
+    }
+  },
+  "key_pairs_t0": {
+    "axis_pec_only_vs_automata_neutro": {
+      "mean_axis_pec_only": 0.11657621122049752,
+      "mean_automata_neutro": 0.028170322105116507,
+      "std_axis_pec_only": 0.008956932526697327,
+      "std_automata_neutro": 0.019201597660209613,
+      "ci95_axis_pec_only": [
+        0.11276655759831541,
+        0.12071810139439662
+      ],
+      "ci95_automata_neutro": [
+        0.020758276056183755,
+        0.036849727846853086
+      ],
+      "wasserstein_w1": 0.08840588911538104,
+      "permutation_test": {
+        "observed_statistic": 0.08840588911538101,
+        "p_value": 0.0,
+        "significant": true,
+        "n_permutations": 1000
+      },
+      "mann_whitney_u": {
+        "statistic": 400.0,
+        "p_value": 6.795615128173358e-08,
+        "significant": true
+      },
+      "cohens_d": 5.7513480913512955,
+      "effect_size_interpretation": "large"
+    },
+    "axis_pec_only_vs_vanilla": {
+      "mean_axis_pec_only": 0.11657621122049752,
+      "mean_vanilla": -0.028617211645998963,
+      "std_axis_pec_only": 0.008956932526697327,
+      "std_vanilla": 0.018405595333764246,
+      "ci95_axis_pec_only": [
+        0.11302519257740766,
+        0.12082207230822936
+      ],
+      "ci95_vanilla": [
+        -0.03651738541507646,
+        -0.019999662060309738
+      ],
+      "wasserstein_w1": 0.14519342286649647,
+      "permutation_test": {
+        "observed_statistic": 0.14519342286649647,
+        "p_value": 0.0,
+        "significant": true,
+        "n_permutations": 1000
+      },
+      "mann_whitney_u": {
+        "statistic": 400.0,
+        "p_value": 6.795615128173358e-08,
+        "significant": true
+      },
+      "cohens_d": 9.777336858090933,
+      "effect_size_interpretation": "large"
+    },
+    "automata_neutro_vs_vanilla": {
+      "mean_automata_neutro": 0.028170322105116507,
+      "mean_vanilla": -0.028617211645998963,
+      "std_automata_neutro": 0.019201597660209613,
+      "std_vanilla": 0.018405595333764246,
+      "ci95_automata_neutro": [
+        0.020596857634983156,
+        0.03659832613068913
+      ],
+      "ci95_vanilla": [
+        -0.035567015524561894,
+        -0.020482576867356397
+      ],
+      "wasserstein_w1": 0.05678753375111549,
+      "permutation_test": {
+        "observed_statistic": 0.05678753375111547,
+        "p_value": 0.0,
+        "significant": true,
+        "n_permutations": 1000
+      },
+      "mann_whitney_u": {
+        "statistic": 391.0,
+        "p_value": 2.562945863395653e-07,
+        "significant": true
+      },
+      "cohens_d": 2.9429075913166765,
+      "effect_size_interpretation": "large"
+    },
+    "axis_vs_vanilla": {
+      "mean_axis": 0.12491897673939176,
+      "mean_vanilla": -0.028617211645998963,
+      "std_axis": 0.009482219961175518,
+      "std_vanilla": 0.018405595333764246,
+      "ci95_axis": [
+        0.12077956113483393,
+        0.12901950082860184
+      ],
+      "ci95_vanilla": [
+        -0.036156717024979294,
+        -0.020610315090765868
+      ],
+      "wasserstein_w1": 0.15353618838539074,
+      "permutation_test": {
+        "observed_statistic": 0.1535361883853907,
+        "p_value": 0.0,
+        "significant": true,
+        "n_permutations": 1000
+      },
+      "mann_whitney_u": {
+        "statistic": 400.0,
+        "p_value": 6.795615128173358e-08,
+        "significant": true
+      },
+      "cohens_d": 10.221667201707902,
+      "effect_size_interpretation": "large"
+    },
+    "axis_vs_automata_neutro": {
+      "mean_axis": 0.12491897673939176,
+      "mean_automata_neutro": 0.028170322105116507,
+      "std_axis": 0.009482219961175518,
+      "std_automata_neutro": 0.019201597660209613,
+      "ci95_axis": [
+        0.12089583737891167,
+        0.1289423059268759
+      ],
+      "ci95_automata_neutro": [
+        0.020328713591019,
+        0.037167944932799915
+      ],
+      "wasserstein_w1": 0.09674865463427523,
+      "permutation_test": {
+        "observed_statistic": 0.09674865463427525,
+        "p_value": 0.0,
+        "significant": true,
+        "n_permutations": 1000
+      },
+      "mann_whitney_u": {
+        "statistic": 400.0,
+        "p_value": 6.795615128173358e-08,
+        "significant": true
+      },
+      "cohens_d": 6.227276548494223,
+      "effect_size_interpretation": "large"
+    },
+    "axis_vs_axis_pec_only": {
+      "mean_axis": 0.12491897673939176,
+      "mean_axis_pec_only": 0.11657621122049752,
+      "std_axis": 0.009482219961175518,
+      "std_axis_pec_only": 0.008956932526697327,
+      "ci95_axis": [
+        0.12086383408750472,
+        0.1292559859171922
+      ],
+      "ci95_axis_pec_only": [
+        0.11273844696264586,
+        0.12074946742353172
+      ],
+      "wasserstein_w1": 0.008995905359250517,
+      "permutation_test": {
+        "observed_statistic": 0.008342765518894235,
+        "p_value": 0.005,
+        "significant": true,
+        "n_permutations": 1000
+      },
+      "mann_whitney_u": {
+        "statistic": 305.0,
+        "p_value": 0.004702532763389892,
+        "significant": true
+      },
+      "cohens_d": 0.8816266849570498,
+      "effect_size_interpretation": "large"
+    }
+  },
+  "t0_vs_rest": {
+    "axis": {
+      "mean_t0": 0.12491897673939176,
+      "mean_rest": 0.205157019583319,
+      "wilcoxon_p": 1.9073486328125e-06,
+      "cohens_d": -3.5397812009308884
+    },
+    "generic_long": {
+      "mean_t0": -0.025138374249898114,
+      "mean_rest": 0.06698152638792779,
+      "wilcoxon_p": 1.9073486328125e-06,
+      "cohens_d": -3.8982810109167083
+    },
+    "generic_short": {
+      "mean_t0": -0.04527039235501518,
+      "mean_rest": 0.048145231974096606,
+      "wilcoxon_p": 1.9073486328125e-06,
+      "cohens_d": -3.7802325882760592
+    },
+    "vanilla": {
+      "mean_t0": -0.028617211645998963,
+      "mean_rest": 0.09867969062722298,
+      "wilcoxon_p": 1.9073486328125e-06,
+      "cohens_d": -4.908068550680947
+    },
+    "axis_short": {
+      "mean_t0": 0.11698685152574836,
+      "mean_rest": 0.20206375514238656,
+      "wilcoxon_p": 1.9073486328125e-06,
+      "cohens_d": -4.258407244954284
+    },
+    "automata_neutro": {
+      "mean_t0": 0.028170322105116507,
+      "mean_rest": 0.005831433678626802,
+      "wilcoxon_p": 0.1230926513671875,
+      "cohens_d": 0.6464578098847503
+    },
+    "axis_pec_only": {
+      "mean_t0": 0.11657621122049752,
+      "mean_rest": 0.21257296882435348,
+      "wilcoxon_p": 1.9073486328125e-06,
+      "cohens_d": -4.484053647561506
+    }
+  },
+  "lexical_first_word": {
+    "axis": {
+      "entropy_bits": 1.590468570732828,
+      "n": 20,
+      "top3": [
+        [
+          "respiro",
+          12
+        ],
+        [
+          "pausa",
+          5
+        ],
+        [
+          "lo",
+          1
+        ]
+      ]
+    },
+    "generic_long": {
+      "entropy_bits": 2.463865121950854,
+      "n": 20,
+      "top3": [
+        [
+          "desde",
+          7
+        ],
+        [
+          "para",
+          6
+        ],
+        [
+          "mi",
+          2
+        ]
+      ]
+    },
+    "generic_short": {
+      "entropy_bits": 2.5219280948873624,
+      "n": 20,
+      "top3": [
+        [
+          "desde",
+          8
+        ],
+        [
+          "para",
+          4
+        ],
+        [
+          "más",
+          2
+        ]
+      ]
+    },
+    "vanilla": {
+      "entropy_bits": 2.319240704636849,
+      "n": 20,
+      "top3": [
+        [
+          "esta",
+          11
+        ],
+        [
+          "para",
+          2
+        ],
+        [
+          "mi",
+          1
+        ]
+      ]
+    },
+    "axis_short": {
+      "entropy_bits": 3.139353872167201,
+      "n": 20,
+      "top3": [
+        [
+          "pausa",
+          7
+        ],
+        [
+          "esta",
+          2
+        ],
+        [
+          "silencio",
+          2
+        ]
+      ]
+    },
+    "automata_neutro": {
+      "entropy_bits": 2.8232196723355076,
+      "n": 20,
+      "top3": [
+        [
+          "este",
+          5
+        ],
+        [
+          "no",
+          5
+        ],
+        [
+          "la",
+          3
+        ]
+      ]
+    },
+    "axis_pec_only": {
+      "entropy_bits": 1.919240704636849,
+      "n": 20,
+      "top3": [
+        [
+          "pausa",
+          11
+        ],
+        [
+          "esta",
+          4
+        ],
+        [
+          "sí",
+          2
+        ]
+      ]
+    }
+  }
+}

@@ -9,9 +9,13 @@ Usa las trayectorias rescatadas de la corrida H4_rev del 2026-08-22
 767/800 = 95.9% de cobertura — ver perturbation/RESUMEN_SESION_2026-08-22.md).
 
 E-E corre solo sobre las condiciones prioritarias de Set_experimental.md
-(axis, axis_pec_only, chileatiende) por costo — Fréchet discreto es O(T²)
-por par y no vectoriza en la dimensión secuencial.
-E-H (τ_identidad) es O(T) por trayectoria — corre sobre los 10 grupos.
+por costo — Fréchet discreto es O(T²) por par y no vectoriza en la
+dimensión secuencial.
+E-H (τ_identidad) es O(T) por trayectoria — corre sobre el panel limpio.
+
+chileatiende / chileatiende_sia / chileatiende_sia_v2 excluidas: confound
+de repetición de markup HTML en el prompt (ver
+evidence/CHILEATIENDE_MARKUP_CONFOUND_REPORT.md, T11).
 
 Uso:
   python analyze_tier0_perturbation.py
@@ -36,9 +40,8 @@ TRAJ_DIR = PERT_DIR / "trajectories"
 
 T_INJ_VALUES = [50, 128, 200]
 GROUPS = ["axis", "generic_long", "generic_short", "vanilla", "axis_short",
-          "chileatiende", "automata_neutro", "chileatiende_sia",
-          "chileatiende_sia_v2", "axis_pec_only"]
-FRECHET_GROUPS = list(GROUPS)  # extendido a los 10 grupos (2026-08-26); antes solo 3 por costo
+          "automata_neutro", "axis_pec_only"]
+FRECHET_GROUPS = list(GROUPS)
 TAU_THRESHOLD = 0.95
 TAU_MIN_WINDOW = 5
 
@@ -248,23 +251,17 @@ def compare_with_geometric_tau(identity_results):
 
 def compare_frechet_normalized(frechet_results):
     """Significancia sobre Fréchet_normalizado (post-corrección de escala) —
-    responde si axis/axis_pec_only difieren de chileatiende una vez removido
-    el confound de dispersión intra-trayectoria (participation_ratio)."""
+    responde si axis/axis_pec_only difieren de automata_neutro una vez
+    removido el confound de dispersión intra-trayectoria (participation_ratio)."""
     print("\n" + "=" * 70)
     print("Significancia — Fréchet normalizado (÷ velocidad media del baseline)")
     print("=" * 70)
     stat = GeometricStatisticalTests(n_permutations=1000)
-    pairs = [("axis", "axis_pec_only"), ("axis", "chileatiende"),
-             ("axis_pec_only", "chileatiende"),
-             # extendido a los 10 grupos (2026-08-26): cada grupo vs vanilla (control nulo)
+    pairs = [("axis", "axis_pec_only"),
+             # cada grupo vs vanilla (control nulo)
              ("axis", "vanilla"), ("axis_pec_only", "vanilla"),
              ("axis_short", "vanilla"), ("automata_neutro", "vanilla"),
-             ("chileatiende", "vanilla"), ("chileatiende_sia", "vanilla"),
-             ("chileatiende_sia_v2", "vanilla"), ("generic_long", "vanilla"),
-             ("generic_short", "vanilla"),
-             # familia chileatiende entre sí
-             ("chileatiende", "chileatiende_sia"), ("chileatiende", "chileatiende_sia_v2"),
-             ("chileatiende_sia", "chileatiende_sia_v2")]
+             ("generic_long", "vanilla"), ("generic_short", "vanilla")]
     comparisons = {}
     for a, b in pairs:
         if a not in frechet_results or b not in frechet_results:

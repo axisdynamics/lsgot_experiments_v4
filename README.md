@@ -22,14 +22,14 @@ condiciones de este repo).
 
 ```
 paper/       lsgot_4.md (reformulación) y lsgot_3.md (paper anterior, referenciado como antecedente)
-evidence/    15 reportes — diseño factorial, resultados por experimento, auditoría metodológica
+evidence/    reportes — diseño factorial, resultados por experimento, auditoría metodológica, validación cross-modelo
 data/        JSON agregados por experimento (sin *.npz): respuestas, curvatura, RQA/Hurst/PR, τ/recovery_rate, Fréchet
 scripts/     pipeline de extracción, perturbación y análisis estadístico
 ```
 
 ## Diseño experimental
 
-Nueve condiciones sobre un mismo modelo cruzan dos factores:
+Siete condiciones limpias sobre un mismo modelo cruzan dos factores:
 
 - **Identidad (I):** auto-referencia declarada y *cableada* como paso obligatorio del pipeline de respuesta.
 - **Densidad de restricción (C):** reglas trigger→salida fija, filtro de prioridad absoluta, jerarquía de bloques, salidas verbatim.
@@ -39,8 +39,14 @@ Nueve condiciones sobre un mismo modelo cruzan dos factores:
 | `vanilla`, `generic_long`, `generic_short` | − | − |
 | `axis`, `axis_short` | + | + |
 | `axis_pec_only` | + | − |
-| `chileatiende`, `automata_neutro` | − | + |
-| `chileatiende_sia`, `chileatiende_sia_v2` | + (declarada/cableada) | + |
+| `automata_neutro` | − | + |
+
+> El diseño original incluía además un autómata de dominio real (con y sin
+> auto-referencia cableada, dos variantes). Se excluyeron por completo:
+> fuerzan un wrapper HTML literal repetido en el 100% de sus respuestas, un
+> confound de formato que se leía como señal geométrica de restricción.
+> `automata_neutro` (0% markup, misma densidad de restricción) sostiene el
+> Factor 1 por sí solo, sin ese confound.
 
 Detalle completo del diseño y de por qué se necesitaban estas celdas cruzadas
 en `evidence/Teoria_subconjunto_acotado.md` y `evidence/ROADMAP_REENCUADRE_DENSIDAD_RESTRICCION.md`.
@@ -58,17 +64,25 @@ limpiamente en este panel:
    auto-referencia esté *cableada* como paso obligatorio, no solo
    declarada — y es prácticamente indistinguible de `vanilla` cuando hay
    identidad sin densidad de restricción, mientras que la densidad de
-   restricción sin identidad degrada la recuperación específica hasta en
-   un 79% de los casos (`recovery_id` cae a 0.21 en `chileatiende_sia_v2`,
-   t_inj=200).
+   restricción sin identidad degrada la recuperación específica: `recovery_id`
+   cae a 0.43-0.67 en `automata_neutro` (el único grupo del panel bajo 0.85),
+   más de un tercio de sus trayectorias sin recuperar su propia dirección de
+   identidad tras la perturbación (`EE_EH_WINDOW_REPORT.md`).
 
 Una tercera pieza — proyección sobre una dirección de identidad estilo
 persona-vector — muestra una doble disociación limpia (identidad positiva,
-restricción-sin-identidad negativa, d=8.89 entre `axis` y `chileatiende`,
-el efecto más grande del panel) pero **no funciona como atractor
-direccional**: perturbar a lo largo de esa dirección no produce
+restricción-sin-identidad negativa, d=+5.52 entre `axis_pec_only` y
+`automata_neutro`, el efecto más grande del panel) pero **no funciona como
+atractor direccional**: perturbar a lo largo de esa dirección no produce
 recuperación diferencial frente a perturbar ortogonalmente (`EI_PERMUTATION_REPORT.md`,
 null result en las 6 condiciones probadas).
+
+Esta disociación **replica en Qwen3-32B** (arquitectura distinta — GQA +
+QK-norm, 64 capas, tokenizer distinto), con efectos incluso mayores
+(d=+12.97 en t=0), sin re-balancear las condiciones por longitud de token.
+La jerarquía relativa "restricción > identidad" no es universal — en Qwen3
+los dos factores están más equilibrados — pero la doble disociación en sí
+no es un artefacto de Gemma-4. Ver `evidence/QWEN3_VALIDATION_REPORT.md`.
 
 Tabla completa, significancia y limitaciones en `paper/lsgot_4.md`.
 
@@ -102,14 +116,28 @@ python analyze_ei_permutation.py
 ```
 
 **Requieren los `.npz` de embeddings (no incluidos) para volver a calcularse desde cero:**
-`analyze_tier0.py` (espera `results_local/sia_extended_v5/*_embeddings.npz`) y
+`analyze_tier0.py` (espera `results_local/sia_extended_v5/*_embeddings.npz`),
 `analyze_tier0_perturbation.py` (espera además
-`perturbation/results/perturbation_sia_L30_medium/trajectories/*_embeddings.npz`).
-Los JSON/MD que sí están en `data/` y `evidence/` (`_tier0_metrics.json`,
-`results.json`, `TIER0_REPORT.md`, `EE_EH_WINDOW_REPORT.md/json`) son la
-**salida ya computada** de estos dos scripts, incluida como evidencia, no
-como insumo para volver a correrlos. Ver `FUENTES.md` (no versionado, solo
-en el árbol local) para la ruta exacta de origen de esos `.npz`.
+`perturbation/results/perturbation_sia_L30_medium/trajectories/*_embeddings.npz`),
+los cuatro scripts de `scripts/fase0/` (E-L, E-H2, E-J, E-F2 — mismo
+`results_local/sia_extended_v5`, más `results_local/ef2_L5_L55` para E-F2),
+los de `scripts/fase2_exploracion/` (A1-A4; A5 se corrió inline, sin script
+propio, solo queda `A5_results.json`), `scripts/fase3_qwen3/analyze_qwen3_fase0.py`
+(espera `results_local/qwen3_fase0/*.npz`, ver `run_qwen3_extraction.py` para
+cómo se generaron — esa extracción sí requiere GPU + el modelo Qwen3-32B, no
+solo los embeddings), y `scripts/perturbation/make_recovery_realignment_figure.py`
+(Figura 1 de `paper/lsgot_4.md` §3.3 — espera los mismos `.npz` de trayectorias
+que `recovery_analyzer.py`).
+
+Los JSON/MD que sí están en `data/`, `scripts/fase0/`, `scripts/fase2_exploracion/`,
+`scripts/fase3_qwen3/` y `evidence/` (`_tier0_metrics.json`, `results.json`,
+`TIER0_REPORT.md`, `EE_EH_WINDOW_REPORT.md/json`, `EL/EH2/EJ/EF2_results.json`,
+`A1-A5_results.json`, `qwen3_fase0_results.json`, `v_identidad_qwen3.npy`, y
+`paper/figures/recovery_realignment_curve.png` ya renderizada) son la
+**salida ya computada** de estos scripts, incluida como evidencia para
+corroborar los números del paper sin necesitar los embeddings crudos —
+no como insumo para volver a correrlos. Ver `FUENTES.md` (no versionado,
+solo en el árbol local) para la ruta exacta de origen de esos `.npz`.
 
 **Nueva corrida completa** (requiere GPU A100/H100 80GB, `min_vram_gb=65`,
 y un token de HuggingFace con acceso aceptado a `google/gemma-4-31B-it`):

@@ -1,5 +1,41 @@
 # Teoría del subconjunto acotado
 
+> ⚠️ **Nota 2026-08-28 (noche) — confound de markup HTML en
+> chileatiende-family.** chileatiende/chileatiende_sia/chileatiende_sia_v2
+> fuerzan un wrapper HTML literal en el 100% de sus respuestas (34-44% de
+> cada respuesta es texto idéntico repetido — ver
+> `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`). Esto es un documento
+> narrativo denso, no se reescribió línea por línea — en su lugar, esta
+> nota distingue qué sobrevive:
+>
+> - **NO afectado:** las secciones "Elementos compartidos..." y
+>   "Verificación cuantitativa..." analizan el **texto de los system
+>   prompts** (axis.dna, chileatiende.txt), no las respuestas generadas —
+>   el confound vive en el output del modelo, no en el prompt de entrada.
+>   Esa comparación textual/estructural sigue siendo válida.
+> - **Afectado — no usar como evidencia:** cualquier cifra geométrica
+>   citada para chileatiende/chileatiende_sia/chileatiende_sia_v2 (Δκ,
+>   τ, recovery_rate, alineación P→R, participation_ratio) — los reportes
+>   que las contenían (`CHILEATIENDE_SIA_REPORT.md`,
+>   `CHILEATIENDE_CONTROL_REPORT.md`) fueron eliminados por contener
+>   exclusivamente análisis contaminado; ver
+>   `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md` para el porqué. Todas las
+>   citas a esos dos archivos más abajo en este documento son históricas
+>   (narran cómo se llegó a la teoría) y ya no resuelven a un archivo real.
+> - **Retirado explícitamente:** la reformulación del Factor 2 ("no
+>   basta con que la auto-referencia esté declarada — tiene que estar
+>   cableada como paso obligatorio") se apoya enteramente en la
+>   comparación chileatiende_sia vs chileatiende_sia_v2 vs chileatiende
+>   puro (líneas ~106-195 abajo) — con esos datos retractados, esta
+>   hipótesis queda **sin confirmar**, no refutada. Ver el retiro
+>   equivalente en `AXIS_PEC_ONLY_REPORT.md` (conclusión #3).
+> - **Sigue en pie, con datos limpios:** el Factor 1 (densidad de
+>   restricción → colapso geométrico) — `automata_neutro` (0% markup) lo
+>   confirma por sí solo, ver `AUTOMATA_NEUTRO_REPORT.md` y
+>   `CORRECCION_DVHAT_SIN_CHILEATIENDE.md`. axis_pec_only (Factor 2 sin
+>   automatismo, no colapsa, recupera rápido) tampoco depende de
+>   chileatiende — ver `AXIS_PEC_ONLY_REPORT.md`.
+
 **Fecha:** 2026-08-18
 **Origen:** análisis textual de axis.dna, axis_short.txt y chileatiende.txt
 tras descartar longitud como explicación del colapso geométrico de

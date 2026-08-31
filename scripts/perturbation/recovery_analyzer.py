@@ -252,50 +252,25 @@ def compare_groups(group_agg: Dict[str, Dict]) -> Dict:
         else:
             row["delta_axis_minus_vanilla"] = None
 
-        # Homologación axis_short/chileatiende: deltas dirigidos además de
-        # los E1/E2/E3 originales (mismo patrón que sia/run_exp.py::phase_analyze).
+        # Homologación axis_short: deltas dirigidos además de los E1/E2/E3
+        # originales (mismo patrón que sia/run_exp.py::phase_analyze).
         axs = row.get("axis_short")
-        chi = row.get("chileatiende")
         row["delta_axis_short_minus_axis"] = (axs - ax) if axs is not None and ax is not None else None
         row["delta_axis_short_minus_vanilla"] = (axs - van) if axs is not None and van is not None else None
-        row["delta_chileatiende_minus_generic_long"] = (chi - gl) if chi is not None and gl is not None else None
-        row["delta_chileatiende_minus_vanilla"] = (chi - van) if chi is not None and van is not None else None
 
         # Automata neutro (Factor 1 puro): deltas dirigidos de recuperación —
         # vs axis (misma arquitectura de autómata, con/sin auto-ref), vs
-        # chileatiende (mismo tipo de restricción, distinto dominio), vs
         # vanilla (referencia).
         an = row.get("automata_neutro")
         row["delta_automata_neutro_minus_axis"] = (an - ax) if an is not None and ax is not None else None
-        row["delta_automata_neutro_minus_chileatiende"] = (an - chi) if an is not None and chi is not None else None
         row["delta_automata_neutro_minus_vanilla"] = (an - van) if an is not None and van is not None else None
-
-        # chileatiende_sia (celda cruzada Factor1+Factor2): deltas dirigidos —
-        # vs chileatiende (mismo contenido/dominio, con vs sin arquitectura
-        # SIA auto-referencial), vs axis (misma arquitectura SIA, distinto
-        # dominio), vs automata_neutro (mismo Factor 1 fuerte, con vs sin
-        # Factor 2).
-        csia = row.get("chileatiende_sia")
-        row["delta_chileatiende_sia_minus_chileatiende"] = (csia - chi) if csia is not None and chi is not None else None
-        row["delta_chileatiende_sia_minus_axis"] = (csia - ax) if csia is not None and ax is not None else None
-        row["delta_chileatiende_sia_minus_automata_neutro"] = (csia - an) if csia is not None and an is not None else None
-
-        # chileatiende_sia_v2 (Triple PEC cableado como paso obligatorio):
-        # deltas dirigidos — vs chileatiende_sia v1 (mismo contenido, único
-        # cambio es el cableado operativo) y vs axis (referencia de
-        # recuperación rápida con auto-referencia cableada).
-        csia_v2 = row.get("chileatiende_sia_v2")
-        row["delta_chileatiende_sia_v2_minus_chileatiende_sia"] = (csia_v2 - csia) if csia_v2 is not None and csia is not None else None
-        row["delta_chileatiende_sia_v2_minus_axis"] = (csia_v2 - ax) if csia_v2 is not None and ax is not None else None
-        row["delta_chileatiende_sia_v2_minus_chileatiende"] = (csia_v2 - chi) if csia_v2 is not None and chi is not None else None
 
         # axis_pec_only (Factor 2 puro, sin arquitectura de autómata): deltas
         # dirigidos — vs axis (misma identidad/Triple PEC, con vs sin
-        # automatismo) y vs chileatiende/automata_neutro (Factor 1 puro).
+        # automatismo) y vs automata_neutro (Factor 1 puro).
         apo = row.get("axis_pec_only")
         row["delta_axis_pec_only_minus_axis"] = (apo - ax) if apo is not None and ax is not None else None
         row["delta_axis_pec_only_minus_vanilla"] = (apo - van) if apo is not None and van is not None else None
-        row["delta_axis_pec_only_minus_chileatiende"] = (apo - chi) if apo is not None and chi is not None else None
         row["delta_axis_pec_only_minus_automata_neutro"] = (apo - an) if apo is not None and an is not None else None
 
         comparison[key] = row
