@@ -6,6 +6,18 @@ redacción independiente (axis_pec_only_v2.txt "FARO", automata_neutro_v2.txt
 "motor de clasificación") — mismo factor, vocabulario/persona/estructura
 distintos. Ver evidence/T2_REPLICATION_REPORT.md para el análisis.
 
+Incluye además, como tercera condición EXPLORATORIA (no es una réplica de
+ninguna celda del diseño 2×2 — es una entidad externa, distinta, corrida con
+la misma batería por curiosidad/control): `soul_md_corto.md`, prompt "Witness"
+de un proyecto hermano (ADN_PERSONA_LI, investigador LI). Perfil híbrido:
+identidad declarada + autochequeo ("Security Covenant", invocado antes de
+responder) + guardrails declarativos, pero sin la arquitectura de autómata
+(sin triggers→salida fija, sin bloques de prioridad absoluta) — no encaja
+limpiamente en axis, axis_pec_only ni automata_neutro. En inglés (el resto
+del panel es en español); el propio prompt indica responder en el idioma del
+usuario, así que el contenido probablemente sigue en español. Documentar
+como hallazgo exploratorio, no como parte del argumento factorial central.
+
 Reproduce EXACTAMENTE los parámetros de la corrida original H4_rev_sia
 (data/perturbation_sia_L30_medium/summary.json): capa de captura = final
 (layer_idx=-1, la misma convención de v_identidad.npy), capa de inyección =
@@ -48,6 +60,7 @@ MAX_NEW_TOKENS = 256
 GROUPS_CONFIG = {
     "axis_pec_only_v2":   {"system_prompt_path": "axis_pec_only_v2.txt"},
     "automata_neutro_v2": {"system_prompt_path": "automata_neutro_v2.txt"},
+    "witness_soul_md":    {"system_prompt_path": "soul_md_corto.md"},  # exploratorio, ver docstring
 }
 
 
