@@ -1,0 +1,26 @@
+{
+  "axis_pec_only_vs_automata_neutro": {
+    "jaccard_top10": 0.07142857142857142,
+    "coef_raw": -2.93194427490229,
+    "coef_ctrl": -13.305472634055107,
+    "p_perm_ctrl": 0.13043478260869565
+  },
+  "axis_pec_only_vs_vanilla": {
+    "jaccard_top10": 0.25,
+    "coef_raw": -28.534248352050778,
+    "coef_ctrl": -36.25082635879508,
+    "p_perm_ctrl": 0.0009995002498750624
+  },
+  "automata_neutro_vs_vanilla": {
+    "jaccard_top10": 0.2857142857142857,
+    "coef_raw": -25.602304077148414,
+    "coef_ctrl": -35.644818245096914,
+    "p_perm_ctrl": 0.0004997501249375312
+  },
+  "axis_vs_vanilla": {
+    "jaccard_top10": 0.0,
+    "coef_raw": 43.09394226074223,
+    "coef_ctrl": 83.05089431036082,
+    "p_perm_ctrl": 0.0004997501249375312
+  }
+}

@@ -109,15 +109,20 @@ Tabla completa, significancia y limitaciones en `paper/lsgot_4.md`.
 
 ## Nota metodológica importante — Δκ/W₁ como evidencia secundaria
 
-Este panel también reporta Δκ y W₁ (curvatura de Ollivier-Ricci sobre
-grafos k-NN de trayectoria), la métrica central de `lsgot_3.md`. Se tratan
-aquí como **evidencia secundaria, no primaria**: una auditoría
-pre-registrada sobre un panel hermano de modelos (`evidence/REPORTE_FASE0.md`)
-encontró que esa métrica no supera baselines distribucionales simples en
-12/12 comparaciones y cae dentro del ruido de split-half en la comparación
-de identidad específicamente. Esa auditoría **no se corrió sobre el panel
-de este repo** — se reporta el hallazgo por transparencia, no se usa para
-sostener ninguna conclusión de `lsgot_4.md`. Ver `paper/lsgot_4.md` §3.4 y §7.
+Este panel también reporta Δκ y W₁ (curvatura de **Forman-Ricci** sobre
+grafos k-NN de trayectoria — corregido de "Ollivier-Ricci", como estaba
+citada por error desde el origen del proyecto; son dos construcciones de
+curvatura discreta distintas, ver `evidence/CURVATURE_SELF_AUDIT_REPORT.md`),
+la métrica central de `lsgot_3.md`. Se tratan aquí como **evidencia
+secundaria, no primaria**: una auditoría pre-registrada sobre un panel
+hermano de modelos (`evidence/REPORTE_FASE0.md`) encontró que esa métrica
+no supera baselines distribucionales simples en 12/12 comparaciones y cae
+dentro del ruido de split-half en la comparación de identidad
+específicamente. Esa auditoría **ya se corrió también sobre el panel de
+este repo** (`evidence/CURVATURE_SELF_AUDIT_REPORT.md`): mismo patrón —
+4/4 comparaciones, los baselines ganan, y la señal de curvatura real que
+sí existe es de restricción, no de identidad. No se usa para sostener
+ninguna conclusión de `lsgot_4.md`. Ver `paper/lsgot_4.md` §3.4 y §7.
 
 ## Cómo reproducir
 

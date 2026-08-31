@@ -319,3 +319,42 @@ cuales es la magnitud que `lsgot_3.pdf` interpretó originalmente como huella
 de identidad (esa, ya establecido, es densidad de restricción). El objetivo
 de este set no es rescatar la hipótesis original sino evitar reemplazarla por
 otra igual de subdeterminada — un solo escalar por un solo escalar.
+
+## T12 — Auto-auditoría Δκ/W₁ + corrección Ollivier→Forman (2026-08-31, RESUELTO en parte)
+
+Ítem #1 de "Future work" del paper (§7.2): correr el protocolo de
+`REPORTE_FASE0.md` (baselines vs. curvatura, split-half null, confound de
+primer token) sobre el panel Gemma-4-31B-it de este paper. Ver
+`CURVATURE_SELF_AUDIT_REPORT.md` para el detalle completo.
+
+**Hallazgo no buscado, previo a correr nada:** `curvature_analyzer.py` (md5
+idéntico en el panel de este paper y en el panel hermano de
+`REPORTE_FASE0.md`) implementa `FormanRicciAnalyzer` — curvatura de Forman,
+puramente combinatoria — no Ollivier-Ricci (transporte óptimo), pese a que
+`lsgot_4.md` y `REPORTE_FASE0.md` la citan como "Ollivier-Ricci" en todas
+partes, incluida la referencia a Ollivier (2009). (`TIER0_REPORT.md` no
+nombra la fórmula, no necesitó corrección.)
+Error heredado del origen del proyecto. Corregido en `lsgot_4.md`
+(§2.3/§3.4/§7.2/Referencias) y `README.md` — corrección de nombre, ningún
+valor de Δκ/W₁ recalculado ni cambiado.
+
+**Con la métrica correctamente entendida (Forman-Ricci), 3 chequeos corridos
+sin GPU (embeddings ya extraídos):**
+
+- Split-half null: señal fuerte para los pares que involucran
+  `automata_neutro` (×3.5–17 el ruido); `axis_pec_only` vs `vanilla`
+  (identidad pura) cae dentro del ruido (0.4–0.5×) — confirma que esta
+  familia de métricas es de restricción, no de identidad.
+- Baselines vs. curvatura: 4/4 comparaciones, los baselines simples ganan
+  (probe lineal AUC=1.000 en las cuatro) — mismo patrón que el panel
+  hermano.
+- Confound de primer token (proxy textual, no el control definitivo con
+  token forzado): real (Jaccard top-10 hasta 0.00 en axis vs vanilla), pero
+  a diferencia del panel hermano **no revierte** los efectos de `‖v1‖` de
+  este panel — sobreviven y se refuerzan al controlar.
+
+**Pendiente (requiere GPU):** el control definitivo de `REPORTE_FASE0.md`
+(forward pass con token forzado constante, comparando h_post en vez del
+proxy) — la versión proxy ya es tranquilizadora, pero no reemplaza este
+control. Baja prioridad relativa: ninguna afirmación del paper depende de
+`‖v1‖` en sí (v̂ es proyección coseno, no norma).
