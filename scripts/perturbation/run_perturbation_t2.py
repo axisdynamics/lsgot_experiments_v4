@@ -40,7 +40,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from perturbation_extractor import PerturbationExtractor  # noqa: E402
 
 HERE = Path(__file__).parent
-MODEL_PATH = "google/gemma-4-31B-it"
+MODEL_PATH = "/workspace/models/gemma-4-31B-it"  # local, ya descargado — evitar re-bajar al cache de /root (disco chico)
 # Defaults asumen la misma disposición de /workspace usada en las corridas
 # previas de este proyecto (ver run_perturbation.py) — sobreescribir con
 # --prompts-json / --prompts-dir si el pod nuevo usa otra ruta.
