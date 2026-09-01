@@ -116,13 +116,18 @@ d=+5.25 (vs d=+5.52 del original), y el fallo de recuperación de
 Como **control fuera de diseño** (§3.8 de `lsgot_4.md`), se corrió la misma
 batería sobre `soul_md_corto.md` ("Witness"), una entidad de identidad
 densa tomada de `ADN_PERSONA_LI` — un proyecto hermano de este grupo de
-investigación, redactado por otra persona sin conocimiento de este panel.
-Tiene identidad declarada y auto-chequeo cableado, pero ninguna
-arquitectura de reglas trigger→salida ni filtro de prioridad absoluta. En
-las tres señales de identidad, en recuperación y en fidelidad de ruta
-converge con el perfil de `axis_pec_only` — no con el de `automata_neutro`
-ni en ningún punto intermedio — pese a estar en inglés y no haber sido
-diseñada para este estudio.
+investigación, redactado por otra persona sin conocimiento de este panel,
+sobre la convención pública `SOUL.md`/[`soul-md`](https://github.com/Twynzen/soul-md)
+(Twynzen) — sin ninguna línea de herencia textual con la redacción propia
+de `axis`. Esto descarta que la señal de identidad sea un artefacto de
+similitud semántica con el vocabulario de `axis`: es una identidad de
+autoría, estructura y origen de plantilla independientes. Tiene identidad
+declarada y auto-chequeo cableado, pero ninguna arquitectura de reglas
+trigger→salida ni filtro de prioridad absoluta. En las tres señales de
+identidad, en recuperación y en fidelidad de ruta converge con el perfil
+de `axis_pec_only` — no con el de `automata_neutro` ni en ningún punto
+intermedio — pese a estar en inglés y no haber sido diseñada para este
+estudio.
 
 Tabla completa, significancia y limitaciones en `paper/lsgot_4.md`.
 
