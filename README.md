@@ -1,7 +1,8 @@
 # LSGOT — Identidad vs. densidad de restricción (Gemma-4-31B-it, SIA; validado cross-modelo en Qwen3-32B)
 
 Subconjunto curado de evidencia, scripts y resultados agregados que sostiene
-`paper/lsgot_4.md` — una reformulación de `paper/lsgot_3.md` sobre un solo
+`paper/lsgot_4.md` — una reformulación de lsgot_3 (paper antecedente,
+versionado en otro repositorio de este grupo, no en este) sobre un solo
 modelo (Gemma-4-31B-it) y un diseño factorial explícito (identidad ×
 densidad de restricción operativa) en vez del diseño de 3 condiciones /
 4 modelos del paper original.
@@ -24,7 +25,7 @@ condiciones de este repo).
 ## Qué mide cada carpeta
 
 ```
-paper/                    lsgot_4.md (reformulación), lsgot_3.md (antecedente), figures/ (Figura 1)
+paper/                    lsgot_4.md (reformulación; lsgot_3, el antecedente, vive en otro repositorio), figures/ (Figura 1)
 evidence/                 reportes — diseño factorial, resultados por experimento, auditoría metodológica, validación cross-modelo
 data/                     JSON agregados por experimento (sin *.npz): respuestas, curvatura, RQA/Hurst/PR, τ/recovery_rate, Fréchet
 scripts/                  extracción, perturbación y análisis estadístico
@@ -137,7 +138,7 @@ Este panel también reporta Δκ y W₁ (curvatura de **Forman-Ricci** sobre
 grafos k-NN de trayectoria — corregido de "Ollivier-Ricci", como estaba
 citada por error desde el origen del proyecto; son dos construcciones de
 curvatura discreta distintas, ver `evidence/CURVATURE_SELF_AUDIT_REPORT.md`),
-la métrica central de `lsgot_3.md`. Se tratan aquí como **evidencia
+la métrica central del paper antecedente (lsgot_3, en otro repositorio). Se tratan aquí como **evidencia
 secundaria, no primaria**: una auditoría pre-registrada sobre un panel
 hermano de modelos (`evidence/REPORTE_FASE0.md`) encontró que esa métrica
 no supera baselines distribucionales simples en 12/12 comparaciones y cae
