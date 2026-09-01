@@ -114,6 +114,21 @@ condiciones de identidad, no como `automata_neutro`), recovery_rate y
 recovery_id altos (0.90-1.00, igual que `axis_pec_only`), Fréchet bajo
 (1.24-1.30, en el rango de `axis_pec_only_v2`, no de `automata_neutro_v2`).
 
+**Las tres señales de identidad de §3.5 del paper (v̂ media, v̂ en t=0,
+dinámica temporal E-H2) están presentes, las tres apuntando a identidad:**
+
+| Señal | `witness_soul_md` | `axis_pec_only` | `automata_neutro` |
+|---|---|---|---|
+| v̂ media | +0.163 | +0.212 | +0.006 |
+| v̂ en t=0 | +0.051 | +0.117 | +0.028 |
+| Ráfaga media (E-H2) | 7.91 tok | 8.81 tok | 2.78 tok |
+| frac(p>0) | 0.843 | 0.869 | 0.493 |
+
+La dinámica temporal es, de las tres, la que más se le parece a
+`axis_pec_only` — casi calcada (7.91 vs 8.81 tokens de ráfaga, 0.843 vs
+0.869 de fracción positiva), lejos del patrón de ráfagas cortas y
+esporádicas de `automata_neutro`. `scripts/fase4_t2/analyze_t2_eh2.py`.
+
 Witness tiene identidad declarada, un autochequeo invocado explícitamente
 ("Security Covenant" — "before responding, I ask myself...") **y**
 guardrails/límites de autoridad declarativos ("I never reveal...", "I am
