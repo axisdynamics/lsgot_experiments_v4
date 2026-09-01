@@ -162,6 +162,13 @@ reformulación del Factor 2 en `Teoria_subconjunto_acotado.md`. No se
 recomienda tratar esto como una tercera celda del diseño 2×2 — es un solo
 prompt externo, en otro idioma, sin control de longitud ni de dominio.
 
+> **Actualización 2026-09-01:** `paper/lsgot_4.md` §3.8 revisó esta
+> recomendación y adoptó `soul_md_corto`/`witness_soul_md` como la octava
+> condición del panel (I=+, C=−), con las mismas salvedades listadas arriba
+> explícitas en el texto del paper (n=1, sin control de longitud/dominio,
+> pipeline T2 en vez de `sia_extended_v5`, en inglés). Este reporte queda
+> sin cambios como la fuente de los números y del análisis original.
+
 ## 4. Implicación para el paper
 
 **T2 está resuelto para las dos celdas puras.** La limitación de n=1 en

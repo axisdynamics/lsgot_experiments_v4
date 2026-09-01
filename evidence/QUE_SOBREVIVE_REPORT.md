@@ -32,6 +32,7 @@ de este panel. Cada fila indica el estado actual y por qué. No reemplaza a
 | Cifra insignia del paper (§3.5) | d=+8.89 (`axis` vs `chileatiende`) → **d=+5.52** (`axis_pec_only` vs `automata_neutro`) | `chileatiende` forzaba markup HTML repetido en el 100% de sus respuestas — confound de formato, no de restricción |
 | Nombre de la métrica de curvatura | "Ollivier-Ricci Δκ/W₁" → **"Forman-Ricci Δκ/W₁"** | `curvature_analyzer.py` (md5 idéntico en este panel y en `REPORTE_FASE0.md`) siempre calculó Forman (combinatoria), nunca Ollivier (transporte óptimo) — error heredado del origen del proyecto, no de esta sesión |
 | Referencia bibliográfica | Ollivier, Y. (2009) → **Forman, R. (2003)** | Consecuencia directa del punto anterior |
+| Tratamiento de `witness_soul_md`/`soul_md_corto` | "Control fuera de diseño, exploratorio" (`T2_REPLICATION_REPORT.md` §3) → **octava condición del panel (I=+, C=−)** (`paper/lsgot_4.md` §2.2, §3.8) | Converge limpiamente con `axis_pec_only` en las tres señales de identidad, en recuperación y en fidelidad de ruta — se revisó la recomendación original a la luz de esa convergencia; las salvedades (n=1, sin control de longitud/dominio, en inglés, pipeline T2) quedan explícitas en el paper, no se ocultaron |
 
 ## 4. Retirado — ya no se usa como evidencia de nada
 
@@ -47,7 +48,6 @@ de este panel. Cada fila indica el estado actual y por qué. No reemplaza a
 |---|---|---|
 | **Causalidad de v̂** (E-K, steering) | 17/17 combinaciones probadas degeneraron en repetición; control aleatorio descarta que sea específico de v̂ — es el mecanismo de inyección sostenida el que falla | Reintentar con inyección puntual única o clamping de norma, no el mismo mecanismo |
 | **Control definitivo de primer token** (forward pass, token forzado) | La versión proxy (léxica) ya corrió y es tranquilizadora — no revierte nada de este panel | Requiere GPU + Gemma-4-31B-it; baja prioridad relativa (ningún hallazgo del paper depende de ‖v1‖ en sí) |
-| **`witness_soul_md` como tercera celda del 2×2** | Exploratorio, un solo prompt externo, en inglés, sin control de longitud ni dominio — no se trató como parte del diseño factorial | No es una pregunta a cerrar — es intencionalmente fuera del alcance del panel (`T2_REPLICATION_REPORT.md` §3) |
 | **Perturbación/recuperación en Qwen3** | No corrida | Requiere GPU + pipeline H4_rev completo en el segundo modelo |
 | **Scale sweep real** (no solo cambio de arquitectura) | No corrida | El umbral de "~30B" sigue siendo evidencia informal de despliegue |
 | **E-F / E-G** (logit-lens vertical, atención al prompt) | Nunca corridas | Extracción nueva, cara — candidatas a ronda dedicada |

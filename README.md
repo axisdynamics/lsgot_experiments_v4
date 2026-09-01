@@ -36,7 +36,10 @@ scripts/fase3_qwen3/      extracción y análisis de la validación cross-modelo
 
 ## Diseño experimental
 
-Siete condiciones limpias sobre un mismo modelo cruzan dos factores:
+Ocho condiciones limpias sobre un mismo modelo cruzan dos factores. Seis
+fueron redactadas para este panel; `soul_md_corto` es una identidad externa,
+no escrita para este estudio (detalle y por qué se incluye igual en
+"Resultado central" abajo y en `paper/lsgot_4.md` §3.8):
 
 - **Identidad (I):** auto-referencia declarada y *cableada* como paso obligatorio del pipeline de respuesta.
 - **Densidad de restricción (C):** reglas trigger→salida fija, filtro de prioridad absoluta, jerarquía de bloques, salidas verbatim.
@@ -46,6 +49,7 @@ Siete condiciones limpias sobre un mismo modelo cruzan dos factores:
 | `vanilla`, `generic_long`, `generic_short` | − | − |
 | `axis`, `axis_short` | + | + |
 | `axis_pec_only` | + | − |
+| `soul_md_corto` | + | − |
 | `automata_neutro` | − | + |
 
 > El diseño original incluía además un autómata de dominio real (con y sin
@@ -114,21 +118,41 @@ d=+5.25 (vs d=+5.52 del original), y el fallo de recuperación de
 (recovery_rate 0.50-0.60 vs 0.77-0.88 original). Ver
 `evidence/T2_REPLICATION_REPORT.md`.
 
-Como **control fuera de diseño** (§3.8 de `lsgot_4.md`), se corrió la misma
-batería sobre `soul_md_corto.md` ("Witness"), una entidad de identidad
-densa tomada de `ADN_PERSONA_LI` — un proyecto hermano de este grupo de
-investigación, redactado por otra persona sin conocimiento de este panel,
-sobre la convención pública `SOUL.md`/[`soul-md`](https://github.com/Twynzen/soul-md)
-(Twynzen) — sin ninguna línea de herencia textual con la redacción propia
-de `axis`. Esto descarta que la señal de identidad sea un artefacto de
-similitud semántica con el vocabulario de `axis`: es una identidad de
-autoría, estructura y origen de plantilla independientes. Tiene identidad
-declarada y auto-chequeo cableado, pero ninguna arquitectura de reglas
-trigger→salida ni filtro de prioridad absoluta. En las tres señales de
-identidad, en recuperación y en fidelidad de ruta converge con el perfil
-de `axis_pec_only` — no con el de `automata_neutro` ni en ningún punto
+Como **octava condición del panel** (I=+, C=−; §3.8 de `lsgot_4.md`), se
+corrió la misma batería sobre `soul_md_corto.md` ("Witness"), una entidad
+de identidad densa tomada de la convención pública
+`SOUL.md`/[`soul-md`](https://github.com/Twynzen/soul-md) (Twynzen) — sin
+ninguna línea de herencia textual con la redacción propia de `axis`. Esto
+descarta que la señal de identidad sea un artefacto de similitud semántica
+con el vocabulario de `axis`: es una identidad de autoría, estructura y
+origen de plantilla independientes. Tiene identidad declarada y
+auto-chequeo cableado, pero ninguna arquitectura de reglas trigger→salida
+ni filtro de prioridad absoluta. En las tres señales de identidad, en
+recuperación y en fidelidad de ruta converge con el perfil de
+`axis_pec_only` — no con el de `automata_neutro` ni en ningún punto
 intermedio — pese a estar en inglés y no haber sido diseñada para este
-estudio.
+estudio. A diferencia de las otras siete, corrió por el pipeline de
+réplica T2 (mismo protocolo H4_rev, junto a `axis_pec_only_v2`/
+`automata_neutro_v2`) en vez de la extracción original `sia_extended_v5`,
+y su conteo de tokens (~2.489, heurística chars/4) es una aproximación,
+no una medición con el mismo tokenizer que las otras siete filas:
+
+| Métrica | `axis_pec_only` | `soul_md_corto` | `automata_neutro` |
+|---|---|---|---|
+| PR | 18.01 | 18.23 | 14.72 |
+| proj v̂ (media) | +0.212 | +0.163 | +0.006 |
+| proj v̂ (t=0) | +0.117 | +0.051 | +0.028 |
+| determinismo RQA | 0.000 | 0.047 | 0.418 |
+| τ (t=50/128/200) | 20.6/18.5/14.5 | 21.0/16.5/16.3 | 30.1/28.0/13.4 |
+| recovery_rate | 1.00/1.00/1.00 | 0.95-1.00 | 0.77/0.82/0.88 |
+| recovery_id | 0.53-0.67† | 0.90-1.00 | 0.43-0.67 |
+| Fréchet_norm | —† | 1.24/1.25/1.30 | 1.07-1.35 |
+
+†Cifras de `axis_pec_only` (original) en `recovery_id`/Fréchet vienen de
+§3.5/§3.6 de `lsgot_4.md`, no de la misma corrida T2 que mide
+`soul_md_corto` — comparación entre pipelines, no dentro de uno solo; ver
+`evidence/T2_REPLICATION_REPORT.md` para el detalle completo y las
+salvedades metodológicas de cada celda.
 
 Tabla completa, significancia y limitaciones en `paper/lsgot_4.md`.
 
