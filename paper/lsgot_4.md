@@ -210,18 +210,18 @@ Seven of the eight conditions in §2.2's table were authored for this panel's 2�
 
 We ran this condition through the identical free-generation and H4_rev pipelines used for `axis_pec_only_v2`/`automata_neutro_v2` (§5), not through a redesigned protocol. All three static identity signals of §3.5 are present, all three pointing toward identity: mean v̂ projection +0.163 (vs +0.212 for `axis_pec_only`, +0.006 for `automata_neutro`), t = 0 projection +0.051 (vs +0.117, +0.028), and sustained-activation dynamics (§3.5's temporal-shape signal) nearly identical to `axis_pec_only` (mean burst length 7.9 tokens vs 8.8; 84% of tokens projecting positive vs 87%) and far from `automata_neutro`'s short, sparse bursts (2.8 tokens, 49%). RQA determinism is 0.047 — near the identity-condition floor, not `automata_neutro`'s 0.42–0.65. Recovery is at or near ceiling (recovery_rate and recovery_id both 0.90–1.00 across all three injection points) rather than showing the coarse-recovery illusion of §3.3. Route-fidelity (Fréchet, §3.6) is statistically indistinguishable from `axis_pec_only_v2` at all three injection points (all p > 0.09) and significantly better than `automata_neutro_v2` at all three (d = −1.21 to −1.56, all p < 0.0001) — this condition does not merely reach a similar coarse state after perturbation, it returns by essentially the same route as its own baseline.
 
-| Metric | `axis_pec_only` | `soul_md_corto` | `automata_neutro` |
-|---|---|---|---|
-| Participation ratio | 18.01 | 18.23 | 14.72 |
-| v̂ projection (mean) | +0.212 | +0.163 | +0.006 |
-| v̂ projection (t = 0) | +0.117 | +0.051 | +0.028 |
-| RQA determinism | 0.000 | 0.047 | 0.418 |
-| τ_geom (t=50/128/200) | 20.6/18.5/14.5 | 21.0/16.5/16.3 | 30.1/28.0/13.4 |
-| recovery_rate | 1.00/1.00/1.00 | 0.95–1.00 | 0.77/0.82/0.88 |
-| recovery_id | 0.53–0.67‡ | 0.90–1.00 | 0.43–0.67 |
-| Fréchet_norm (raw) | —‡ | 1.24/1.25/1.30 | 1.07–1.35§ |
+| Metric | `axis` | `axis_pec_only` | `soul_md_corto` | `automata_neutro` |
+|---|---|---|---|---|
+| Participation ratio | 17.54 | 18.01 | 18.23 | 14.72 |
+| v̂ projection (mean) | +0.205 | +0.212 | +0.163 | +0.006 |
+| v̂ projection (t = 0) | +0.125 | +0.117 | +0.051 | +0.028 |
+| RQA determinism | 0.000 | 0.000 | 0.047 | 0.418 |
+| τ_geom (t=50/128/200) | 21.1/19.6/16.3 | 20.6/18.5/14.5 | 21.0/16.5/16.3 | 30.1/28.0/13.4 |
+| recovery_rate | 1.00/1.00/1.00 | 1.00/1.00/1.00 | 0.95–1.00 | 0.77/0.82/0.88 |
+| recovery_id | 1.00/0.95/0.85‡ | 1.00/0.89/0.95‡ | 0.90–1.00 | 0.53/0.67/0.43‡ |
+| Fréchet | +0.11/+0.23/+0.28§ | — | 1.24/1.25/1.30 | +1.07/+1.21/+1.35§ |
 
-‡`axis_pec_only`'s recovery_id and route-fidelity figures are from §3.5/§3.6's original H4_rev run, not the T2 pass that measured `soul_md_corto`; the `axis_pec_only`/`automata_neutro` column here is a cross-pipeline reference point, not a same-run comparison. §Reported in §3.6 as Cohen's d against `vanilla`, not the raw statistic; the raw value is not directly comparable to the `soul_md_corto` column's raw Fréchet_norm for that reason — see `T2_REPLICATION_REPORT.md` §§1–2 for the full, pipeline-matched numbers and the permutation test (`soul_md_corto` vs `automata_neutro_v2`: d = −1.21 to −1.56, all p < 0.0001; vs `axis_pec_only_v2`: all n.s.) this table's route-fidelity claim rests on.
+‡`axis`, `axis_pec_only`, and `automata_neutro`'s recovery_id figures (t=50/128/200) are from §3.5's original H4_rev run, not the T2 pass that measured `soul_md_corto`; those three columns here are a cross-pipeline reference point, not a same-run comparison. §`axis` and `automata_neutro`'s Fréchet cells are Cohen's d against `vanilla` as reported in §3.6, not a raw statistic (`axis`: n.s. at all three points; `automata_neutro`: p < 0.001 at all three) — not directly comparable to the `soul_md_corto` column's raw Fréchet_norm value for that reason; `axis_pec_only`'s raw Fréchet is not reported in this paper at the single-condition level, only as part of the `vanilla`-relative comparison above — see `T2_REPLICATION_REPORT.md` §§1–2 for the full, pipeline-matched raw numbers and the permutation test (`soul_md_corto` vs `automata_neutro_v2`: d = −1.21 to −1.56, all p < 0.0001; vs `axis_pec_only_v2`: all n.s.) this table's route-fidelity claim rests on.
 
 A prompt with declarative behavioral limits but no trigger-architecture, written by someone else, for a different purpose, in a different language, converges on the identity profile across every measure in this paper — static and dynamic — rather than landing anywhere between the two poles. This sharpens Factor C: what gates the effects in §3.1–§3.7 is not the mere presence of behavioral rules, but specifically an automaton architecture (trigger-to-fixed-output mapping, an absolute-priority filter, a declared block hierarchy) — a system with real behavioral constraints but no such architecture behaves like `axis_pec_only`, not like `automata_neutro`. We include it as the panel's eighth condition (§2.2) rather than a separate out-of-design item, on the strength of that convergence — but flag, and do not smooth over, what still sets it apart from the other seven: it has no length or domain matching, it is in English rather than Spanish, it was measured through the T2/H4_rev pipeline rather than the original `sia_extended_v5` extraction (the table above notes where that makes a comparison cross-pipeline rather than same-run), and n = 1 like every other condition in this panel. Full detail in `T2_REPLICATION_REPORT.md` §3, which recommended treating this condition as exploratory and out-of-design at the time it was written; we revisit that recommendation here in light of how cleanly and consistently it replicates every measure in this paper.
 

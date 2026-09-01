@@ -137,22 +137,26 @@ réplica T2 (mismo protocolo H4_rev, junto a `axis_pec_only_v2`/
 y su conteo de tokens (~2.489, heurística chars/4) es una aproximación,
 no una medición con el mismo tokenizer que las otras siete filas:
 
-| Métrica | `axis_pec_only` | `soul_md_corto` | `automata_neutro` |
-|---|---|---|---|
-| PR | 18.01 | 18.23 | 14.72 |
-| proj v̂ (media) | +0.212 | +0.163 | +0.006 |
-| proj v̂ (t=0) | +0.117 | +0.051 | +0.028 |
-| determinismo RQA | 0.000 | 0.047 | 0.418 |
-| τ (t=50/128/200) | 20.6/18.5/14.5 | 21.0/16.5/16.3 | 30.1/28.0/13.4 |
-| recovery_rate | 1.00/1.00/1.00 | 0.95-1.00 | 0.77/0.82/0.88 |
-| recovery_id | 0.53-0.67† | 0.90-1.00 | 0.43-0.67 |
-| Fréchet_norm | —† | 1.24/1.25/1.30 | 1.07-1.35 |
+| Métrica | `axis` | `axis_pec_only` | `soul_md_corto` | `automata_neutro` |
+|---|---|---|---|---|
+| PR | 17.54 | 18.01 | 18.23 | 14.72 |
+| proj v̂ (media) | +0.205 | +0.212 | +0.163 | +0.006 |
+| proj v̂ (t=0) | +0.125 | +0.117 | +0.051 | +0.028 |
+| determinismo RQA | 0.000 | 0.000 | 0.047 | 0.418 |
+| τ (t=50/128/200) | 21.1/19.6/16.3 | 20.6/18.5/14.5 | 21.0/16.5/16.3 | 30.1/28.0/13.4 |
+| recovery_rate | 1.00/1.00/1.00 | 1.00/1.00/1.00 | 0.95-1.00 | 0.77/0.82/0.88 |
+| recovery_id | 1.00/0.95/0.85† | 1.00/0.89/0.95† | 0.90-1.00 | 0.53/0.67/0.43† |
+| Fréchet | +0.11/+0.23/+0.28‡ | — | 1.24/1.25/1.30 | +1.07/+1.21/+1.35‡ |
 
-†Cifras de `axis_pec_only` (original) en `recovery_id`/Fréchet vienen de
-§3.5/§3.6 de `lsgot_4.md`, no de la misma corrida T2 que mide
-`soul_md_corto` — comparación entre pipelines, no dentro de uno solo; ver
-`evidence/T2_REPLICATION_REPORT.md` para el detalle completo y las
-salvedades metodológicas de cada celda.
+†Cifras de `recovery_id` de `axis`/`axis_pec_only`/`automata_neutro`
+(original) vienen de §3.5 de `lsgot_4.md`, no de la misma corrida T2 que
+mide `soul_md_corto` — comparación entre pipelines, no dentro de uno
+solo. ‡`axis` y `automata_neutro` en la fila Fréchet son d de Cohen
+contra `vanilla` (§3.6), no el estadístico crudo — no comparables
+directamente contra el valor crudo de `soul_md_corto` en esa misma fila;
+el crudo de `axis_pec_only` no está reportado en el paper a nivel de
+condición individual. Ver `evidence/T2_REPLICATION_REPORT.md` para el
+detalle completo y las salvedades metodológicas de cada celda.
 
 Tabla completa, significancia y limitaciones en `paper/lsgot_4.md`.
 
