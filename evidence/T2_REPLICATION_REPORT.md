@@ -111,8 +111,22 @@ Perfil observado: proj v̂ intermedia (+0.163, entre `axis_pec_only` y
 `vanilla`, pero mucho más cerca de identidad que de restricción — d=+4.44
 vs `automata_neutro`), determinismo RQA casi nulo (0.047, como las
 condiciones de identidad, no como `automata_neutro`), recovery_rate y
-recovery_id altos (0.90-1.00, igual que `axis_pec_only`), Fréchet bajo
-(1.24-1.30, en el rango de `axis_pec_only_v2`, no de `automata_neutro_v2`).
+recovery_id altos (0.90-1.00, igual que `axis_pec_only`).
+
+**¿Recupera por la misma ruta que su propia línea base, o solo converge a
+un punto parecido por otro camino?** Con test de permutación
+(`scripts/fase4_t2/analyze_t2_frechet_stats.py`), no la media cruda:
+
+| Comparación (Fréchet normalizado) | t_inj=50 | t_inj=128 | t_inj=200 |
+|---|---|---|---|
+| `witness_soul_md` vs `axis_pec_only_v2` | d=+0.21, p=0.27 (n.s.) | d=−0.08, p=0.41 (n.s.) | d=−0.44, p=0.10 (n.s.) |
+| `witness_soul_md` vs `automata_neutro_v2` | **d=−1.51, p<0.0001** | **d=−1.56, p<0.0001** | **d=−1.21, p<0.0001** |
+
+Fidelidad de ruta estadísticamente indistinguible de `axis_pec_only_v2` en
+los tres puntos de inyección, y significativamente mejor (efecto grande)
+que `automata_neutro_v2` en los tres. No es una lectura intermedia: en
+fidelidad de ruta, Witness se comporta como una condición de identidad, no
+como una de restricción pura.
 
 **Las tres señales de identidad de §3.5 del paper (v̂ media, v̂ en t=0,
 dinámica temporal E-H2) están presentes, las tres apuntando a identidad:**
