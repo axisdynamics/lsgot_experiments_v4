@@ -105,6 +105,14 @@ La jerarquía relativa "restricción > identidad" no es universal — en Qwen3
 los dos factores están más equilibrados — pero la doble disociación en sí
 no es un artefacto de Gemma-4. Ver `evidence/QWEN3_VALIDATION_REPORT.md`.
 
+También **replica con una segunda redacción independiente de las dos
+condiciones puras** (`axis_pec_only_v2`, `automata_neutro_v2` — otra
+persona, otro vocabulario, mismo factor): la disociación central da
+d=+5.25 (vs d=+5.52 del original), y el fallo de recuperación de
+`automata_neutro` se replica de forma más severa, no más débil
+(recovery_rate 0.50-0.60 vs 0.77-0.88 original). Ver
+`evidence/T2_REPLICATION_REPORT.md`.
+
 Tabla completa, significancia y limitaciones en `paper/lsgot_4.md`.
 
 ## Nota metodológica importante — Δκ/W₁ como evidencia secundaria

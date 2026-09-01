@@ -8,7 +8,8 @@ de este panel. Cada fila indica el estado actual y por qué. No reemplaza a
 
 | Hallazgo | Evidencia | Qué lo puso a prueba |
 |---|---|---|
-| **v̂ — doble disociación estática** (identidad positiva, restricción negativa) | d=+5.52 (`axis_pec_only` vs `automata_neutro`, §3.5) | Sobrevivió: exclusión de chileatiende (d bajó de 8.89 a 5.52, no desapareció), replicación en Qwen3 (más fuerte, d=+12.97), auto-auditoría de curvatura (baselines confirman separación de v1), confound de primer token a nivel proxy (se refuerza, no revierte) |
+| **v̂ — doble disociación estática** (identidad positiva, restricción negativa) | d=+5.52 (`axis_pec_only` vs `automata_neutro`, §3.5) | Sobrevivió: exclusión de chileatiende (d bajó de 8.89 a 5.52, no desapareció), replicación en Qwen3 (más fuerte, d=+12.97), auto-auditoría de curvatura (baselines confirman separación de v1), confound de primer token a nivel proxy (se refuerza, no revierte), **T2 — segunda instanciación independiente de las dos celdas puras (d=+5.25, prácticamente idéntico)** |
+| **Recuperación gatillada por cableado, T2** | `automata_neutro_v2` recovery_rate=0.50-0.60 (más severo que el original 0.77-0.88) | Réplica de manipulación con redacción independiente — el fallo de recuperación no solo sobrevive, se acentúa |
 | **v̂ en t=0** (antes de generar) | d=+5.75 a +9.78 (E-L) | Sobrevive en Qwen3, más fuerte (d=+12.97 en la comparación análoga) |
 | **v̂ — dinámica temporal** (ráfagas sostenidas) | ráfaga 7.9-8.8 vs 2.8 tokens (E-H2) | Sobrevive en Qwen3, más extremo |
 | **Participation ratio, efecto graduado** | id. d=−1.18, restr. d=−1.79 (§3.1) | Sobrevive en Qwen3: `automata_neutro` el PR más bajo en 12/12 capas, sin excepción |
@@ -46,7 +47,7 @@ de este panel. Cada fila indica el estado actual y por qué. No reemplaza a
 |---|---|---|
 | **Causalidad de v̂** (E-K, steering) | 17/17 combinaciones probadas degeneraron en repetición; control aleatorio descarta que sea específico de v̂ — es el mecanismo de inyección sostenida el que falla | Reintentar con inyección puntual única o clamping de norma, no el mismo mecanismo |
 | **Control definitivo de primer token** (forward pass, token forzado) | La versión proxy (léxica) ya corrió y es tranquilizadora — no revierte nada de este panel | Requiere GPU + Gemma-4-31B-it; baja prioridad relativa (ningún hallazgo del paper depende de ‖v1‖ en sí) |
-| **T2 — réplica de la manipulación** | 🔄 **corriendo ahora mismo** (`axis_pec_only_v2`, `automata_neutro_v2`, + `soul_md_corto` exploratorio) | Resultado pendiente — ver próximo reporte |
+| **`witness_soul_md` como tercera celda del 2×2** | Exploratorio, un solo prompt externo, en inglés, sin control de longitud ni dominio — no se trató como parte del diseño factorial | No es una pregunta a cerrar — es intencionalmente fuera del alcance del panel (`T2_REPLICATION_REPORT.md` §3) |
 | **Perturbación/recuperación en Qwen3** | No corrida | Requiere GPU + pipeline H4_rev completo en el segundo modelo |
 | **Scale sweep real** (no solo cambio de arquitectura) | No corrida | El umbral de "~30B" sigue siendo evidencia informal de despliegue |
 | **E-F / E-G** (logit-lens vertical, atención al prompt) | Nunca corridas | Extracción nueva, cara — candidatas a ronda dedicada |
