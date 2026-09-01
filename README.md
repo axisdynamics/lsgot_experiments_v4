@@ -113,6 +113,17 @@ d=+5.25 (vs d=+5.52 del original), y el fallo de recuperación de
 (recovery_rate 0.50-0.60 vs 0.77-0.88 original). Ver
 `evidence/T2_REPLICATION_REPORT.md`.
 
+Como **control fuera de diseño** (§3.8 de `lsgot_4.md`), se corrió la misma
+batería sobre `soul_md_corto.md` ("Witness"), una entidad de identidad
+densa tomada de `ADN_PERSONA_LI` — un proyecto hermano de este grupo de
+investigación, redactado por otra persona sin conocimiento de este panel.
+Tiene identidad declarada y auto-chequeo cableado, pero ninguna
+arquitectura de reglas trigger→salida ni filtro de prioridad absoluta. En
+las tres señales de identidad, en recuperación y en fidelidad de ruta
+converge con el perfil de `axis_pec_only` — no con el de `automata_neutro`
+ni en ningún punto intermedio — pese a estar en inglés y no haber sido
+diseñada para este estudio.
+
 Tabla completa, significancia y limitaciones en `paper/lsgot_4.md`.
 
 ## Nota metodológica importante — Δκ/W₁ como evidencia secundaria
