@@ -6,6 +6,7 @@ con test de permutación (igual método que §3.6 del paper), comparando
 witness_soul_md contra axis_pec_only_v2 (identidad) y automata_neutro_v2
 (restricción) en vez de solo reportar la media cruda.
 """
+import json
 import sys
 from pathlib import Path
 
@@ -19,7 +20,8 @@ T2_DIR = Path(
     "gemma4_31b_combined/perturbation/results_t2/trajectories"
 )
 T_INJ_VALUES = [50, 128, 200]
-GROUPS = ["axis_pec_only_v2", "automata_neutro_v2", "witness_soul_md"]
+GROUPS = ["axis_pec_only_v2", "automata_neutro_v2", "witness_soul_md",
+          "soul_jarvis", "soul_elena_financial", "soul_solidity_auditor"]
 
 
 def load_traj_npz(name):
@@ -89,13 +91,33 @@ def main():
             line += f"  {np.mean(v):.3f}±{np.std(v):.3f}(n={len(v):2d})    "
         print(line)
 
-    print("\n=== witness_soul_md vs identidad y vs restricción (permutación, Fréchet normalizado) ===")
-    for a, b in [("witness_soul_md", "axis_pec_only_v2"), ("witness_soul_md", "automata_neutro_v2")]:
+    print("\n=== witness_soul_md/soul_* vs identidad y vs restricción (permutación, Fréchet normalizado) ===")
+    pairs_out = {}
+    for a, b in [("witness_soul_md", "axis_pec_only_v2"), ("witness_soul_md", "automata_neutro_v2"),
+                 ("soul_jarvis", "axis_pec_only_v2"), ("soul_jarvis", "automata_neutro_v2"),
+                 ("soul_elena_financial", "axis_pec_only_v2"), ("soul_elena_financial", "automata_neutro_v2"),
+                 ("soul_solidity_auditor", "axis_pec_only_v2"), ("soul_solidity_auditor", "automata_neutro_v2")]:
         for t in T_INJ_VALUES:
             res = tester.full_comparison(per_group[a][t], per_group[b][t], a, b)
             d = res["cohens_d"]
             p = res["permutation_test"]["p_value"]
             print(f"  {a} vs {b}  t_inj={t:3d}  d={d:+.2f} ({res['effect_size_interpretation']})  p={p:.4f}")
+            pairs_out[f"{a}_vs_{b}_t{t}"] = {
+                "cohens_d": d, "p_value": p,
+                "effect_size_interpretation": res["effect_size_interpretation"],
+            }
+
+    out = {
+        "summary": {g: {f"t{t}": {"mean": float(np.mean(per_group[g][t])),
+                                   "std": float(np.std(per_group[g][t])),
+                                   "n": len(per_group[g][t])}
+                         for t in T_INJ_VALUES}
+                    for g in GROUPS},
+        "pairs": pairs_out,
+    }
+    out_path = Path(__file__).parent / "t2_frechet_stats_results.json"
+    out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False))
+    print(f"\nGuardado: {out_path}")
 
 
 if __name__ == "__main__":

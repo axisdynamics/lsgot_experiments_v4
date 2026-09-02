@@ -28,7 +28,8 @@ T2_DIR = Path(
 V_HAT_PATH = Path(__file__).parent.parent / "perturbation" / "v_identidad.npy"
 
 T_INJ_VALUES = [50, 128, 200]
-GROUPS = ["axis_pec_only_v2", "automata_neutro_v2", "witness_soul_md"]
+GROUPS = ["axis_pec_only_v2", "automata_neutro_v2", "witness_soul_md",
+          "soul_jarvis", "soul_elena_financial", "soul_solidity_auditor"]
 TAU_MIN_WINDOW = 5
 TAU_THRESHOLD = 0.95
 

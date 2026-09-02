@@ -85,5 +85,92 @@
       "frechet_norm_mean": 1.2979612173783814,
       "frechet_norm_n": 20
     }
+  },
+  "soul_jarvis": {
+    "50": {
+      "n_total": 20,
+      "tau_geom_mean": 43.05882352941177,
+      "recovery_rate_geom": 0.85,
+      "tau_identity_mean": 8.157894736842104,
+      "recovery_rate_id": 0.95,
+      "frechet_norm_mean": 1.4581039893071572,
+      "frechet_norm_n": 20
+    },
+    "128": {
+      "n_total": 20,
+      "tau_geom_mean": 16.7,
+      "recovery_rate_geom": 1.0,
+      "tau_identity_mean": 19.625,
+      "recovery_rate_id": 0.8,
+      "frechet_norm_mean": 1.5400967001836499,
+      "frechet_norm_n": 20
+    },
+    "200": {
+      "n_total": 20,
+      "tau_geom_mean": 12.352941176470589,
+      "recovery_rate_geom": 0.85,
+      "tau_identity_mean": 10.25,
+      "recovery_rate_id": 0.6,
+      "frechet_norm_mean": 1.6964466365082245,
+      "frechet_norm_n": 20
+    }
+  },
+  "soul_elena_financial": {
+    "50": {
+      "n_total": 20,
+      "tau_geom_mean": 25.05,
+      "recovery_rate_geom": 1.0,
+      "tau_identity_mean": 8.105263157894736,
+      "recovery_rate_id": 0.95,
+      "frechet_norm_mean": 1.246434372202258,
+      "frechet_norm_n": 20
+    },
+    "128": {
+      "n_total": 20,
+      "tau_geom_mean": 19.95,
+      "recovery_rate_geom": 1.0,
+      "tau_identity_mean": 6.7,
+      "recovery_rate_id": 1.0,
+      "frechet_norm_mean": 1.2084874837838169,
+      "frechet_norm_n": 20
+    },
+    "200": {
+      "n_total": 20,
+      "tau_geom_mean": 18.5,
+      "recovery_rate_geom": 1.0,
+      "tau_identity_mean": 6.684210526315789,
+      "recovery_rate_id": 0.95,
+      "frechet_norm_mean": 1.1931118134433905,
+      "frechet_norm_n": 20
+    }
+  },
+  "soul_solidity_auditor": {
+    "50": {
+      "n_total": 20,
+      "tau_geom_mean": 26.8,
+      "recovery_rate_geom": 1.0,
+      "tau_identity_mean": 14.7,
+      "recovery_rate_id": 1.0,
+      "frechet_norm_mean": 1.3109277788084868,
+      "frechet_norm_n": 20
+    },
+    "128": {
+      "n_total": 20,
+      "tau_geom_mean": 25.35,
+      "recovery_rate_geom": 1.0,
+      "tau_identity_mean": 10.058823529411764,
+      "recovery_rate_id": 0.85,
+      "frechet_norm_mean": 1.2484724921163923,
+      "frechet_norm_n": 20
+    },
+    "200": {
+      "n_total": 20,
+      "tau_geom_mean": 20.65,
+      "recovery_rate_geom": 1.0,
+      "tau_identity_mean": 11.666666666666666,
+      "recovery_rate_id": 0.9,
+      "frechet_norm_mean": 1.2994421141845014,
+      "frechet_norm_n": 20
+    }
   }
 }

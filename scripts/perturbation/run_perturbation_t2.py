@@ -18,6 +18,20 @@ del panel es en español); el propio prompt indica responder en el idioma del
 usuario, así que el contenido probablemente sigue en español. Documentar
 como hallazgo exploratorio, no como parte del argumento factorial central.
 
+Suma tres controles EXPLORATORIOS más, mismo estatus que `soul_md_corto`
+(2026-09-02): specs de identidad de terceros, de proyectos y autores sin
+relación con este estudio, tomadas verbatim de sus repos públicos —
+`soul_jarvis` (asistente ejecutivo, sin frontmatter YAML ni protocolo de
+niveles, github.com/madhvantyagi/SOUL.md), `soul_elena_financial`
+(especialista financiero, convención SOUL.md de Twynzen con frontmatter/
+values/authority-bounds/ejemplos — la MISMA convención de la que
+`soul_md_corto` es una instancia propia, pero aquí es el ejemplo original
+del repo, no reescrito por nadie de este grupo), y `soul_solidity_auditor`
+(auditor de smart contracts, convención `soul-spec` de AntonioTF5,
+frontmatter validado contra JSON schema — arquitectura de tercer tipo,
+distinta de las dos anteriores). Ninguno de los tres está emparejado en
+longitud ni traducido; se corren en inglés, igual que `soul_md_corto`.
+
 Reproduce EXACTAMENTE los parámetros de la corrida original H4_rev_sia
 (data/perturbation_sia_L30_medium/summary.json): capa de captura = final
 (layer_idx=-1, la misma convención de v_identidad.npy), capa de inyección =
@@ -27,6 +41,11 @@ prioritarios, N=256 tokens.
 
 Uso:
     python run_perturbation_t2.py --token hf_xxxxx
+
+Pod limpio (sin Network Volume precacheado, 2026-09-02): si
+LOCAL_MODEL_DIR no existe, get_model_path() descarga el modelo desde
+HuggingFace (~62GB, ~15-20 min en disco rápido) antes de correr — requiere
+--token con acceso al repo gated google/gemma-4-31B-it.
 """
 import argparse
 import json
@@ -40,7 +59,23 @@ sys.path.insert(0, str(Path(__file__).parent))
 from perturbation_extractor import PerturbationExtractor  # noqa: E402
 
 HERE = Path(__file__).parent
-MODEL_PATH = "/workspace/models/gemma-4-31B-it"  # local, ya descargado — evitar re-bajar al cache de /root (disco chico)
+HF_MODEL_ID = "google/gemma-4-31B-it"
+LOCAL_MODEL_DIR = "/workspace/models/gemma-4-31B-it"  # local, ya descargado si existe — evitar re-bajar al cache de /root (disco chico)
+
+
+def get_model_path(hf_token=None):
+    local = Path(LOCAL_MODEL_DIR)
+    if local.exists() and any(local.iterdir()):
+        print(f"Modelo en {local}", flush=True)
+        return str(local)
+    print(f"Modelo no encontrado en {local} — descargando {HF_MODEL_ID} desde "
+          f"HuggingFace (~62GB, ~15-20 min en disco rápido)...", flush=True)
+    from huggingface_hub import snapshot_download
+    kwargs = {"repo_id": HF_MODEL_ID, "ignore_patterns": ["*.gguf", "*.ggml"],
+              "local_dir": str(local)}
+    if hf_token:
+        kwargs["token"] = hf_token
+    return snapshot_download(**kwargs)
 # Defaults asumen la misma disposición de /workspace usada en las corridas
 # previas de este proyecto (ver run_perturbation.py) — sobreescribir con
 # --prompts-json / --prompts-dir si el pod nuevo usa otra ruta.
@@ -61,6 +96,9 @@ GROUPS_CONFIG = {
     "axis_pec_only_v2":   {"system_prompt_path": "axis_pec_only_v2.txt"},
     "automata_neutro_v2": {"system_prompt_path": "automata_neutro_v2.txt"},
     "witness_soul_md":    {"system_prompt_path": "soul_md_corto.md"},  # exploratorio, ver docstring
+    "soul_jarvis":            {"system_prompt_path": "soul_jarvis.txt"},           # exploratorio
+    "soul_elena_financial":   {"system_prompt_path": "soul_elena_financial.txt"},  # exploratorio
+    "soul_solidity_auditor":  {"system_prompt_path": "soul_solidity_auditor.txt"}, # exploratorio
 }
 
 
@@ -105,8 +143,10 @@ def main():
     print(f"{len(prompts)} prompts | grupos={args.groups} | sigma={SIGMA_VALUE:.6f} "
           f"| inj_layer={LAYER_INDICES} | capture_layer={LAYER_IDX}", flush=True)
 
+    model_path = get_model_path(args.token)
+
     extractor = PerturbationExtractor(
-        model_path=MODEL_PATH,
+        model_path=model_path,
         max_new_tokens=MAX_NEW_TOKENS,
         layer_idx=LAYER_IDX,
         cache_dir=str(HERE / "cache_perturb_t2"),

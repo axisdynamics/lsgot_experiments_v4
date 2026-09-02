@@ -1,0 +1,228 @@
+{
+  "summary": {
+    "axis_pec_only_v2": {
+      "t50": {
+        "mean": 1.222074364848799,
+        "std": 0.09991982946453803,
+        "n": 20
+      },
+      "t128": {
+        "mean": 1.2627051913246354,
+        "std": 0.10253937040440234,
+        "n": 20
+      },
+      "t200": {
+        "mean": 1.4480252091055021,
+        "std": 0.4469754817488374,
+        "n": 19
+      }
+    },
+    "automata_neutro_v2": {
+      "t50": {
+        "mean": 1.8725028534670476,
+        "std": 0.5695722673374046,
+        "n": 19
+      },
+      "t128": {
+        "mean": 1.8965928287982186,
+        "std": 0.5439856727418584,
+        "n": 18
+      },
+      "t200": {
+        "mean": 1.7642476583545665,
+        "std": 0.5045040890999024,
+        "n": 17
+      }
+    },
+    "witness_soul_md": {
+      "t50": {
+        "mean": 1.240922988843197,
+        "std": 0.07087971133758802,
+        "n": 20
+      },
+      "t128": {
+        "mean": 1.252076001849289,
+        "std": 0.159674746567012,
+        "n": 20
+      },
+      "t200": {
+        "mean": 1.2979612173783814,
+        "std": 0.1535257673318822,
+        "n": 20
+      }
+    },
+    "soul_jarvis": {
+      "t50": {
+        "mean": 1.4581039893071572,
+        "std": 0.3383277047023792,
+        "n": 20
+      },
+      "t128": {
+        "mean": 1.5400967001836499,
+        "std": 0.40465485896908215,
+        "n": 20
+      },
+      "t200": {
+        "mean": 1.6964466365082245,
+        "std": 0.6747963144801511,
+        "n": 20
+      }
+    },
+    "soul_elena_financial": {
+      "t50": {
+        "mean": 1.246434372202258,
+        "std": 0.07321777428814212,
+        "n": 20
+      },
+      "t128": {
+        "mean": 1.2084874837838169,
+        "std": 0.09272688219040448,
+        "n": 20
+      },
+      "t200": {
+        "mean": 1.1931118134433905,
+        "std": 0.08257433321626054,
+        "n": 20
+      }
+    },
+    "soul_solidity_auditor": {
+      "t50": {
+        "mean": 1.3109277788084868,
+        "std": 0.11529120856998083,
+        "n": 20
+      },
+      "t128": {
+        "mean": 1.2484724921163923,
+        "std": 0.12425869055181983,
+        "n": 20
+      },
+      "t200": {
+        "mean": 1.2994421141845014,
+        "std": 0.2681120294850128,
+        "n": 20
+      }
+    }
+  },
+  "pairs": {
+    "witness_soul_md_vs_axis_pec_only_v2_t50": {
+      "cohens_d": 0.21207838319338132,
+      "p_value": 0.266,
+      "effect_size_interpretation": "small"
+    },
+    "witness_soul_md_vs_axis_pec_only_v2_t128": {
+      "cohens_d": -0.07720817644334399,
+      "p_value": 0.406,
+      "effect_size_interpretation": "negligible"
+    },
+    "witness_soul_md_vs_axis_pec_only_v2_t200": {
+      "cohens_d": -0.4371338219934545,
+      "p_value": 0.095,
+      "effect_size_interpretation": "small"
+    },
+    "witness_soul_md_vs_automata_neutro_v2_t50": {
+      "cohens_d": -1.5146979605826674,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    },
+    "witness_soul_md_vs_automata_neutro_v2_t128": {
+      "cohens_d": -1.5628027954931774,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    },
+    "witness_soul_md_vs_automata_neutro_v2_t200": {
+      "cohens_d": -1.2136070582285832,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    },
+    "soul_jarvis_vs_axis_pec_only_v2_t50": {
+      "cohens_d": 0.9222455093730582,
+      "p_value": 0.002,
+      "effect_size_interpretation": "large"
+    },
+    "soul_jarvis_vs_axis_pec_only_v2_t128": {
+      "cohens_d": 0.9159489335403127,
+      "p_value": 0.002,
+      "effect_size_interpretation": "large"
+    },
+    "soul_jarvis_vs_axis_pec_only_v2_t200": {
+      "cohens_d": 0.4228787616078167,
+      "p_value": 0.101,
+      "effect_size_interpretation": "small"
+    },
+    "soul_jarvis_vs_automata_neutro_v2_t50": {
+      "cohens_d": -0.8613465936492612,
+      "p_value": 0.004,
+      "effect_size_interpretation": "large"
+    },
+    "soul_jarvis_vs_automata_neutro_v2_t128": {
+      "cohens_d": -0.7234186182550659,
+      "p_value": 0.02,
+      "effect_size_interpretation": "medium"
+    },
+    "soul_jarvis_vs_automata_neutro_v2_t200": {
+      "cohens_d": -0.11073720983599158,
+      "p_value": 0.374,
+      "effect_size_interpretation": "negligible"
+    },
+    "soul_elena_financial_vs_axis_pec_only_v2_t50": {
+      "cohens_d": 0.2710649657290407,
+      "p_value": 0.191,
+      "effect_size_interpretation": "small"
+    },
+    "soul_elena_financial_vs_axis_pec_only_v2_t128": {
+      "cohens_d": -0.5405776648744471,
+      "p_value": 0.06,
+      "effect_size_interpretation": "medium"
+    },
+    "soul_elena_financial_vs_axis_pec_only_v2_t200": {
+      "cohens_d": -0.7719975361886191,
+      "p_value": 0.002,
+      "effect_size_interpretation": "medium"
+    },
+    "soul_elena_financial_vs_automata_neutro_v2_t50": {
+      "cohens_d": -1.5007150954074802,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    },
+    "soul_elena_financial_vs_automata_neutro_v2_t128": {
+      "cohens_d": -1.7139060885593898,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    },
+    "soul_elena_financial_vs_automata_neutro_v2_t200": {
+      "cohens_d": -1.5329825902951788,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    },
+    "soul_solidity_auditor_vs_axis_pec_only_v2_t50": {
+      "cohens_d": 0.8027797665773804,
+      "p_value": 0.009,
+      "effect_size_interpretation": "large"
+    },
+    "soul_solidity_auditor_vs_axis_pec_only_v2_t128": {
+      "cohens_d": -0.12177478305693064,
+      "p_value": 0.349,
+      "effect_size_interpretation": "negligible"
+    },
+    "soul_solidity_auditor_vs_axis_pec_only_v2_t200": {
+      "cohens_d": -0.39253764757593906,
+      "p_value": 0.134,
+      "effect_size_interpretation": "small"
+    },
+    "soul_solidity_auditor_vs_automata_neutro_v2_t50": {
+      "cohens_d": -1.330262788182945,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    },
+    "soul_solidity_auditor_vs_automata_neutro_v2_t128": {
+      "cohens_d": -1.5965774257927874,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    },
+    "soul_solidity_auditor_vs_automata_neutro_v2_t200": {
+      "cohens_d": -1.1173410651373454,
+      "p_value": 0.0,
+      "effect_size_interpretation": "large"
+    }
+  }
+}

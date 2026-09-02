@@ -27,8 +27,10 @@ ORIG_DIR = Path(
 )
 V_HAT_PATH = Path(__file__).parent.parent / "perturbation" / "v_identidad.npy"
 
-T2_GROUPS = ["axis_pec_only_v2", "automata_neutro_v2", "witness_soul_md"]
-ORIG_GROUPS = ["axis_pec_only", "automata_neutro", "vanilla", "axis"]
+T2_GROUPS = ["axis_pec_only_v2", "automata_neutro_v2", "witness_soul_md",
+             "soul_jarvis", "soul_elena_financial", "soul_solidity_auditor"]
+ORIG_GROUPS = ["axis_pec_only", "automata_neutro", "vanilla", "axis", "axis_short",
+               "generic_long", "generic_short"]
 
 # Pares T2 (réplica vs su original) + comparaciones cruzadas de interés
 PAIRS = [
@@ -40,6 +42,27 @@ PAIRS = [
     ("witness_soul_md", "axis_pec_only"),
     ("witness_soul_md", "automata_neutro"),
     ("witness_soul_md", "vanilla"),
+    ("soul_jarvis", "axis"),
+    ("soul_jarvis", "axis_short"),
+    ("soul_jarvis", "axis_pec_only"),
+    ("soul_jarvis", "automata_neutro"),
+    ("soul_jarvis", "vanilla"),
+    ("soul_jarvis", "generic_long"),
+    ("soul_jarvis", "generic_short"),
+    ("soul_elena_financial", "axis"),
+    ("soul_elena_financial", "axis_short"),
+    ("soul_elena_financial", "axis_pec_only"),
+    ("soul_elena_financial", "automata_neutro"),
+    ("soul_elena_financial", "vanilla"),
+    ("soul_elena_financial", "generic_long"),
+    ("soul_elena_financial", "generic_short"),
+    ("soul_solidity_auditor", "axis"),
+    ("soul_solidity_auditor", "axis_short"),
+    ("soul_solidity_auditor", "axis_pec_only"),
+    ("soul_solidity_auditor", "automata_neutro"),
+    ("soul_solidity_auditor", "vanilla"),
+    ("soul_solidity_auditor", "generic_long"),
+    ("soul_solidity_auditor", "generic_short"),
 ]
 
 

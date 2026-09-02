@@ -32,6 +32,8 @@ scripts/                  extracción, perturbación y análisis estadístico
 scripts/fase0/            E-L, E-H2, E-J, E-F2 (panel Gemma limpio) + resultados ya computados
 scripts/fase2_exploracion/ A1-A5, exploración adicional sobre los embeddings ya extraídos
 scripts/fase3_qwen3/      extracción y análisis de la validación cross-modelo en Qwen3-32B
+scripts/fase4_t2/         réplica T2 (axis_pec_only_v2/automata_neutro_v2) + soul_md_corto + 3 SOUL.md externos más
+scripts/perturbation/run_perturbation_t2.py  extracción+H4_rev del pipeline T2 (descarga el modelo solo si no lo encuentra)
 ```
 
 ## Diseño experimental
@@ -159,6 +161,48 @@ condición individual. Ver `evidence/T2_REPLICATION_REPORT.md` para el
 detalle completo y las salvedades metodológicas de cada celda.
 
 Tabla completa, significancia y limitaciones en `paper/lsgot_4.md`.
+
+### Validación exploratoria adicional — tres SOUL.md externos más (2026-09-02)
+
+Misma pregunta que con `soul_md_corto`, con tres identidades ajenas más,
+de proyectos sin relación con este estudio: `soul_jarvis` (asistente
+ejecutivo, [`madhvantyagi/SOUL.md`](https://github.com/madhvantyagi/SOUL.md)),
+`soul_elena_financial` (especialista financiero, el ejemplo original de
+[`Twynzen/soul-md`](https://github.com/Twynzen/soul-md) — la misma
+convención de la que `soul_md_corto` es una instancia propia),
+`soul_solidity_auditor` (auditor de contratos,
+[`AntonioTF5/soul-spec`](https://github.com/AntonioTF5/soul-spec)). A
+diferencia de `soul_md_corto`, el resultado no es uniforme: ninguno de
+los tres tiene lenguaje de pausa/silencio/autobservación cableado — grep
+de los cinco prompts relevantes da 0 coincidencias en los tres nuevos,
+contra 13/8/7 (silencio/pausa/respiración) en `axis.dna` y una sola
+invocación explícita en `soul_md_corto`. Y ninguno de los tres se
+distingue de `automata_neutro` en v̂ proyectado en t=0 (p=0.069-0.262,
+los tres n.s.) — el único ancla verdaderamente binaria y exclusiva del
+mecanismo, de las tres señales de identidad de §3.5.
+
+Los perfiles resultantes son genuinamente distintos entre sí:
+`soul_jarvis` converge con `automata_neutro` en PR (d=−0.05, n.s.) y en
+determinismo RQA (0.420 vs 0.418) pese a no tener arquitectura de reglas
+— sospecha de artefacto léxico (lista fija de frases), no verificada;
+`soul_elena_financial` es indistinguible de `generic_long`/`generic_short`
+en PR (p=0.209/0.227) pese a tener persona y metodología declaradas —
+el primer control de longitud "encontrado" en vez de diseñado; y
+`soul_solidity_auditor` colapsa más que su control de longitud casi
+exacto (903 vs 938 tokens, d=−1.33, p<0.0001) sin alcanzar el polo de
+identidad. En recuperación, ocho de las nueve condiciones del panel
+recuperan al 100% con o sin el mecanismo cableado — solo fallan
+`automata_neutro` y `soul_jarvis` — confirmando que recuperación y ancla
+estática son ejes ortogonales, no la misma señal.
+
+Esto ubica el origen del ancla de identidad con más precisión que
+"identidad" en sentido amplio: la hipótesis con la que arrancó el
+proyecto (`LSGOT_v2_5.md` §2.1/§5.3-5.4, `axis` vs `axis_nowit` — quitar
+solo el protocolo Witness colapsa el efecto a p=0.093 n.s.) es la que
+esta ronda replica, sin haber sido diseñada para eso. Detalle completo,
+todas las tablas y la significancia en
+`evidence/SOUL_MD_EXTERNAL_CONTROLS_REPORT.md`; guía de continuación en
+`SOUL_MD_UPDATE_GUIDE.md`.
 
 ## Nota metodológica importante — Δκ/W₁ como evidencia secundaria
 
