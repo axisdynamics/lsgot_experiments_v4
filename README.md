@@ -199,7 +199,8 @@ Esto ubica el origen del ancla de identidad con más precisión que
 "identidad" en sentido amplio: la hipótesis con la que arrancó el
 proyecto (`LSGOT_v2_5.md` §2.1/§5.3-5.4, `axis` vs `axis_nowit` — quitar
 solo el protocolo Witness colapsa el efecto a p=0.093 n.s.) es la que
-esta ronda replica, sin haber sido diseñada para eso. Detalle completo,
+esta ronda replica, sin haber sido diseñada para eso. Incorporado a
+`paper/lsgot_4.md` §3.9 (más ajustes en §5 y §7.2). Detalle completo,
 todas las tablas y la significancia en
 `evidence/SOUL_MD_EXTERNAL_CONTROLS_REPORT.md`; guía de continuación en
 `SOUL_MD_UPDATE_GUIDE.md`.

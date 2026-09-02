@@ -94,11 +94,15 @@ incluso en modelos de solo texto. Fix aplicado esta ronda: desinstalar
    `axis`/`axis_pec_only` vs `soul_md_corto` (v̂ media d=−1.87, p<0.0001)
    es de redundancia estructural o de alguna otra diferencia entre los dos
    prompts.
-4. **`paper/lsgot_4.md` no fue actualizado con esta relectura** — quedó
-   deliberadamente fuera de esta ronda (cambio de terminología que
-   atraviesa toda la sección de resultados publicada, requiere decisión
-   explícita de los autores antes de tocarlo). El Artifact y
-   `evidence/SOUL_MD_EXTERNAL_CONTROLS_REPORT.md`/`README.md` sí la tienen.
+4. **`paper/lsgot_4.md` ya incorpora esta relectura** (§3.9 nuevo, ajustes
+   en §5 y §7.2 — sesión 2026-09-02, después de la ronda inicial de este
+   documento). No se tocó el Abstract ni la definición de Factor I en
+   §2.2 — el hallazgo se lee como una confirmación/afinamiento de esa
+   definición (que ya exige auto-chequeo *cableado*, no solo declarado),
+   no como un cambio de terminología. Si en el futuro se decide sí
+   renombrar Factor I en el resto del paper, hacerlo con una pasada
+   completa (Abstract, §1.4 hipótesis, §2.2, §4, §6) para no dejar
+   secciones con vocabulario inconsistente.
 5. **Commit sin push**: los cambios de esta ronda quedaron commiteados
    localmente en `main` pero no empujados a
    `origin/main` (`github.com/axisdynamics/lsgot_experiments_v4`) — repo
