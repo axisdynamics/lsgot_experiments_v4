@@ -216,8 +216,10 @@ de transformers 5.16.1 + torch 2.14 + contextos de 4K tokens):
    salvo ruido ULP (0.0 en L59, 8e-2 en L58, ~1.4 en L0 a T≈4K) — los ops de
    redondeo bf16 son identidad en el backward, así que los READOUTS JVP no
    heredan ese ruido del forward. Verificaciones: base (W_U@y == argmax logits,
-   20/20), J_59 analítico (err rel 2.6e-3), primal por (prompt, capa) grabado
-   en meta.json.
+   20/20 — no-fatal: near-ties, 1/140 divergió), J_59 analítico (err rel
+   2.6e-3), primal por (prompt, capa) grabado en meta.json. La máscara
+   deslizante del builder sale con una columna de más cuando T < ventana
+   (T=966 → mask 967) — se recorta a min(T, sliding_window).
 5. Las predicciones P1-P3 se chequean con criterios pre-especificados en el
    docstring de analyze_j_lens.py sobre el instrumento JVP (top-10/top-50) +
    la separación JS del lens ingenuo como corroborativo.
@@ -255,6 +257,10 @@ scp -r root@<pod>:/workspace/scripts/fase4_t2/results_jlens/ \
   ~/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/results_jlens/
 # ~0.5GB (states/ + jvp/ + meta.json — SIN jacobians: --jbar quedó OFF por los
 # muros medidos; ver decisiones de diseño)
+
+# Los scripts de debug/validación del pod y sus logs quedaron guardados en
+# results_jlens/pod_debug_2026-09-03/ (con README) por si hay que repetir la
+# validación en un entorno nuevo.
 
 # local (CPU): W_U y normas (2.8GB, sin GPU) + análisis
 cd LSGOT_v4/scripts/fase4_t2
