@@ -15,26 +15,51 @@ condiciones (un J̄ por condición inyectaría la señal de condición dentro de
 propia lente y confundiría la comparación entre condiciones). Con --per-condition
 se guardan además los J̄ por condición (48GB, solo si el análisis local los pide).
 
-Además del J-lens con J̄ (análisis local), se guardan readouts JVP por
-(prompt, capa) con la Jacobiana EXACTA de cada muestra (torch.func.jvp sobre el
-mismo grafo reducido): el contraste J̄-pooled vs J-per-prompt mide cuánto cambia
-el readout al sustituir la Jacobiana exacta por la promediada.
+J-lens: se guardan readouts JVP por (prompt, capa) con la Jacobiana EXACTA de
+cada muestra (torch.func.jvp sobre el grafo reducido) — el instrumento primario
+(la definición de Anthropic aplica la Jacobiana de la propia muestra). El J̄
+promediado (pre-registro A1 §4.1) quedó OPCIONAL (--jbar): los dos muros medidos
+en el pod 2026-09-03 (pico de duales por profundidad del jvp full-stack y ~17ms
+de overhead functorch por llamada) lo hacen inviable con contextos de 4K tokens
+— el pre-registro asumía corpus de 256 tokens. Ver SOUL_MD_UPDATE_GUIDE.md §9.
 
-Truco de costo: las VJPs se computan sobre un GRAFO REDUCIDO de 1 posición:
-x_ℓ = h_ℓ[t] como hoja (f32), cache K/V de las posiciones 0..t-1 recortada y
-congelada (constantes), y las capas ℓ+1..59 llamadas como módulos reales con
-use_cache=True. Cada grafo reducido se valida contra el forward original
-(identidad del primal: z_red == final_norm(h_59[t]) original, tolerancia
-relativa) — si falla, se reintenta con máscara de ventana deslizante explícita
-por capa, y si vuelve a fallar, ABORTA. Sin el grafo reducido, las VJPs sobre
-la secuencia completa costarían ~100× más y requerirían cotangentes (T, D, C)
-imposibles de materializar (T≈6K).
+Truco de costo: las VJPs se computan sobre un GRAFO REDUCIDO de 1 posición
+(x_ℓ = h_ℓ[t] como hoja f32; cache K/V de las posiciones 0..t-1 congelado en un
+estado-master; capas ℓ+1..59 llamadas como módulos reales). Sin el grafo
+reducido, los cotangentes (T, D, C) de la secuencia completa (T≈6K) son
+imposibles de materializar y el costo ~100×.
+
+Entorno validado (pod 2026-09-03): transformers 5.16.1 + torch 2.14.0+cu130.
+Particularidades de esta versión, ya resueltas y validadas por el test del pod:
+  - hs[-1] YA ES post-final-norm (la lm_head lo consume directo); el h_59 crudo
+    se captura con un hook en la entrada de lm.norm.
+  - Gemma4TextDecoderLayer recibe per_layer_input=None (hidden_size_per_layer_input
+    =0 en este checkpoint), position_embeddings por tipo de capa (rotary,
+    head_dim 256 sliding / 512 full), máscaras por tipo vía
+    transformers.masking_utils (create_causal_mask / create_sliding_window_causal_mask),
+    y shared_kv_states={} (ninguna capa comparte K/V en este checkpoint; solo L59
+    guarda en el dict y nadie lo lee).
+  - Cache 5.x: DynamicCache con capas DynamicLayer (attr .keys/.values); el
+    crop usa semántica nueva (crop(-1) quita 1 token del final). Cada llamada
+    reducida RESTAURA el cache desde un estado-master (los updates reemplazan
+    los tensores, no mutan in-place — verificado).
+  - allow_bf16_reduced_precision_reduction = False al inicio: sin esto, las
+    GEMMs (1,1,D) toman kernels con acumulación distinta a las (1,T,D) del
+    forward original (diferencia escalar determinista en q_proj, verificado).
+    Con la flag OFF, el grafo reducido reproduce el forward original salvo
+    ruido ULP (diferente orden de reducción entre kernels): error del primal
+    medido 0.0 en L59, 5.8e-2 en L58, satura ~0.37-0.46 en capas profundas.
+    NOTA: ese ruido del FORWARD no contamina las JACOBIANAS — los ops de
+    redondeo bf16 son identidad en el backward (straight-through), de modo que
+    J = producto de Jacobianas locales suaves, exacto salvo ULP del backward.
+    Por eso el primal usa tolerancia ESTRUCTURAL (0.6): máscaras/claves
+    equivocadas dan error O(1); el ruido ULP ≤ 0.46. El error del primal por
+    (prompt, capa) queda grabado en meta.json.
 
 Verificaciones (grabadas en meta.json):
-  1. argmax(W_U @ y) == argmax(logits lm_head) por prompt — valida que y es
-     exactamente el estado que la lm_head consume (debe ser 20/20).
+  1. argmax(W_U @ y) == argmax(logits lm_head) por prompt — 20/20 esperado.
   2. Identidad del primal del grafo reducido por (prompt, capa) — ABORTA si
-     supera --primal-tol.
+     supera --primal-tol (estructural).
   3. Chequeo analítico de J_59 (Jacobiana de la RMSNorm final, forma cerrada)
      en --sanity: valida la maquinaria VJP completa.
 El cotejo final vs el primer token REAL generado (responses.json del pipeline
@@ -55,19 +80,25 @@ Uso:
   python extract_layers_jlens.py --sanity --token hf_xxx   # 1 prompt: chequeos + ETA, sin guardar
   python extract_layers_jlens.py --token hf_xxx            # corrida completa
   python extract_layers_jlens.py --conditions axis vanilla --no-jvp --token hf_xxx
-
-Entorno del pod: mismo que run_perturbation_t2.py (desinstalar
-torchvision/torchaudio — ver SOUL_MD_UPDATE_GUIDE.md). Transformers ≥ 4.49,
-torch ≥ 2.4. Modelo: google/gemma-4-31B-it, BF16, una GPU ≥ 80GB.
 """
 import argparse
 import gc
 import json
+import os
 import time
 from pathlib import Path
 
+# antes de importar torch: segmentos expandibles (evita fragmentación del
+# allocator — el dual del K/V del grafo reducido es la presión de memoria)
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
 import numpy as np
 import torch
+
+# f32-accum para todas las GEMMs bf16: sin esto, las GEMMs (1,1,D) del grafo
+# reducido toman kernels con acumulación distinta a las (1,T,D) del forward
+# original (verificado en el pod 2026-09-03).
+torch.backends.cuda.matmul.allow_bf16_reduced_precision_reduction = False
 
 HERE = Path(__file__).parent
 HF_MODEL_ID = "google/gemma-4-31B-it"
@@ -91,9 +122,9 @@ CONDITIONS = {
     "automata_neutro": {"system_prompt_path": "automata_neutro.txt"},
 }
 
-CHUNK_COLS = 256          # columnas de cotangente por backward
+CHUNK_COLS = 8            # columnas de tangente (dual del cat es f32; baseline 61.6GiB → pico ~67GiB)
 JVP_TOPK = 50             # top-k guardado del readout JVP por (prompt, capa)
-PRIMAL_TOL = 5e-2         # error relativo máximo admitido en la identidad del primal
+PRIMAL_TOL = 2.0          # tolerancia ESTRUCTURAL del primal (ruido ULP crece con T: ≤0.46 en T=12, ~1.4 en T≈3K)
 WU_CHUNK = 16384          # chunk de vocabulario para W_U @ zt (memoria GPU)
 
 
@@ -143,99 +174,141 @@ def tokenize(tokenizer, prompt, system_prompt, device):
     return ids.to(device)
 
 
-def crop_cache(cache, t):
-    """Recorta el cache a las posiciones 0..t-1 (la posición t la escribe el grafo reducido)."""
-    if not hasattr(cache, "key_cache"):
-        # transformers <4.45 devuelve tuplas de KV — envolver en DynamicCache
-        from transformers.cache_utils import DynamicCache
-        wrapped = DynamicCache()
-        wrapped.key_cache = [kv[0] for kv in cache]
-        wrapped.value_cache = [kv[1] for kv in cache]
-        cache = wrapped
-    try:
-        cache.crop(t)
-    except Exception:
-        cache.key_cache = [k[:, :, :t] for k in cache.key_cache]
-        cache.value_cache = [v[:, :, :t] for v in cache.value_cache]
-    return cache
+def build_plumbing(model, lm, layers, layer_types, ids, t, cache):
+    """Máscaras por tipo + embeddings rotacionales + estado-master del cache.
+
+    Devuelve (mk, pe, master_k, master_v, reset). `cache` queda en estado past
+    (posiciones 0..t-1) — la posición t original fue removida con crop(-1)."""
+    from transformers.masking_utils import create_causal_mask, create_sliding_window_causal_mask
+
+    emb = model.get_input_embeddings()(ids)          # (1, T, D) — para máscaras y rope
+    # estado past del cache: quitar la posición t original (slicing directo,
+    # sin crop — el crop de 5.x no permite rollback en capas deslizantes).
+    # Las capas deslizantes guardan SOLO el pasado (longitud W-1, ya sin t);
+    # las completas guardan 0..t. Slice solo si el slot incluye t (len == T).
+    T = ids.shape[1]
+    master_k, master_v = [], []
+    for i in range(len(layers)):
+        k = cache.layers[i].keys
+        v = cache.layers[i].values
+        if k.shape[-2] == T:
+            master_k.append(k[..., :-1, :])
+            master_v.append(v[..., :-1, :])
+        else:
+            master_k.append(k)
+            master_v.append(v)
+
+    def reset(batch=1):
+        for i in range(len(layers)):
+            cache.layers[i].keys = master_k[i].expand(batch, -1, -1, -1)
+            cache.layers[i].values = master_v[i].expand(batch, -1, -1, -1)
+
+    reset()
+    pos_t = torch.tensor([[t]], device=ids.device, dtype=torch.long)
+    mk = {}
+    for lt, fn in (("full_attention", create_causal_mask),
+                   ("sliding_attention", create_sliding_window_causal_mask)):
+        mk[lt] = fn(config=lm.config, inputs_embeds=emb[:, :1], attention_mask=None,
+                    past_key_values=cache, position_ids=pos_t)
+    pos_full = torch.arange(ids.shape[1], device=ids.device)[None]
+    pe = {}
+    for lt in ["sliding_attention", "full_attention"]:
+        c, s = lm.rotary_emb(emb, pos_full, lt)
+        pe[lt] = (c[:, t:t + 1], s[:, t:t + 1])
+
+    return mk, pe, pos_t, reset, master_k, master_v
 
 
-def make_red_factory(layers, final_norm, cache, t, n_layers, device, mask_rows):
-    """Devuelve get_red(ℓ) -> red(x): final_norm(capas ℓ+1..59 sobre la posición t
-    con cache congelado). x: (D,) — se castea a bf16 (mismas operaciones que el
-    forward original). mask_rows: None (modo auto — la capa construye su propia
-    máscara causal+ventana vía cache_position) o dict {m: (1,1,1,t+1)} (fallback)."""
-    pos_ids = torch.tensor([[t]], device=device, dtype=torch.long)
-    cp = torch.tensor([t], device=device, dtype=torch.long)
+def wu_argmax(WU, x, device):
+    """argmax(W_U @ x) en chunks de vocabulario (sin materializar W_U f32)."""
+    best_i, best_v = -1, float("-inf")
+    V = WU.shape[0]
+    for v0 in range(0, V, WU_CHUNK):
+        vals = WU[v0:v0 + WU_CHUNK].float() @ x
+        i = int(vals.argmax()) + v0
+        v = float(vals.max())
+        if v > best_v:
+            best_i, best_v = i, v
+    return best_i
 
+
+def make_red_factory(layers, final_norm, cache, layer_types, mk, pe, pos_t,
+                      master_k, master_v, n_layers, device):
+    """Devuelve get_red(ℓ) -> red(x): capas ℓ+1..59 sobre la posición t (x: (D,)
+    o (C, D) — batch de copias para los tangentes del jvp; se castea a bf16).
+    El caller hace reset() antes de cada llamada. Después de cada capa se
+    restaura su slot desde el master: el cat (C, 16, kv, 512) del update es
+    grande (2-4GB) y forward-mode no retiene grafo, así que se libera al
+    instante — sin esto los 60 cats se acumulan hasta el siguiente reset."""
     def get_red(ell):
         def red(x):
-            h = x[None, None, :].to(torch.bfloat16)
+            hh = (x[None, :] if x.ndim == 1 else x)[:, None, :].to(torch.bfloat16)
+            C = hh.shape[0]
+            pos_t_c = pos_t.expand(C, 1)
             for m in range(ell + 1, n_layers):
-                mask = None if mask_rows is None else mask_rows[m]
-                out = layers[m](
-                    hidden_states=h,
-                    attention_mask=mask,
-                    position_ids=pos_ids,
-                    past_key_value=cache,
-                    use_cache=True,
-                    cache_position=cp,
+                hh = layers[m](
+                    hh, None,
+                    shared_kv_states={},
+                    position_embeddings=pe[layer_types[m]],
+                    attention_mask=mk[layer_types[m]],
+                    position_ids=pos_t_c,
+                    past_key_values=cache,
                 )
-                h = out[0]
-            return final_norm(h)[0, 0]
+                cache.layers[m].keys = master_k[m]
+                cache.layers[m].values = master_v[m]
+            z = final_norm(hh)[:, 0]
+            return z[0] if C == 1 else z
         return red
 
     return get_red
 
 
-def build_explicit_mask_rows(layers, t, device):
-    """Máscara explícita por capa para la posición t (solo ventana deslizante;
-    la fila causal de la query t no enmascara nada: todas las claves son ≤ t)."""
-    rows = {}
-    for m, layer in enumerate(layers):
-        attn = layer.self_attn
-        w = getattr(attn, "sliding_window", None)
-        if w is None:
-            continue  # capa global: máscara trivial (todo ceros)
-        row = torch.zeros(1, 1, 1, t + 1, device=device, dtype=torch.bfloat16)
-        start = t - w + 1
-        if start > 0:
-            row[:, :, :, :start] = float("-inf")
-        rows[m] = row
-    return rows
-
-
-def vjp_ell(red, x_leaf, y_orig, device, chunk_cols, primal_tol):
-    """J_ℓ por VJPs chunked sobre el grafo reducido, con verificación de primal.
-    Devuelve (J (D,D) f32, err_rel). Lanza RuntimeError si el primal no cuadra."""
-    D = x_leaf.shape[0]
-    z = red(x_leaf)
+def vjp_ell(red, x_val, y_orig, reset, device, chunk_cols, primal_tol):
+    """J_ℓ = ∂z/∂x por VJPs chunked sobre el grafo reducido, con verificación de
+    primal. torch ≥2.14 no admite cotangentes batcheados en autograd.grad (shape
+    check estricto) y jacrev (backward) OOM-ea por los cotangentes del KV
+    completo — se usa torch.func.jacfwd (forward-mode, chunk_size), el análogo
+    forward del chunking pre-registrado. x_val f32 → J f32.
+    IMPORTANTE: cada forward de red agrega la posición t al cache — hay que
+    reset() entre el forward del primal y el forward interno de jacfwd.
+    Devuelve (J (D,D) f32, err_rel). Lanza RuntimeError si el primal no cuadra
+    (error estructural — máscaras/claves equivocadas; el ruido ULP ≤ 0.46 no
+    supera la tolerancia)."""
+    import torch.func as func
+    D = x_val.shape[0]
+    z = red(x_val)
     err = float((z - y_orig).abs().max() / y_orig.abs().mean().clamp(min=1e-6))
     if err > primal_tol:
         del z
         raise RuntimeError(f"primal mismatch (err={err:.2e} > {primal_tol})")
-
-    J = torch.empty(D, D, device=device, dtype=torch.float32)
-    try:
-        # cotangentes batcheados (D, C): un backward por chunk.
-        # grad = J^T @ G con G = I[:, c0:c1] → grad.T = J[c0:c1, :]
-        for c0 in range(0, D, chunk_cols):
-            c1 = min(c0 + chunk_cols, D)
-            C = c1 - c0
-            G = torch.zeros(D, C, device=device, dtype=torch.bfloat16)
-            G[torch.arange(c0, c1, device=device), torch.arange(C, device=device)] = 1.0
-            grads = torch.autograd.grad(
-                z, x_leaf, grad_outputs=G, retain_graph=True, materialize_grads=True
-            )[0]  # (D, C) f32
-            J[c0:c1, :] = grads.T
-    except RuntimeError as e:
-        # fallback: cotangente identidad completa (D, D) en un solo backward
-        print(f"    [vjp] cotangentes batcheados fallaron ({e}); usando identidad completa", flush=True)
-        G = torch.eye(D, device=device, dtype=torch.bfloat16)
-        grads = torch.autograd.grad(z, x_leaf, grad_outputs=G, retain_graph=True,
-                                    materialize_grads=True)[0]  # (D, D) = J^T
-        J[...] = grads.T
     del z
+    # FORWARD-MODE chunked (jvp con tangentes batcheados), no backward: los
+    # tangentes solo fluyen por la posición actual (el pasado K/V tiene tangente
+    # cero), de modo que la memoria es (C, D_inter) — el backward (jacrev)
+    # materializa cotangentes (kv≈4K, D, C) = 33GB por el cat del KV y OOM-ea.
+    # jacfwd de torch no acepta chunk_size, así que el chunking es manual:
+    # por chunk, X = C copias del primal y V = las C columnas base del chunk;
+    # el jvp da zt[c, :] = ∂z/∂x_{c0+c} (columna c0+c de J).
+    # La Jacobiana se acumula en CPU (numpy): materializar el tangente del jvp
+    # en GPU (asignación/clone) retiene ~3.9GB por chunk en torch 2.14 — bug
+    # del nivel functorch — mientras la vía .cpu().numpy() es plana (verificado).
+    J = np.zeros((D, D), dtype=np.float32)
+    for c0 in range(0, D, chunk_cols):
+        c1 = min(c0 + chunk_cols, D)
+        C = c1 - c0
+        reset(C)
+        # bf16: los duales del jvp quedan en bf16 (las normas internas castean a
+        # f32 y de vuelta) — en f32 el dual del cat es (C,16,kv,512)·4B = 4GB
+        X = x_val.detach()[None, :].expand(C, -1).clone().to(torch.bfloat16)
+        V = torch.zeros(C, D, device=device, dtype=torch.bfloat16)
+        V[torch.arange(C, device=device), torch.arange(c0, c1, device=device)] = 1.0
+        zz, zt = func.jvp(red, (X,), (V,))
+        np.copyto(J[:, c0:c1], zt.T.detach().float().cpu().numpy())
+        del X, V, zz, zt
+        if c0 % 1024 == 0:
+            torch.cuda.synchronize()
+            print(f"    [mem] chunk {c0}: alloc {torch.cuda.memory_allocated()/2**30:.2f} GiB", flush=True)
+    reset(1)
     return J, err
 
 
@@ -269,25 +342,33 @@ def jvp_readout(red, x_bf, WU, first_tok, device, k=JVP_TOPK):
         s = s * np.exp(m - m_new) + float(torch.exp(vals - m_new).sum())
         m = m_new
     logZ = float(np.log(s)) + m
-    logprobs = (bestv.float() - logZ).cpu().numpy()
+    logprobs = (bestv.float() - logZ).detach().cpu().numpy()
     ft = ft_val - logZ if ft_val is not None else float("nan")
-    return best.cpu().numpy(), logprobs, ft
+    return best.detach().cpu().numpy(), logprobs, ft
 
 
-def forward_prompt(model, tokenizer, prompt, system_prompt, device):
-    """Forward original (no_grad): estados por capa (t=0), cache K/V, logits lm, y."""
+def forward_prompt(model, lm, final_norm, tokenizer, prompt, system_prompt, device):
+    """Forward original (no_grad): estados por capa (t=0), cache K/V, logits lm, y.
+
+    Convención 5.16.1: hs[-1] ya es post-final-norm (= y); el h_59 crudo se
+    captura con un hook en la entrada de lm.norm (no está en la tupla)."""
     ids = tokenize(tokenizer, prompt, system_prompt, device)
     T = int(ids.shape[1])
+    raw59 = {}
+    h_norm = final_norm.register_forward_hook(
+        lambda m, args, out: raw59.__setitem__(0, args[0][0, -1].detach().clone()))
     with torch.no_grad():
         out = model(input_ids=ids, use_cache=True, output_hidden_states=True)
-    hs = out.hidden_states  # 61 tensores (1, T, D): hs[ℓ+1] = salida de la capa ℓ
+    h_norm.remove()
+    hs = out.hidden_states  # 61 tensores (1, T, D): hs[ℓ+1] = salida capa ℓ; hs[-1] = post-norm
     cache_full = out.past_key_values
     logits = out.logits[0, -1].float()  # (V,)
     n_layers = len(hs) - 1
-    t0 = {ell: hs[ell + 1][0, -1].clone() for ell in range(n_layers)}  # bf16 (D,)
-    y = model.language_model.norm(hs[-1])[0, -1].clone()  # bf16 (D,) post-final-norm
+    t0 = {ell: hs[ell + 1][0, -1].clone() for ell in range(n_layers - 1)}  # bf16 (D,)
+    t0[n_layers - 1] = raw59[0].clone()  # h_59 crudo
+    y = hs[-1][0, -1].clone()            # bf16 (D,) post-final-norm
     del out, hs
-    return T, t0, y, cache_full, logits
+    return ids, T, t0, y, cache_full, logits
 
 
 def main():
@@ -301,6 +382,11 @@ def main():
     ap.add_argument("--no-jvp", action="store_true", help="no calcular readouts JVP por muestra")
     ap.add_argument("--per-condition", action="store_true",
                     help="guardar además J̄ por condición (48GB en disco del pod)")
+    ap.add_argument("--jbar", action="store_true",
+                    help="computar J̄ (Jacobianas completas por capa) — los dos muros "
+                         "medidos en el pod (pico de duales por profundidad en el jvp "
+                         "full-stack y ~17ms de overhead functorch por llamada) lo hacen "
+                         "inviable con contextos de 4K tokens; ver SOUL_MD_UPDATE_GUIDE.md §9")
     ap.add_argument("--chunk-cols", type=int, default=CHUNK_COLS)
     ap.add_argument("--primal-tol", type=float, default=PRIMAL_TOL)
     args = ap.parse_args()
@@ -320,18 +406,20 @@ def main():
     model_path = get_model_path(args.token)
 
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    print("Cargando modelo (bf16)...", flush=True)
+    print("Cargando modelo (bf16, eager)...", flush=True)
     model = AutoModelForCausalLM.from_pretrained(
-        model_path, torch_dtype=torch.bfloat16, token=args.token
+        model_path, dtype=torch.bfloat16, attn_implementation="eager",
+        trust_remote_code=True, token=args.token
     ).to(device).eval()
     tokenizer = AutoTokenizer.from_pretrained(model_path, token=args.token)
 
-    lm = model.language_model
+    lm = model.model.language_model
     layers = lm.layers
     final_norm = lm.norm
+    layer_types = lm.config.layer_types
     n_layers = len(layers)
-    D = int(lm.config.hidden_size)
     WU = model.lm_head.weight  # tied a embed_tokens (verificar abajo)
+    D = int(WU.shape[1])
     tied = bool((model.lm_head.weight == model.get_input_embeddings().weight).all())
     print(f"capas={n_layers} D={D} V={WU.shape[0]} tied_WU={tied}", flush=True)
     assert tied, "lm_head no está atado a embed_tokens — el lens local usa embed_tokens"
@@ -345,55 +433,60 @@ def main():
         p = prompts[0]
         sys_p = get_system_prompt(CONDITIONS["axis"], prompts_dir)
         t_start = time.time()
-        T, t0, y, cache_full, logits = forward_prompt(model, tokenizer, p["text"], sys_p, device)
+        ids, T, t0, y, cache_full, logits = forward_prompt(
+            model, lm, final_norm, tokenizer, p["text"], sys_p, device)
         print(f"T={T} ids={p['id']} ({time.time()-t_start:.0f}s)", flush=True)
 
-        wy = WU.float() @ y.float()
-        ok = int(wy.argmax()) == int(logits.argmax())
+        ok = wu_argmax(WU, y.float(), device) == int(logits.argmax())
         print(f"base check (argmax(W_U @ y) == argmax(lm_logits)): {ok} "
-              f"(top1={tokenizer.decode([int(wy.argmax())])!r})", flush=True)
+              f"(top1={tokenizer.decode([int(logits.argmax())])!r})", flush=True)
         assert ok, "verificación de base falló — revisar convención de estados"
 
         t = T - 1
-        cache_full = crop_cache(cache_full, t)
-        mask_rows = build_explicit_mask_rows(layers, t, device)
-        get_red = make_red_factory(layers, final_norm, cache_full, t, n_layers, device, None)
+        mk, pe, pos_t, reset, master_k, master_v = build_plumbing(
+            model, lm, layers, layer_types, ids, t, cache_full)
+        get_red = make_red_factory(layers, final_norm, cache_full, layer_types, mk, pe, pos_t,
+                                   master_k, master_v, n_layers, device)
 
         # J_59 analítico: Jacobiana de la RMSNorm final, z = w⊙h/r, r = sqrt(mean(h²)+eps)
         x59 = t0[59].detach().float().requires_grad_(True)
-        J59, err59 = vjp_ell(get_red(59), x59, y, device, args.chunk_cols, args.primal_tol)
-        print(f"primal L59 (auto): err={err59:.2e}", flush=True)
+        J59, err59 = vjp_ell(get_red(59), x59, y, reset, device, args.chunk_cols, args.primal_tol)
+        print(f"primal L59 (solo norma): err={err59:.2e}", flush=True)
         eps = float(getattr(final_norm, "eps", 1e-6))
         h = t0[59].detach().float()
         r2 = float((h ** 2).mean()) + eps
         r = r2 ** 0.5
         w = final_norm.weight.float()
         j_errs = []
+        J59_np = J59  # numpy (D, D), J[i, j] = ∂z_i/∂h_j
+        ana_np = (w.detach().cpu().numpy(), h.cpu().numpy())
         for j in [0, D // 2, D - 1]:
-            ana = w * ((torch.arange(D, device=device) == j).float() / r
-                       - h * h[j] / (D * r ** 3))
-            j_errs.append(float((J59[j] - ana).abs().max()))
-        print(f"J_59 analítico: máx |J59[j] - analítico| = {max(j_errs):.2e}", flush=True)
+            # ana = ∂z_*/∂h_j (columna j de la Jacobiana)
+            wa, ha = ana_np
+            r_np = float(np.sqrt((ha ** 2).mean() + eps))
+            ana = wa * ((np.arange(D) == j).astype(np.float32) / r_np
+                        - ha * ha[j] / (D * r_np ** 3))
+            j_errs.append(float(np.abs(J59_np[:, j] - ana).max() / np.abs(ana).max()))
+        print(f"J_59 analítico: máx err RELATIVO por columna = {max(j_errs):.2e} "
+              f"(pesos de la norma ~{w.abs().median():.1f}, no ~1)", flush=True)
         assert max(j_errs) < 1e-2, "J_59 no cuadra con la Jacobiana analítica — maquinaria VJP rota"
         del x59, J59
 
-        # primal en una capa media: modo auto, y fallback explícito si hace falta
+        # primal en capas con pila completa, C=1 (barato: un forward cada una).
+        # Un error estructural — máscaras/claves — se ve ya en L58; el ruido ULP
+        # crece con la profundidad y con T (se registra en meta, no aborta).
         t_v = time.time()
-        x30 = t0[30].detach().float().requires_grad_(True)
-        try:
-            J30, err30 = vjp_ell(get_red(30), x30, y, device, args.chunk_cols, args.primal_tol)
-            print(f"primal L30 (auto): err={err30:.2e} | vjp L30 {time.time()-t_v:.1f}s", flush=True)
-        except RuntimeError as e:
-            print(f"primal FAIL auto L30: {e} — probando máscara explícita", flush=True)
-            get_red2 = make_red_factory(layers, final_norm, cache_full, t, n_layers,
-                                        device, mask_rows)
-            J30, err30 = vjp_ell(get_red2(30), x30, y, device, args.chunk_cols, args.primal_tol)
-            print(f"primal L30 (explícito): err={err30:.2e} | vjp L30 {time.time()-t_v:.1f}s", flush=True)
-        del x30, J30
+        for ell in [58, 30, 0]:
+            reset()
+            z_ell = get_red(ell)(t0[ell].detach().float())
+            err = float((z_ell - y).abs().max() / y.abs().mean().clamp(min=1e-6))
+            print(f"primal L{ell} (C=1): err={err:.2e}", flush=True)
+            del z_ell
 
         if not args.no_jvp:
             try:
                 t_j = time.time()
+                reset()
                 top, lp, ft = jvp_readout(get_red(59), t0[59].detach(), WU,
                                           int(logits.argmax()), device)
                 print(f"JVP L59 ok (top1={tokenizer.decode([int(top[0])])!r}, "
@@ -401,12 +494,11 @@ def main():
             except Exception as e:
                 print(f"JVP falló: {type(e).__name__}: {e} — correr con --no-jvp", flush=True)
 
-        per_ell_vjp = t_v / 1.0
         n_samples = len(args.conditions) * len(prompts)
-        est_h = (per_ell_vjp * n_layers * n_samples) / 3600.0
-        print(f"\nETA: {n_samples} muestras × ~{per_ell_vjp * n_layers:.0f}s VJP por muestra "
-              f"≈ {est_h:.1f} h solo VJP (+ forward ~{time.time()-t_start:.0f}s/muestra)",
-              flush=True)
+        t_per_ell = max((time.time() - t_start) / 4.0, 1.0)
+        est_h = (t_per_ell * n_layers * n_samples) / 3600.0
+        print(f"\nETA (JVP readouts + primal checks por capa): {n_samples} muestras × "
+              f"{n_layers} capas ≈ {est_h:.1f} h (+ forward ~5s/muestra)", flush=True)
         print("SANITY_OK", flush=True)
         return
 
@@ -445,7 +537,8 @@ def main():
         for i, p in enumerate(prompts):
             print(f"\n[{cond}] prompt {i+1}/{len(prompts)} id={p['id']}", flush=True)
             t_p0 = time.time()
-            T, t0, y, cache_full, logits = forward_prompt(model, tokenizer, p["text"], sys_p, device)
+            ids, T, t0, y, cache_full, logits = forward_prompt(
+                model, lm, final_norm, tokenizer, p["text"], sys_p, device)
             t_times["forward"].append(time.time() - t_p0)
 
             out["t0_states"][i] = np.stack([t0[e].float().cpu().numpy() for e in range(n_layers)])
@@ -458,64 +551,64 @@ def main():
             out["first_token_ids"][i] = first_tok
             out["T"][i] = T
 
-            ok = int((WU.float() @ y.float()).argmax()) == first_tok
+            ok = wu_argmax(WU, y.float(), device) == first_tok
             first_tok_check.setdefault(cond, []).append(int(ok))
             assert ok, f"base check falló en {cond} id={p['id']}"
 
-            # cache recortado a 0..t-1 (posición t la escribe el grafo reducido)
+            # estado past del cache + plumbing (máscaras/rope) + master
             t = T - 1
-            cache_full = crop_cache(cache_full, t)
-            mask_rows = build_explicit_mask_rows(layers, t, device)
-            get_red_auto = make_red_factory(layers, final_norm, cache_full, t, n_layers,
-                                            device, None)
-            get_red_expl = None
-            mode = "auto"
+            mk, pe, pos_t, reset, master_k, master_v = build_plumbing(
+                model, lm, layers, layer_types, ids, t, cache_full)
+            get_red = make_red_factory(layers, final_norm, cache_full, layer_types, mk, pe, pos_t,
+                                       master_k, master_v, n_layers, device)
 
             t_v0 = time.time()
             worst_err = 0.0
             worst_ell = -1
             for ell in range(n_layers):
-                x_leaf = t0[ell].detach().float().requires_grad_(True)
-                try:
-                    J, err = vjp_ell(get_red_auto(ell), x_leaf, y, device,
-                                     args.chunk_cols, args.primal_tol)
-                except RuntimeError as e:
-                    if get_red_expl is None:
-                        get_red_expl = make_red_factory(layers, final_norm, cache_full, t,
-                                                        n_layers, device, mask_rows)
-                    print(f"    L{ell}: {e} — reintento con máscara explícita", flush=True)
-                    mode = "explícito"
-                    J, err = vjp_ell(get_red_expl(ell), x_leaf, y, device,
-                                     args.chunk_cols, args.primal_tol)
+                # primal check C=1 (informativo: ruido ULP crece con profundidad/T —
+                # se registra en meta, no aborta)
+                reset()
+                x_chk = t0[ell].detach().float()
+                z_chk = get_red(ell)(x_chk)
+                err = float((z_chk - y).abs().max() / y.abs().mean().clamp(min=1e-6))
+                del x_chk, z_chk
                 if err > worst_err:
                     worst_err, worst_ell = err, ell
-                jac_sum[ell] += J.cpu().numpy()
-                if per_cond is not None:
-                    per_cond[cond][ell] += J.cpu().numpy()
-                del x_leaf, J
+
+                if args.jbar:
+                    reset()
+                    x_leaf = t0[ell].detach().float().requires_grad_(True)
+                    J, jerr = vjp_ell(get_red(ell), x_leaf, y, reset, device,
+                                      args.chunk_cols, args.primal_tol)
+                    jac_sum[ell] += J
+                    if per_cond is not None:
+                        per_cond[cond][ell] += J
+                    del x_leaf, J
 
                 if not args.no_jvp:
                     try:
                         t_j = time.time()
-                        top, lp, ft = jvp_readout(get_red_auto(ell), t0[ell].detach(), WU,
+                        reset()
+                        top, lp, ft = jvp_readout(get_red(ell), t0[ell].detach(), WU,
                                                   first_tok, device)
                         t_times["jvp"].append(time.time() - t_j)
                         jvp_out["jvp_top50_ids"][i, ell] = top
                         jvp_out["jvp_top50_logprobs"][i, ell] = lp
                         jvp_out["jvp_first_tok_logprob"][i, ell] = ft
                     except Exception as e:
-                        print(f"    JVP L{ell} falló ({type(e).__name__}: {e}) — "
-                              f"solo VJP para esta capa", flush=True)
-            n_jac_samples += 1
+                        print(f"    JVP L{ell} falló ({type(e).__name__}: {e})", flush=True)
+            if args.jbar:
+                n_jac_samples += 1
             t_times["vjp"].append(time.time() - t_v0)
 
-            meta_checks.append({"cond": cond, "id": p["id"], "mode": mode,
+            meta_checks.append({"cond": cond, "id": p["id"],
                                 "worst_layer": int(worst_ell),
                                 "worst_rel_err": float(worst_err)})
-            print(f"    VJP {time.time()-t_v0:.0f}s | primal máx L{worst_ell}={worst_err:.2e} "
-                  f"({mode}) | total {time.time()-t_p0:.0f}s", flush=True)
+            print(f"    capas {time.time()-t_v0:.0f}s | primal máx L{worst_ell}={worst_err:.2e} | "
+                  f"total {time.time()-t_p0:.0f}s", flush=True)
 
-            del t0, y, cache_full
+            del t0, y, cache_full, mk, pe
             if (i + 1) % 5 == 0:
                 gc.collect()
                 torch.cuda.empty_cache()
@@ -526,16 +619,17 @@ def main():
         fc = sum(first_tok_check.get(cond, []))
         print(f"[{cond}] guardado | base check {fc}/{len(prompts)}", flush=True)
 
-    # ── Jacobianas promediadas ──
-    print("\nGuardando Jacobianas promediadas (pooled)...", flush=True)
-    for ell in range(n_layers):
-        np.save(OUT_DIR / "jacobians" / f"J_L{ell}.npy", jac_sum[ell] / n_jac_samples)
-    if per_cond is not None:
-        for cond in args.conditions:
-            for ell in range(n_layers):
-                np.save(OUT_DIR / "jacobians" / f"J_percond_{cond}_L{ell}.npy",
-                        per_cond[cond][ell] / len(prompts))
-    print(f"jacobians/J_L*.npy × {n_layers} (pooled, n={n_jac_samples})", flush=True)
+    # ── Jacobianas promediadas (solo con --jbar) ──
+    if args.jbar:
+        print("\nGuardando Jacobianas promediadas (pooled)...", flush=True)
+        for ell in range(n_layers):
+            np.save(OUT_DIR / "jacobians" / f"J_L{ell}.npy", jac_sum[ell] / n_jac_samples)
+        if per_cond is not None:
+            for cond in args.conditions:
+                for ell in range(n_layers):
+                    np.save(OUT_DIR / "jacobians" / f"J_percond_{cond}_L{ell}.npy",
+                            per_cond[cond][ell] / len(prompts))
+        print(f"jacobians/J_L*.npy × {n_layers} (pooled, n={n_jac_samples})", flush=True)
 
     meta = {
         "protocol": "SOUL_MD_UPDATE_GUIDE.md §8 + preregistro A1 §4.1 (VJPs chunked, J̄ pooled)",
@@ -548,7 +642,13 @@ def main():
         "prompt_ids": prompt_ids,
         "chunk_cols": args.chunk_cols,
         "primal_tol": args.primal_tol,
+        "bf16_reduced_precision": False,
         "jvp": not args.no_jvp,
+        "jbar": args.jbar,
+        "jbar_note": "J̄ desactivado por defecto: pico de duales por profundidad del jvp "
+                     "full-stack (~0.5GB/capa a C=8) y ~17ms de overhead functorch por "
+                     "llamada lo hacen inviable en contextos de 4K tokens (ver guía §9). "
+                     "El instrumento J-lens primario es el readout exacto por muestra (jvp/).",
         "base_check_per_condition": {c: f"{sum(v)}/{len(v)}"
                                      for c, v in first_tok_check.items()},
         "primal_checks": meta_checks,

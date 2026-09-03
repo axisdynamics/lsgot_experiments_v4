@@ -179,20 +179,48 @@ Los dos scripts del protocolo §8 ya existen en `scripts/fase4_t2/`:
   separación JS entre condiciones por capa; chequeo de las 3 predicciones
   §2.2 con criterios fijados en su docstring ANTES de ver datos.
 
-Decisiones de diseño (registradas antes de correr):
-1. **J̄ POOLED** (140 muestras, no por condición): la lente es un
-   instrumento único; un J̄ por condición inyectaría la señal de condición
-   en la propia lente y confundiría la comparación entre condiciones.
-   `--per-condition` guarda además los 7 J̄ (48GB) si el análisis los pide.
-2. **Grafo reducido de 1 posición** para las VJPs: sin él, los cotangentes
-   (T, D, C) de la secuencia completa (T≈6K) son imposibles de
-   materializar y el costo ~100×. El grafo reducido se valida por
-   identidad del primal en cada (prompt, capa); fallback automático a
-   máscara de ventana deslizante explícita.
-3. **JVP por muestra** (forward-mode, `torch.func.jvp`): contraste entre
-   J̄-pooled y Jacobiana exacta — mide la neutralidad del instrumento.
-4. Cotangentes en bf16 (mismas operaciones que el modelo), acumulación f32
-   en la hoja; J̄ se guarda f32. Caveat de precisión registrado.
+Decisiones de diseño (registradas antes de correr) — ACTUALIZADO 2026-09-03
+tras la validación en el pod (el plan original de J̄ no sobrevivió la realidad
+de transformers 5.16.1 + torch 2.14 + contextos de 4K tokens):
+
+1. **J-lens = JVP exacto por muestra** (`torch.func.jvp`, un dual forward por
+   (prompt, capa) sobre el grafo reducido) — es la definición del J-lens de
+   Anthropic (la Jacobiana de la propia muestra aplicada a su estado) y quedó
+   como instrumento primario. Top-50 + logprob del primer token guardados.
+2. **J̄ (Jacobianas promediadas) quedó OPCIONAL (`--jbar`)**: dos muros medidos
+   en el pod lo hacen inviable hoy con contextos de 4K tokens (el pre-registro
+   A1 asumía corpus de 256 tokens):
+   - jacrev (backward) materializa cotangentes (kv≈4K, D, C) = 33GB a C=256 → OOM;
+   - el jvp full-stack retiene ~0.5GB de duales por capa en el nivel functorch
+     (L30 = +15GB → OOM a C=8);
+   - ~17ms de overhead functorch por llamada (aun reutilizando la función):
+     5.6M llamadas = 26h;
+   - materializar el tangente del jvp en GPU (asignación/clone) retiene 3.9GB
+     por chunk en torch 2.14 (bug del nivel functorch) — la vía CPU
+     (`.cpu().numpy()`) es plana (verificado).
+   Si el contraste instrumento-promediado vuelve a necesitarse, recalcular J̄
+   con contextos de 256 tokens (el régimen del pre-registro) o en un pod con
+   más VRAM.
+3. **Grafo reducido de 1 posición** (validado): hs[-1] YA es post-final-norm en
+   5.16.1 (la lm_head lo consume directo); el h_59 crudo se captura con hook en
+   la entrada de lm.norm. Capas llamadas como módulos reales con
+   per_layer_input=None, position_embeddings por tipo de capa (rotary 256/512),
+   máscaras por tipo vía transformers.masking_utils, shared_kv_states={}
+   (ninguna capa comparte K/V en este checkpoint). Cache 5.x (DynamicLayer,
+   attr .keys/.values; crop(-1) quita del final; los updates reemplazan, no
+   mutan) — estado past por slicing directo de los slots (las capas deslizantes
+   guardan solo el pasado, W−1), reset desde un master antes de cada forward.
+4. `allow_bf16_reduced_precision_reduction=False` (sin esto las GEMMs (1,1,D)
+   toman kernels con acumulación distinta — diferencia escalar en q_proj,
+   verificado). El primal del grafo reducido reproduce el forward original
+   salvo ruido ULP (0.0 en L59, 8e-2 en L58, ~1.4 en L0 a T≈4K) — los ops de
+   redondeo bf16 son identidad en el backward, así que los READOUTS JVP no
+   heredan ese ruido del forward. Verificaciones: base (W_U@y == argmax logits,
+   20/20), J_59 analítico (err rel 2.6e-3), primal por (prompt, capa) grabado
+   en meta.json.
+5. Las predicciones P1-P3 se chequean con criterios pre-especificados en el
+   docstring de analyze_j_lens.py sobre el instrumento JVP (top-10/top-50) +
+   la separación JS del lens ingenuo como corroborativo.
 
 ### Comandos del pod (limpio, A100/H100 80GB, disk ≥120GB, min_vram_gb=65)
 
@@ -207,13 +235,16 @@ scp data/sia/prompts/axis.dna data/sia/prompts/axis_short.txt \
 scp ~/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/data/prompts.json \
     root@<pod>:/workspace/sia_data/
 
-# pod: entorno (desinstalar torchvision/torchaudio como siempre) + SANITY
+# pod: entorno + SANITY. ATENCIÓN (validado 2026-09-03): gemma4 NO existe en
+# transformers <5.x — el pin viejo (4.49-4.53) NO sirve. El entorno validado es
+# transformers 5.16.1 + torch 2.14.0+cu130 (pip install -U torch; 5.16.1 exige
+# torch >=2.5). Desinstalar torchvision/torchaudio como siempre.
 ssh root@<pod> "cd /workspace/scripts/fase4_t2 && \
   pip uninstall -y torchvision torchaudio -q && \
-  pip install -U 'transformers>=4.49,<4.53' -q && \
+  pip install -q -U torch 'transformers==5.16.1' && \
   python3 extract_layers_jlens.py --sanity --token hf_xxxxx"
-# esperar SANITY_OK + ETA (valida: base check, primal auto/explícito L30+L59,
-# J_59 analítico, JVP L59; ~15-20 min si baja el modelo, ~5 min si está)
+# esperar SANITY_OK + ETA (valida: base check, primal L0/L30/L58/L59, J_59
+# analítico, JVP L59; ~5 min con el modelo ya descargado)
 
 # pod: corrida completa (~1-2h de VJP según ETA; tee para el log)
 ssh root@<pod> "cd /workspace/scripts/fase4_t2 && \
@@ -222,7 +253,8 @@ ssh root@<pod> "cd /workspace/scripts/fase4_t2 && \
 # bajar TODO ANTES de soltar el pod (política de embeddings)
 scp -r root@<pod>:/workspace/scripts/fase4_t2/results_jlens/ \
   ~/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/results_jlens/
-# ~7.2GB (jacobians/J_L*.npy 6.9GB f32 + states/ y jvp/ ~0.3GB + meta.json)
+# ~0.5GB (states/ + jvp/ + meta.json — SIN jacobians: --jbar quedó OFF por los
+# muros medidos; ver decisiones de diseño)
 
 # local (CPU): W_U y normas (2.8GB, sin GPU) + análisis
 cd LSGOT_v4/scripts/fase4_t2

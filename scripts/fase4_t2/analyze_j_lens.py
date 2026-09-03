@@ -15,23 +15,30 @@ evidence/WORKSPACE_HYPOTHESIS_REPORT.md §2.2 ANTES de la re-extracción:
   P3. La separación máxima del readout entre condiciones coincide con el
       pico geométrico L35.
 
-Lentes por capa (tres variantes, sobre el estado t=0 de cada (cond, prompt)):
+Lentes por capa (sobre el estado t=0 de cada (cond, prompt)):
   naive  = W_U @ final_norm(h_ℓ)          [final_norm = pesos RMSNorm final]
-  jlens  = W_U @ (J̄_ℓ @ h_ℓ)              [J̄_ℓ pooled 140 muestras, pre-registro A1 §4.1]
-  jvp    = W_U @ (J_ℓ @ h_ℓ) exacto por muestra [guardado en el pod como top-50]
+  jvp    = W_U @ (J_ℓ @ h_ℓ) exacto por muestra — el J-lens primario
+           (top-50 guardado en el pod; la Jacobiana de la propia muestra es la
+           definición del J-lens de Anthropic)
+  jlens  = W_U @ (J̄_ℓ @ h_ℓ) SOLO si existen los archivos jacobians/J_L*.npy
+           (el --jbar del pod quedó opcional por los muros medidos — ver
+           SOUL_MD_UPDATE_GUIDE.md §9)
 
 Criterios de decisión (fijados ANTES de ver datos, en el espíritu del
-pre-registro A1 — no se cambian post-hoc):
+pre-registro A1 — no se cambian post-hoc; el instrumento primario es el JVP
+exacto por muestra):
   P1a CONFIRMADA si onset_autocheck ∈ [13, 33], donde onset = primera capa ℓ
       en que la hit-rate media del vocabulario auto-chequeo en el top-10 del
-      J-lens pooled sobre las condiciones identitarias (axis, axis_short,
-      axis_pec_only) es ≥ 0.1 sostenida ≥ 3 capas consecutivas.
+      JVP sobre las condiciones identitarias (axis, axis_short, axis_pec_only)
+      es ≥ 0.1 sostenida ≥ 3 capas consecutivas.
   P1b CONFIRMADA si snap ∈ [33, 35], donde snap = primera capa con match@1
-      medio (J-lens pooled, condiciones identitarias) ≥ 0.5.
-  P2  CONFIRMADA si sep_J[30] < sep_J[29] y sep_J[30] < sep_J[31], con
-      sep_J = mediana de la divergencia JS (sobre pares de prompts) entre
-      todas las parejas de condiciones del J-lens pooled.
-  P3  CONFIRMADA si argmax(sep_J) ∈ {34, 35, 36}.
+      medio (JVP, condiciones identitarias) ≥ 0.5.
+  P2  CONFIRMADA si sep[30] < sep[29] y sep[30] < sep[31], con sep = 1 −
+      solape Jaccard medio del top-50 del JVP entre todas las parejas de
+      condiciones (la separación del readout).
+  P3  CONFIRMADA si argmax(sep) ∈ {34, 35, 36}.
+  Adicional (corroborativo, no confirmatorio): la separación JS del lens
+  ingenuo (full logits) se reporta por capa.
 Resultado = CONFIRMADA / REFUTADA / PARCIAL (con los números a la vista).
 Todo se reporta, coincida o no.
 
@@ -184,6 +191,8 @@ def main():
 
     data_dir = Path(args.data_dir)
     resp_dir = Path(args.resp_dir)
+    has_jbar = (data_dir / "jacobians" / "J_L0.npy").exists()
+    print(f"J̄ disponible: {has_jbar} (--jbar del pod)")
 
     meta = json.load(open(data_dir / "meta.json"))
     print(f"meta: {meta['model']} | base_check: {meta['base_check_per_condition']}")
@@ -240,17 +249,22 @@ def main():
 
     print("\nProcesando 60 capas × 3 lentes...", flush=True)
     for ell in range(N_LAYERS):
-        # logits naive y jlens por condición para esta capa
+        # logits naive (y jlens si hay J̄) por condición para esta capa
         naive_logits = {}
-        jlens_logits = {}
-        Jbar = np.load(data_dir / "jacobians" / f"J_L{ell}.npy", mmap_mode="r")
         for g in GROUPS:
             h = states[g]["h"][:, ell].T  # (D, 20) f32
             naive_logits[g] = wu_topk_logits(WU, rms_norm(h, final_w))
-            u = Jbar @ h  # (D, 20)
-            jlens_logits[g] = wu_topk_logits(WU, u)
+        jlens_logits = {}
+        if has_jbar:
+            Jbar = np.load(data_dir / "jacobians" / f"J_L{ell}.npy", mmap_mode="r")
+            for g in GROUPS:
+                h = states[g]["h"][:, ell].T
+                jlens_logits[g] = wu_topk_logits(WU, Jbar @ h)
+            del Jbar
 
         for lens, logs in (("naive", naive_logits), ("jlens", jlens_logits)):
+            if not logs:
+                continue
             for g in GROUPS:
                 m1, m10 = match_rates(logs[g], first_real[g])
                 curves[lens]["match1"].setdefault(g, []).append(m1 / 20.0)
@@ -270,6 +284,7 @@ def main():
                 sep_details[lens].setdefault(k2, []).append(v2)
 
         # JVP (exacto por muestra): match y scan sobre el top-50 guardado
+        jvp_top50 = {}
         for g in GROUPS:
             if g not in jvp:
                 curves["jvp"]["match1"].setdefault(g, []).append(float("nan"))
@@ -278,6 +293,7 @@ def main():
                 curves["jvp"]["first_tok_logprob"].setdefault(g, []).append(float("nan"))
                 continue
             top50 = jvp[g]["jvp_top50_ids"][:, ell]  # (20, 50)
+            jvp_top50[g] = top50
             ft = np.array([first_real[g][j] if first_real[g][j] is not None else -1
                            for j in range(20)])
             m1 = int((top50[:, 0] == ft).sum())
@@ -288,6 +304,17 @@ def main():
                 scan_tokens(top50[:, :10].T, autocheck_vocab))
             curves["jvp"]["first_tok_logprob"].setdefault(g, []).append(
                 float(np.nanmean(jvp[g]["jvp_first_tok_logprob"][:, ell])))
+        # separación del JVP: 1 − Jaccard medio del top-50 entre parejas de condiciones
+        overlaps = []
+        gs = [g for g in GROUPS if g in jvp_top50]
+        for i, ga in enumerate(gs):
+            for gb in gs[i + 1:]:
+                a, b = jvp_top50[ga], jvp_top50[gb]  # (20, 50)
+                jac = np.mean([len(set(a[j].tolist()) & set(b[j].tolist())) / 50.0
+                               for j in range(20)])
+                overlaps.append(1.0 - jac)
+        sep["jvp"] = sep.get("jvp", [])
+        sep["jvp"].append(float(np.median(overlaps)) if overlaps else float("nan"))
         del Jbar, naive_logits, jlens_logits
         if ell % 10 == 0:
             print(f"  L{ell} hecho", flush=True)
@@ -317,7 +344,7 @@ def main():
 
     pred = {}
 
-    auto = mean_identity("jlens", "scan_autocheck")
+    auto = mean_identity("jvp", "scan_autocheck")
     onset = None
     run = 0
     for ell in range(N_LAYERS):
@@ -331,14 +358,14 @@ def main():
         else ("REFUTADA" if onset is not None else "PARCIAL (sin onset ≥0.1)"),
         "hitrate_identity_peaks": [int(np.argmax(auto)), float(np.max(auto))]}
 
-    m1 = mean_identity("jlens", "match1")
+    m1 = mean_identity("jvp", "match1")
     snap = next((ell for ell in range(N_LAYERS) if m1[ell] >= 0.5), None)
     pred["P1b_snap"] = {
         "snap_layer": snap, "banda": [33, 35],
         "result": "CONFIRMADA" if snap is not None and 33 <= snap <= 35
         else ("REFUTADA" if snap is not None else "PARCIAL (match@1 < 0.5 nunca)")}
 
-    sj = sep["jlens"]
+    sj = sep["jvp"]
     pred["P2_dip_L30"] = {
         "sep_29_30_31": [round(sj[29], 4), round(sj[30], 4), round(sj[31], 4)],
         "result": "CONFIRMADA" if sj[30] < sj[29] and sj[30] < sj[31] else "REFUTADA"}
