@@ -1,4 +1,4 @@
-# Confound de markup HTML en la familia chileatiende — descarte para E-K y advertencia retroactiva
+# Confound de markup HTML en la familia chat_agente — descarte para E-K y advertencia retroactiva
 
 **Fecha:** 2026-08-28
 **Origen:** observación del usuario ("repite una etiqueta html... equivocadamente medido
@@ -9,8 +9,8 @@ proyecto con prompts poco "encarnados".
 
 ## 1. Resumen
 
-Las tres condiciones de la familia chileatiende (`chileatiende`,
-`chileatiende_sia`, `chileatiende_sia_v2`) tienen una regla de sistema que
+Las tres condiciones de la familia chat_agente (`chat_agente`,
+`chat_agente_sia`, `chat_agente_sia_v2`) tienen una regla de sistema que
 obliga a envolver **toda** respuesta en el mismo wrapper HTML literal
 (`output_format: "HTML estricto — toda respuesta dentro de <div
 class=\"respuesta-bot\"...`, verbatim en las 3 prompts). El resultado: entre
@@ -26,9 +26,9 @@ densidad de restricción real, sino repetición literal de texto.
 
 | Condición | % de caracteres que son tags HTML | Apertura literal idéntica (20 prompts) |
 |---|---|---|
-| `chileatiende` | **43.6%** | 20/20 (mismo string de 62 caracteres) |
-| `chileatiende_sia` | **34.6%** | 20/20 (mismo string de 62 caracteres) |
-| `chileatiende_sia_v2` | (no medido directamente — misma regla `output_format` verbatim en el prompt, línea 178: `"HTML estricto — toda respuesta dentro de <div class=\"respuesta-bot\"..."`, idéntica a `chileatiende.txt` línea 267-268) | por diseño, mismo patrón esperado |
+| `chat_agente` | **43.6%** | 20/20 (mismo string de 62 caracteres) |
+| `chat_agente_sia` | **34.6%** | 20/20 (mismo string de 62 caracteres) |
+| `chat_agente_sia_v2` | (no medido directamente — misma regla `output_format` verbatim en el prompt, línea 178: `"HTML estricto — toda respuesta dentro de <div class=\"respuesta-bot\"..."`, idéntica a `chat_agente.txt` línea 267-268) | por diseño, mismo patrón esperado |
 | `automata_neutro` | 0.0% | sin patrón repetido |
 | `axis` | 0.0% | sin patrón repetido |
 | `vanilla` | 0.0% | sin patrón repetido |
@@ -42,19 +42,19 @@ como fracción de caracteres totales de la respuesta.
 Cualquier métrica que dependa de la trayectoria de hidden states a lo largo
 de la generación (PR, RQA/determinismo, curvatura Δκ, proyección v̂ por
 token) trata cada token como una observación informativa. Si ~35-44% de los
-tokens de CADA trayectoria de chileatiende corresponden al **mismo texto
+tokens de CADA trayectoria de chat_agente corresponden al **mismo texto
 literal repetido** en las 20 trayectorias, esos tokens producen hidden
 states casi idénticos entre prompts — lo que mecánicamente:
 
 - **reduce el participation ratio** (menos varianza efectiva, más
-  redundancia entre trayectorias) — coherente con que chileatiende mostró
+  redundancia entre trayectorias) — coherente con que chat_agente mostró
   el PR más bajo del panel en varias capas de E-F2 (ver `EF2_REPORT.md` §3.3,
-  L30: chileatiende=20.3 vs axis=29.2, automata_neutro=14.3 — pero
+  L30: chat_agente=20.3 vs axis=29.2, automata_neutro=14.3 — pero
   automata_neutro NO tiene este confound, así que su PR bajo sí puede
-  atribuirse a restricción genuina; el de chileatiende es sospechoso).
+  atribuirse a restricción genuina; el de chat_agente es sospechoso).
 - **infla el determinismo RQA** y la reducción de dimensión (Δκ) reportados
-  para chileatiende en el paper y en `CHILEATIENDE_SIA_REPORT.md` — no se
-  puede distinguir, con los datos actuales, cuánto de "chileatiende colapsa
+  para chat_agente en el paper y en `chat_agente_SIA_REPORT.md` — no se
+  puede distinguir, con los datos actuales, cuánto de "chat_agente colapsa
   más que automata_neutro" es densidad de restricción real y cuánto es
   este artefacto de markup repetido.
 - **no es el mismo mecanismo que "auto-referencia cableada"** (Factor 2,
@@ -66,27 +66,27 @@ states casi idénticos entre prompts — lo que mecánicamente:
 ## 4. Alcance del impacto — RESUELTO por exclusión completa (2026-08-28 noche)
 
 Decisión final del usuario: no parchear (p.ej. excluir solo los tokens de
-markup y recalcular) sino **eliminar chileatiende/chileatiende_sia/
-chileatiende_sia_v2 por completo de todos los reportes y métricas**, para
+markup y recalcular) sino **eliminar chat_agente/chat_agente_sia/
+chat_agente_sia_v2 por completo de todos los reportes y métricas**, para
 trabajar únicamente con datos limpios.
 
 | Reporte | Estado tras la limpieza |
 |---|---|
-| `EL_REPORT.md` | Reescrito — filas y comparaciones de chileatiende eliminadas. §3.4 quedó como nota histórica de cómo se detectó el confound, ya no presenta datos de chileatiende como evidencia. |
-| `EH2_REPORT.md` | Reescrito — chileatiende-family y el "par diagnóstico" sia vs sia_v2 (que dependía de ellas) eliminados por completo. El hallazgo central (identidad = ráfagas largas/autocorr. baja) se mantiene con automata_neutro como única referencia de restricción. |
-| `EJ_REPORT.md` | Reescrito **desde cero** (recalculado, no solo editado) sin chileatiende_family. Resultado más limpio: automata_neutro es la condición más distinta del panel completo (antes ese lugar lo ocupaba, engañosamente, chileatiende por su dominio/formato). Jerarquía revisada: "restricción > identidad" (sin el término espurio de "dominio"). |
-| `EF2_REPORT.md` | Editado — filas/columnas de chileatiende-family eliminadas de las 3 tablas por capa y de los pares clave. El hallazgo central (crecimiento monótono de v̂ hacia capas tardías) se mantiene intacto con los pares sin chileatiende. |
-| `CORRECCION_DVHAT_SIN_CHILEATIENDE.md` | Ya nació sin chileatiende como dato válido — es el reporte que originó esta limpieza. Sin cambios. |
-| `EK_REPORT.md` | Ya usaba automata_neutro/vanilla/axis como condiciones objetivo — nunca incluyó chileatiende como dato. Sin cambios. |
+| `EL_REPORT.md` | Reescrito — filas y comparaciones de chat_agente eliminadas. §3.4 quedó como nota histórica de cómo se detectó el confound, ya no presenta datos de chat_agente como evidencia. |
+| `EH2_REPORT.md` | Reescrito — chat_agente-family y el "par diagnóstico" sia vs sia_v2 (que dependía de ellas) eliminados por completo. El hallazgo central (identidad = ráfagas largas/autocorr. baja) se mantiene con automata_neutro como única referencia de restricción. |
+| `EJ_REPORT.md` | Reescrito **desde cero** (recalculado, no solo editado) sin chat_agente_family. Resultado más limpio: automata_neutro es la condición más distinta del panel completo (antes ese lugar lo ocupaba, engañosamente, chat_agente por su dominio/formato). Jerarquía revisada: "restricción > identidad" (sin el término espurio de "dominio"). |
+| `EF2_REPORT.md` | Editado — filas/columnas de chat_agente-family eliminadas de las 3 tablas por capa y de los pares clave. El hallazgo central (crecimiento monótono de v̂ hacia capas tardías) se mantiene intacto con los pares sin chat_agente. |
+| `CORRECCION_DVHAT_SIN_chat_agente.md` | Ya nació sin chat_agente como dato válido — es el reporte que originó esta limpieza. Sin cambios. |
+| `EK_REPORT.md` | Ya usaba automata_neutro/vanilla/axis como condiciones objetivo — nunca incluyó chat_agente como dato. Sin cambios. |
 
 **Ninguna conclusión central de FASE 0/1 dependía exclusivamente de
-chileatiende-family** — en todos los casos el hallazgo sobrevivió intacto
+chat_agente-family** — en todos los casos el hallazgo sobrevivió intacto
 (a veces más nítido) usando solo `automata_neutro` como referencia de
 restricción limpia.
 
 ## 5. Decisión para E-K (y en adelante)
 
-**Se descarta `chileatiende`, `chileatiende_sia` y `chileatiende_sia_v2`
+**Se descarta `chat_agente`, `chat_agente_sia` y `chat_agente_sia_v2`
 como condiciones objetivo o de referencia en E-K y en cualquier análisis
 geométrico nuevo**, hasta que exista una versión con el markup HTML
 removido del texto antes de tokenizar/medir (lo cual requeriría
