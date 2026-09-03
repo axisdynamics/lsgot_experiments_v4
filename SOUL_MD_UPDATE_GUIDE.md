@@ -272,3 +272,22 @@ python3 analyze_j_lens.py   # → j_lens_results.json + chequeo de predicciones 
 El análisis local además valida la cadena completa: `W_U@y` vs primer token
 guardado por el pod (20/20) y primer token guardado vs primer token REAL
 generado por sia_extended_v5 (20/20) — antes de creer ninguna curva.
+
+## 10. Pendiente 2026-09-03 (noche): regenerar los readouts JVP
+
+La corrida de hoy rescató 6/7 condiciones (falta automata_neutro) pero los
+readouts JVP quedaron BASURA por el bug del merge del topk chunked
+(`cat([vals,bestv])[:2k]` cortaba el best — el top-50 era el primer bloque
+del último chunk). Corregido (commit e27dcd9). Protocolo del pod nuevo:
+
+```bash
+# local → pod (mismos archivos que §9, + el script corregido)
+scp scripts/fase4_t2/extract_layers_jlens.py root@<pod>:/workspace/scripts/fase4_t2/
+scp data/sia/prompts/*.dna data/sia/prompts/*.txt root@<pod>:/workspace/sia_data/prompts/
+scp ~/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/data/prompts.json     root@<pod>:/workspace/sia_data/
+
+ssh root@<pod> "cd /workspace/scripts/fase4_t2 &&   pip uninstall -y torchvision torchaudio -q &&   pip install -q -U torch 'transformers==5.16.1' &&   python3 extract_layers_jlens.py --skip-primal --token hf_xxxxx 2>&1 | tee run_jlens_readouts.log"
+# ~20 min descarga modelo + ~40 min corrida (solo-readouts) → results_jlens/
+scp -r root@<pod>:/workspace/scripts/fase4_t2/results_jlens/   ~/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/results_jlens/
+# local: python3 analyze_j_lens.py  → veredicto P1-P3 con el instrumento corregido
+```

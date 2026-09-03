@@ -101,3 +101,49 @@ J-lens. Predicciones:
   barrido por capa con EF2 falló en la base, no en el método).
 - Norms por capa descargadas (240 archivos f32) y W_U (5.3GB) en el
   scratchpad de la sesión — reutilizables para el J-lens si se re-extrae.
+
+## 4. Re-extracción 2026-09-03: infraestructura validada, JVP corregido pendiente
+
+### 4.1 Qué se validó (infraestructura, nuevo)
+
+- Entorno real: transformers 5.16.1 + torch 2.14.0+cu130 (gemma4 NO existe
+  en transformers <5.x). Convención del lens confirmada a nivel de código:
+  `hs[-1]` ya es post-final-norm (la lm_head lo consume directo — el "sin
+  norm adicional" de §1.1); el h_59 crudo se captura con hook en `lm.norm`.
+  Base check re-validado en la re-extracción: 20/20 en 5/6 condiciones
+  rescatadas; axis 18/20 y generic_long 19/20 en saved-vs-real (near-ties
+  por la acumulación f32 de esta corrida).
+- Grafo reducido de 1 posición validado bitwise en la atención (máscaras
+  por tipo de capa vía `transformers.masking_utils`, cache 5.x con estado
+  past por slicing, `allow_bf16_reduced_precision_reduction=False`). El
+  primal reproduce el forward original salvo ruido ULP (0.0 en L59, 8e-2 en
+  L58, ~1.4-2.5 en capas profundas a T≈4K) — los ops de redondeo bf16 son
+  identidad en el backward, así que los readouts JVP no heredan ese ruido.
+  J_59 analítico: err rel 2.6e-3.
+- **Instrumento J-lens = JVP exacto por muestra** (la definición de
+  Anthropic: J_ℓ de la propia muestra aplicada a su estado), un dual-forward
+  por (prompt, capa). El J̄ promediado (pre-registro A1 §4.1) quedó
+  OPCIONAL (`--jbar`): dos muros medidos con contextos de ~4K tokens —
+  cotangentes (kv, D, C) = 33GB en jacrev a C=256; ~0.5GB/capa de duales
+  retenidos en el jvp full-stack (L30 = +15GB → OOM a C=8); ~17ms de
+  overhead functorch por llamada (5.6M llamadas = 26h); y una retención de
+  3.9GB/chunk al materializar tangentes functorch en GPU (la vía CPU numpy
+  es plana). El pre-registro asumía corpus de 256 tokens.
+
+### 4.2 Rescate y bug del readout (pendiente de corregir)
+
+- El pod murió a mitad de la corrida: rescatadas 6/7 condiciones (falta
+  automata_neutro); meta.json no se escribió.
+- **Los readouts JVP guardados son BASURA**: bug del merge del topk chunked
+  (`cat([vals, bestv])[:2k]` cortaba el best acumulado — el top-50 resultante
+  eran los primeros 100 valores del último chunk, constantes en todas las
+  capas). Corregido en `extract_layers_jlens.py` (commit e27dcd9); los
+  readouts deben regenerarse en un pod nuevo (~1h con descarga del modelo;
+  `--skip-primal` ahorra la mitad).
+- Mientras tanto, el lens ingenuo (válido, computado localmente desde los
+  estados rescatados + W_U): match@1 = 0.0 en L5-L50 y 0.9-1.0 en L59 (el
+  snap del lens ingenuo es tardío, >L50); separación JS por capa oscilante:
+  máx L0 (0.69), ~0 en L5-L25, L30=0.32, L35=0.0 (valle), L40-L50≈0.63-0.69,
+  L55=0.0, L59=0.69. Las predicciones P1-P3 siguen PENDIENTES del readout
+  JVP corregido (los criterios están pre-especificados en el docstring de
+  `analyze_j_lens.py`).
