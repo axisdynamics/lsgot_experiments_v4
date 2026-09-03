@@ -103,10 +103,19 @@ incluso en modelos de solo texto. Fix aplicado esta ronda: desinstalar
    renombrar Factor I en el resto del paper, hacerlo con una pasada
    completa (Abstract, §1.4 hipótesis, §2.2, §4, §6) para no dejar
    secciones con vocabulario inconsistente.
-5. **Commit sin push**: los cambios de esta ronda quedaron commiteados
-   localmente en `main` pero no empujados a
-   `origin/main` (`github.com/axisdynamics/lsgot_experiments_v4`) — repo
-   público, push pendiente de confirmación explícita.
+5. **Commit sin push**: resuelto — los 3 commits de la ronda quedaron
+   empujados a `origin/main` (`github.com/axisdynamics/lsgot_experiments_v4`).
+6. **Hipótesis workspace (2026-09-02, después de los ítems anteriores)**:
+   investigación en `evidence/WORKSPACE_HYPOTHESIS_REPORT.md` — lens de
+   capa final validado 20/20 (estados post-final-norm, `W_U @ h` =
+   primer token real), perfil por capas del ancla consistente con las
+   costuras de `axisdynamics/workspace-8b` (pico en L35 = costura de
+   salida, dip en L30 = centro de banda, onset temprano = modo secundario
+   bimodal). **Pendiente**: re-extracción GPU limpia (7 condiciones × 20
+   prompts, residuales crudos por capa + Jacobianas para J-lens) para el
+   test de verbalizabilidad — los estados `ef2_L5_L55` están en una base
+   no identificable y no sirven para el lens. Predicciones registradas en
+   el reporte §2.2.
 6. **Regenerar `MANIFEST_SHA256.sha256`** después de cualquier cambio
    futuro a `data/`, `evidence/`, `paper/`, `scripts/`, `README.md`:
    ```bash
