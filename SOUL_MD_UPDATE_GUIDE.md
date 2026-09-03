@@ -116,7 +116,7 @@ incluso en modelos de solo texto. Fix aplicado esta ronda: desinstalar
    test de verbalizabilidad — los estados `ef2_L5_L55` están en una base
    no identificable y no sirven para el lens. Predicciones registradas en
    el reporte §2.2.
-6. **Regenerar `MANIFEST_SHA256.sha256`** después de cualquier cambio
+7. **Regenerar `MANIFEST_SHA256.sha256`** después de cualquier cambio
    futuro a `data/`, `evidence/`, `paper/`, `scripts/`, `README.md`:
    ```bash
    cd LSGOT_v4 && git add -A && \
@@ -127,3 +127,37 @@ incluso en modelos de solo texto. Fix aplicado esta ronda: desinstalar
    `scripts/fase4_t2/` ni `scripts/perturbation/run_perturbation_t2.py` ni
    `data/sia/prompts/soul_md_corto.md`; quedó regenerado completo en esta
    ronda cubriendo los 113+ archivos trackeados por git.)
+
+## 8. Próxima sesión (pendiente inmediato): re-extracción GPU para el J-lens
+
+Contexto: `evidence/WORKSPACE_HYPOTHESIS_REPORT.md` — el lens de capa
+final está validado (20/20), el perfil por capas calza con las costuras
+de `workspace-8b`, pero la verbalizabilidad por capa quedó pendiente:
+los estados `ef2_L5_L55` están en una base no identificable, y el lens
+ingenuo no basta en la banda media (se necesita la Jacobiana).
+
+**Protocolo del pod (limpio, A100/H100 80GB, disk ≥120GB):**
+1. Extracción de t=0 por capa, 7 condiciones limpias (axis, axis_short,
+   axis_pec_only, generic_long, generic_short, vanilla, automata_neutro),
+   20 prompts prioritarios. Un solo forward por prompt con
+   `output_hidden_states=True` sobre el contexto completo (NO generar
+   tokens — solo el estado t=0), guardando `hidden_states[l]` para las
+   60 capas + el estado post-final-norm del layer -1 (el que este
+   pipeline ya valida con `W_U @ h` = primer token real 20/20).
+   ~140 forwards → ~15 min de GPU.
+2. Jacobianas J_ℓ = ∂(capa final)/∂(capa ℓ) para el J-lens (torch
+   autograd, backward de la capa final a cada capa ℓ, promedio sobre las
+   20 posiciones... sobre t=0 solo hace falta 1 posición por prompt;
+   promediar 20 prompts). ~30 min extra.
+3. Bajar TODO a local ANTES de soltar el pod (política de embeddings —
+   ver memoria del agente): un npz por condición con estados[60 capas]
+   + un npz/pkl de Jacobianas.
+4. Local (CPU): lens por capa = `W_U @ final_norm(h_ℓ)` (lens ingenuo) y
+   `W_U @ J_ℓ @ final_norm(h_ℓ)` (J-lens); match-rate vs primer token
+   real por capa; scan de tokens de identidad/auto-chequeo en top-10.
+   W_U y normas ya descargables con `scripts/fase4_t2/fetch_wu_partial.py`
+   (2.8GB, sin GPU).
+5. Chequear las predicciones registradas (reporte §2.2): readout verbal
+   del auto-chequeo en L13-L33, "snap" al primer token real en L33-L35,
+   convergencia al contenido común en L30, separación máxima entre
+   condiciones en L35.
