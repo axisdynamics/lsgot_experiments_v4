@@ -140,18 +140,21 @@ def match_rates(logits, first_tokens):
 
 
 def js_pairwise(logits_a, logits_b):
-    """Mediana de JS sobre pares de prompts entre dos condiciones.
-    logits: (V, N) f32 cada una."""
+    """Mediana de JS sobre pares de prompts entre dos condiciones (vectorizado).
+    logits: (V, N) f32 cada una.
+    JS(p_i, q_j) = 0.5 [KL(p_i||M) + KL(q_j||M)], M = 0.5(p_i + q_j)
+    KL(p_i||M) = -H(p_i) - Σ_v p_i log M  con H = entropía."""
     pa = _softmax(logits_a)
     pb = _softmax(logits_b)
-    Na, Nb = pa.shape[1], pb.shape[1]
-    js = []
-    for i in range(Na):
-        for j in range(Nb):
-            m = 0.5 * (pa[:, i] + pb[:, j])
-            kl1 = float(np.sum(pa[:, i] * (np.log(pa[:, i] + 1e-30) - np.log(m + 1e-30))))
-            kl2 = float(np.sum(pb[:, j] * (np.log(pb[:, j] + 1e-30) - np.log(m + 1e-30))))
-            js.append(0.5 * (kl1 + kl2))
+    N = pa.shape[1]
+    ha = -(pa * np.log(pa + 1e-30)).sum(axis=0)      # (N,)
+    hb = -(pb * np.log(pb + 1e-30)).sum(axis=0)
+    M = 0.5 * (pa[:, :, None] + pb[:, None, :])      # (V, N, N)
+    logM = np.log(M + 1e-30)
+    cross_ab = np.einsum("vi,vij->ij", pa, logM)     # Σ_v pa[v,i] log M[v,i,j]
+    cross_ba = np.einsum("vj,vij->ij", pb, logM)
+    js = 0.5 * (-ha[:, None] - cross_ab - hb[None, :] - cross_ba)
+    del M, logM
     return float(np.median(js))
 
 
@@ -194,9 +197,13 @@ def main():
     has_jbar = (data_dir / "jacobians" / "J_L0.npy").exists()
     print(f"J̄ disponible: {has_jbar} (--jbar del pod)")
 
-    meta = json.load(open(data_dir / "meta.json"))
-    print(f"meta: {meta['model']} | base_check: {meta['base_check_per_condition']}")
-    print(f"primal peor: {max(meta['primal_checks'], key=lambda c: c['worst_rel_err'])['worst_rel_err']:.2e}")
+    meta_path = data_dir / "meta.json"
+    if meta_path.exists():
+        meta = json.load(open(meta_path))
+        print(f"meta: {meta['model']} | base_check: {meta['base_check_per_condition']}")
+        print(f"primal peor: {max(meta['primal_checks'], key=lambda c: c['worst_rel_err'])['worst_rel_err']:.2e}")
+    else:
+        print("meta.json ausente (el pod murió antes de escribirla) — se analiza con lo rescatado")
 
     from transformers import AutoTokenizer
     tok = AutoTokenizer.from_pretrained(str(args.tok))
@@ -211,7 +218,11 @@ def main():
     autocheck_vocab = vocab_sets(tok, AUTOCHECK_WORDS)
     identity_vocab = vocab_sets(tok, IDENTITY_WORDS)
 
-    # estados por condición
+    # estados por condición (solo las rescatadas — el pod murió antes de
+    # terminar automata_neutro, 2026-09-03)
+    GROUPS = [g for g in globals()["GROUPS"] if (data_dir / "states" / f"{g}.npz").exists()]
+    IDENTITY_GROUPS = [g for g in globals()["IDENTITY_GROUPS"] if g in GROUPS]
+    print(f"condiciones disponibles: {GROUPS}", flush=True)
     states = {}
     for g in GROUPS:
         d = np.load(data_dir / "states" / f"{g}.npz")
@@ -315,7 +326,9 @@ def main():
                 overlaps.append(1.0 - jac)
         sep["jvp"] = sep.get("jvp", [])
         sep["jvp"].append(float(np.median(overlaps)) if overlaps else float("nan"))
-        del Jbar, naive_logits, jlens_logits
+        if has_jbar:
+            del Jbar
+        del naive_logits, jlens_logits
         if ell % 10 == 0:
             print(f"  L{ell} hecho", flush=True)
 
@@ -329,8 +342,9 @@ def main():
 
     print("\n=== match@1 medio por condición (lens ingenuo | J-lens pooled | JVP) ===")
     for g in GROUPS:
+        m_jlens = np.mean(curves["jlens"]["match1"].get(g, [np.nan]))
         print(f"  {g:18s} naive={np.mean(curves['naive']['match1'][g]):.2f}  "
-              f"jlens={np.mean(curves['jlens']['match1'][g]):.2f}  "
+              f"jlens={'—' if np.isnan(m_jlens) else f'{m_jlens:.2f}'}  "
               f"jvp={np.mean(curves['jvp']['match1'][g]):.2f}")
 
     print("\n=== hit-rate auto-chequeo media (top-10) ===")

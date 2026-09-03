@@ -336,9 +336,11 @@ def jvp_readout(red, x_bf, WU, first_tok, device, k=JVP_TOPK):
         vals = WU[v0:v0 + WU_CHUNK].float() @ ztf  # (C,)
         if ft_val is None and v0 <= first_tok < v0 + WU_CHUNK:
             ft_val = float(vals[first_tok - v0])
-        cand = torch.cat([vals, bestv])[: 2 * k]
+        # merge: cat COMPLETO de vals + best acumulado (sin slice — el slice
+        # cortaba el best: con chunk 16K > 2k el topk solo veía el chunk actual)
+        cand = torch.cat([vals, bestv])
         cand_ids = torch.cat(
-            [torch.arange(v0, v0 + vals.shape[0], device=device), best])[: 2 * k]
+            [torch.arange(v0, v0 + vals.shape[0], device=device), best])
         tv, ti = torch.topk(cand, k)
         bestv, best = tv, cand_ids[ti]
         mi = float(vals.max())
@@ -384,6 +386,9 @@ def main():
     ap.add_argument("--sanity", action="store_true",
                     help="1 prompt de axis: chequeos + J_59 analítico + ETA, sin guardar")
     ap.add_argument("--no-jvp", action="store_true", help="no calcular readouts JVP por muestra")
+    ap.add_argument("--skip-primal", action="store_true",
+                    help="saltar los primal checks C=1 (run de solo-readouts — "
+                         "la mitad del tiempo por prompt)")
     ap.add_argument("--per-condition", action="store_true",
                     help="guardar además J̄ por condición (48GB en disco del pod)")
     ap.add_argument("--jbar", action="store_true",
@@ -575,13 +580,14 @@ def main():
             for ell in range(n_layers):
                 # primal check C=1 (informativo: ruido ULP crece con profundidad/T —
                 # se registra en meta, no aborta)
-                reset()
-                x_chk = t0[ell].detach().float()
-                z_chk = get_red(ell)(x_chk)
-                err = float((z_chk - y).abs().max() / y.abs().mean().clamp(min=1e-6))
-                del x_chk, z_chk
-                if err > worst_err:
-                    worst_err, worst_ell = err, ell
+                if not args.skip_primal:
+                    reset()
+                    x_chk = t0[ell].detach().float()
+                    z_chk = get_red(ell)(x_chk)
+                    err = float((z_chk - y).abs().max() / y.abs().mean().clamp(min=1e-6))
+                    del x_chk, z_chk
+                    if err > worst_err:
+                        worst_err, worst_ell = err, ell
 
                 if args.jbar:
                     reset()
