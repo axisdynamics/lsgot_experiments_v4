@@ -8,15 +8,17 @@ Anthropic y del gemma-4-e4b-it (42 capas) del repo hermano
 `axisdynamics/workspace-8b` (réplica pre-registrada del J-lens, reporte:
 `report_ES.md` en ese repo).
 
-**Veredicto final (§5): P1-P3 REFUTADAS.** El ancla no es verbalizable
-linealmente antes de la capa final — el readout J-lens es ruido en toda la
-banda media (L0-L58) y colapsa de golpe en L58→L59 (evento de una sola
-capa, no una banda gradual). La geometría del ancla (§1.2-1.3: perfil por
-capas, pico L35/dip L30, consistencia con las costuras de workspace-8b)
-sigue siendo válida — lo que se refuta es específicamente la
-verbalizabilidad temprana. Las secciones 1-4 documentan el desarrollo
-cronológico (qué se probó primero, qué faltaba, los bugs cazados en el
-camino); §5 tiene el resultado final con los números.
+**Veredicto final (§5-6): no hay evidencia de que t=0 sea el workspace.**
+El único test mecanístico directo (verbalizabilidad lineal, J-lens exacto)
+dio negativo limpio: el readout es ruido en toda la banda media (L0-L58) y
+colapsa de golpe en L58→L59 (evento de una sola capa, no una banda
+gradual) — refuta P1-P3. Lo único que sobrevive es una coincidencia
+correlacional de fracción de profundidad entre el perfil geométrico del
+ancla (§1.2, pico L35/dip L30) y las costuras de `workspace-8b` — pero eso
+es un modelo distinto medido con un método distinto, nunca fue por sí solo
+evidencia fuerte. Las secciones 1-4 documentan el desarrollo cronológico
+(qué se probó primero, qué faltaba, los bugs cazados en el camino); §5
+tiene el resultado final con los números, §6 la conclusión.
 
 ## 1. Lo que quedó PROBADO
 
@@ -219,3 +221,30 @@ poco probable dado que J̄ es un instrumento *más* borroso que el JVP exacto
 usado aquí, así que no debería revelar más estructura que este resultado
 negativo. Los datos completos quedan en
 `scripts/fase4_t2/j_lens_results.json`.
+
+## 6. Conclusión general
+
+**No hay evidencia directa de que el ancla de identidad en t=0 sea un
+readout del global workspace en este modelo.** Distinguir lo que queda en
+pie de lo que se refutó:
+
+- **Refutado por un test directo**: la verbalizabilidad lineal (§5) — el
+  único experimento diseñado para confirmar o refutar la hipótesis
+  mecanísticamente, usando la definición operacional de Anthropic (J-lens
+  exacto), dio negativo limpio en las 9 condiciones.
+- **Sin refutar pero tampoco confirmado**: la coincidencia de fracción de
+  profundidad entre el perfil geométrico del ancla en Gemma-4-31B-it
+  (§1.2) y las costuras que `workspace-8b` localizó en un modelo distinto
+  (gemma-4-e4b-it) con un método distinto (CKA + segmentación de bloques,
+  §1.3). Es un argumento correlacional cross-arquitectura, no un test
+  mecanístico dentro del propio modelo — nunca fue, por diseño, evidencia
+  fuerte de identidad causal con el workspace.
+
+En conjunto: la única pieza que intentaba establecer la identidad
+mecanísticamente falló en encontrar la señal predicha. Lo que sobrevive es
+una coincidencia de fracciones sin poder explicativo adicional una vez que
+se le quita el soporte de la verbalizabilidad. La hipótesis "t=0 = workspace"
+queda sin sustento; el hallazgo de fondo que sí sigue de pie es el perfil
+geométrico del ancla en sí mismo (pico L35, dip L30) — interesante como
+dato descriptivo del modelo, pero sin la interpretación workspace que
+motivó el experimento.
