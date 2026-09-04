@@ -80,13 +80,13 @@ IDENTITY_WORDS = [
 WU_CHUNK = 8192  # chunk de vocabulario para el matmul con W_U (RAM)
 
 
-def load_first_tokens_real(tok, resp_dir, states):
+def load_first_tokens_real(tok, resp_dir, states, groups):
     """Primer token REAL de cada respuesta generada por el pipeline original.
     Para condiciones sin responses.json (controles soul — el pipeline T2 no
     guardó texto), usa los first_token_ids del pod (el greedy de la corrida —
     misma convención que la generación)."""
     ft = {}
-    for g in GROUPS:
+    for g in groups:
         p = resp_dir / f"{g}_responses.json"
         if p.exists():
             rows = json.load(open(p))
@@ -223,12 +223,10 @@ def main():
     V = WU.shape[0]
     print(f"W_U {V}x{D} cargado (mmap)")
 
-    first_real = load_first_tokens_real(tok, resp_dir, states)
     autocheck_vocab = vocab_sets(tok, AUTOCHECK_WORDS)
     identity_vocab = vocab_sets(tok, IDENTITY_WORDS)
 
-    # estados por condición (solo las rescatadas — el pod murió antes de
-    # terminar automata_neutro, 2026-09-03)
+    # estados por condición (solo las condiciones presentes en data_dir)
     GROUPS = [g for g in globals()["GROUPS"] if (data_dir / "states" / f"{g}.npz").exists()]
     IDENTITY_GROUPS = [g for g in globals()["IDENTITY_GROUPS"] if g in GROUPS]
     print(f"condiciones disponibles: {GROUPS}", flush=True)
@@ -243,6 +241,8 @@ def main():
         p = data_dir / "jvp" / f"{g}.npz"
         if p.exists():
             jvp[g] = np.load(p)
+
+    first_real = load_first_tokens_real(tok, resp_dir, states, GROUPS)
 
     # ── validación de base ──
     base = {}

@@ -273,7 +273,19 @@ El análisis local además valida la cadena completa: `W_U@y` vs primer token
 guardado por el pod (20/20) y primer token guardado vs primer token REAL
 generado por sia_extended_v5 (20/20) — antes de creer ninguna curva.
 
-## 10. Pendiente 2026-09-03 (noche): regenerar los readouts JVP
+## 10. Regeneración de readouts JVP (2026-09-03 → cerrado 2026-09-04)
+
+**RESUELTO.** Pod nuevo corrido 2026-09-04 con el merge corregido, 9
+condiciones completas (7 limpias + 2 controles soul), gate L59 validado en
+las 180 muestras. Veredicto: **P1-P3 REFUTADAS** — el readout JVP es ruido
+en toda la banda media y solo colapsa en la capa final (L58→L59, evento de
+una sola capa, no una banda). Detalle completo en
+`evidence/WORKSPACE_HYPOTHESIS_REPORT.md` §5. Nota de entorno: el pod nuevo
+tenía driver CUDA 12.4 (no soporta el build cu130 de torch 2.14) — se usó
+torch 2.6.0+cu124 (satisface el `>=2.5` de transformers 5.16.1) sin cambios
+en el resto del pipeline.
+
+### Protocolo original (referencia, ya ejecutado)
 
 La corrida de hoy rescató 6/7 condiciones (falta automata_neutro) pero los
 readouts JVP quedaron BASURA por el bug del merge del topk chunked

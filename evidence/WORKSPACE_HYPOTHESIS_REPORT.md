@@ -154,6 +154,57 @@ J-lens. Predicciones:
   estados rescatados + W_U): match@1 = 0.0 en L5-L50 y 0.9-1.0 en L59 (el
   snap del lens ingenuo es tardío, >L50); separación JS por capa oscilante:
   máx L0 (0.69), ~0 en L5-L25, L30=0.32, L35=0.0 (valle), L40-L50≈0.63-0.69,
-  L55=0.0, L59=0.69. Las predicciones P1-P3 siguen PENDIENTES del readout
-  JVP corregido (los criterios están pre-especificados en el docstring de
-  `analyze_j_lens.py`).
+  L55=0.0, L59=0.69.
+
+## 5. Re-extracción 2026-09-04: veredicto final de P1-P3 con el readout corregido
+
+Pod nuevo (A100 80GB, torch 2.6.0+cu124 — cu130 exigía driver más nuevo que
+el del pod; transformers 5.16.1 sin cambios), 9 condiciones completas
+(las 7 limpias + `soul_md_corto` y `soul_elena_financial` como controles
+exploratorios adicionales, mismo panel del reporte
+`SOUL_MD_EXTERNAL_CONTROLS_REPORT.md`), `--skip-primal` (~26s/prompt, corrida
+completa en ~65 min). Base check ≥19/20 en las 9 condiciones. El gate de
+validación L59 (readout debe dar la distribución uniforme, ft≈−log(V)) pasó
+en las 180 muestras — confirma que el merge del topk quedó corregido.
+
+### 5.1 Resultado: P1-P3 REFUTADAS con el instrumento JVP corregido
+
+| Predicción | Resultado | Evidencia |
+|---|---|---|
+| P1a (auto-chequeo verbal en L13-L33) | PARCIAL (sin onset ≥0.1 sostenido) | hit-rate máx 0.07, sin sostenerse 3 capas |
+| P1b (snap match@1≥0.5 en L33-L35) | **REFUTADA** | snap solo en L59 (0.95-1.0); L0-L58 ≈ 0.00-0.15 (ruido) |
+| P2 (dip de separación en L30) | **REFUTADA** | sep[29,30,31] = 0.97/0.97/0.97 — plano, sin dip |
+| P3 (separación máxima en L35) | **REFUTADA** | argmax en L0 (0.98); la curva está saturada (0.92-0.98) en casi toda la banda |
+
+**Patrón observado, no anticipado por ninguna de las 3 predicciones**: el
+readout JVP (top-50 del logit lens con la Jacobiana exacta de cada muestra)
+es indistinguible de ruido en TODA la banda media (match@1 ≈ 0-0.15,
+separación entre condiciones saturada cerca del máximo posible ≈0.92-0.98,
+consistente con top-50 casi sin solape en absoluto — ni siquiera entre
+prompts de la MISMA condición) hasta que colapsa abruptamente en la capa
+final: match@1 salta a 0.95-1.0 y la separación CAE a 0.57 (las condiciones
+convergen hacia contenido compartido cerca de la salida). No hay ninguna
+banda intermedia donde el readout lineal decodifique contenido
+interpretable — el "snap" es un evento de una sola capa (L58→L59), no una
+transición gradual sobre una banda de varias capas como predice el paper de
+Anthropic para el onset del workspace.
+
+**Lectura**: bajo esta operacionalización (J-lens exacto por muestra, top-50,
+match@1 y separación de solape), el ancla de identidad en t=0 de este modelo
+NO es verbalizable linealmente antes de la capa final — el resultado es
+consistente con "la representación workspace, si existe, no es legible con
+un lens lineal (ni ingenuo ni con la Jacobiana correcta) hasta la salida", o
+con "el mecanismo que produce el ancla geométrica (perfil por capas §1.2,
+pico L35/dip L30) no es el mismo mecanismo que produce contenido verbalizable
+temprano". Las dos lecturas son indistinguibles con este experimento. La
+geometría (§1.2-1.3, perfil por capas del ancla, consistencia con las
+costuras de workspace-8b) sigue siendo válida — lo que se refuta aquí es
+específicamente la verbalizabilidad temprana, no el perfil geométrico.
+
+**Lo que NO se probó y quedaría para un experimento de seguimiento**: si el
+J-lens con J̄ promediado (diferido por los muros de §4.1) o un corpus más
+corto (256 tokens, el régimen del pre-registro A1) cambia el resultado —
+poco probable dado que J̄ es un instrumento *más* borroso que el JVP exacto
+usado aquí, así que no debería revelar más estructura que este resultado
+negativo. Los datos completos quedan en
+`scripts/fase4_t2/j_lens_results.json`.
