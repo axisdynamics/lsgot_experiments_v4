@@ -287,8 +287,15 @@ scp data/sia/prompts/*.dna data/sia/prompts/*.txt data/sia/prompts/soul_md_corto
     root@<pod>:/workspace/sia_data/prompts/
 scp ~/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/data/prompts.json     root@<pod>:/workspace/sia_data/
 
-ssh root@<pod> "cd /workspace/scripts/fase4_t2 &&   pip uninstall -y torchvision torchaudio -q &&   pip install -q -U torch 'transformers==5.16.1' &&   python3 extract_layers_jlens.py --skip-primal --token hf_xxxxx 2>&1 | tee run_jlens_readouts.log"
-# ~20 min descarga modelo + ~40 min corrida (solo-readouts) → results_jlens/
+ssh root@<pod> "cd /workspace/scripts/fase4_t2 && \
+  pip uninstall -y torchvision torchaudio -q && \
+  pip install -q -U torch 'transformers==5.16.1' && \
+  python3 extract_layers_jlens.py --skip-primal --token hf_xxxxx 2>&1 | tee run_jlens_readouts.log"
+# ~20 min descarga modelo + ~50 min corrida (solo-readouts) → results_jlens/
+# El default del script ahora incluye 9 condiciones: las 7 limpias +
+# soul_md_corto + soul_elena_financial (controles exploratorios T2).
+# Gate de validación: en cada prompt, el readout JVP de L59 debe dar la
+# distribución uniforme (ft ≈ -log(V)) — aborta si no.
 scp -r root@<pod>:/workspace/scripts/fase4_t2/results_jlens/   ~/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/results_jlens/
 # local: python3 analyze_j_lens.py  → veredicto P1-P3 con el instrumento corregido
 ```
