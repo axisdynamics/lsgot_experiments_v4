@@ -283,7 +283,8 @@ del último chunk). Corregido (commit e27dcd9). Protocolo del pod nuevo:
 ```bash
 # local → pod (mismos archivos que §9, + el script corregido)
 scp scripts/fase4_t2/extract_layers_jlens.py root@<pod>:/workspace/scripts/fase4_t2/
-scp data/sia/prompts/*.dna data/sia/prompts/*.txt root@<pod>:/workspace/sia_data/prompts/
+scp data/sia/prompts/*.dna data/sia/prompts/*.txt data/sia/prompts/soul_md_corto.md \
+    root@<pod>:/workspace/sia_data/prompts/
 scp ~/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/data/prompts.json     root@<pod>:/workspace/sia_data/
 
 ssh root@<pod> "cd /workspace/scripts/fase4_t2 &&   pip uninstall -y torchvision torchaudio -q &&   pip install -q -U torch 'transformers==5.16.1' &&   python3 extract_layers_jlens.py --skip-primal --token hf_xxxxx 2>&1 | tee run_jlens_readouts.log"

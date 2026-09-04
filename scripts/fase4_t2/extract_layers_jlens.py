@@ -120,6 +120,12 @@ CONDITIONS = {
     "generic_short":   {"system_prompt_path": "generic_short.txt"},
     "vanilla":         {"system_prompt": "You are a helpful assistant."},
     "automata_neutro": {"system_prompt_path": "automata_neutro.txt"},
+    # Controles exploratorios (2026-09-03): entidades externas del panel T2 —
+    # soul_md_corto = mecanismo testigo sin identidad propia; soul_elena_financial
+    # = identidad declarada con valores, sin testigo. Mismo estatus exploratorio
+    # que en run_perturbation_t2.py.
+    "soul_md_corto":         {"system_prompt_path": "soul_md_corto.md"},
+    "soul_elena_financial":  {"system_prompt_path": "soul_elena_financial.txt"},
 }
 
 CHUNK_COLS = 8            # columnas de tangente (dual del cat es f32; baseline 61.6GiB → pico ~67GiB)

@@ -56,7 +56,8 @@ from pathlib import Path
 import numpy as np
 
 GROUPS = ["axis", "generic_long", "generic_short", "vanilla", "axis_short",
-          "automata_neutro", "axis_pec_only"]
+          "automata_neutro", "axis_pec_only", "soul_md_corto",
+          "soul_elena_financial"]
 IDENTITY_GROUPS = ["axis", "axis_short", "axis_pec_only"]
 N_LAYERS = 60
 EPS = 1e-6
@@ -79,13 +80,21 @@ IDENTITY_WORDS = [
 WU_CHUNK = 8192  # chunk de vocabulario para el matmul con W_U (RAM)
 
 
-def load_first_tokens_real(tok, resp_dir):
-    """Primer token REAL de cada respuesta generada por el pipeline original."""
+def load_first_tokens_real(tok, resp_dir, states):
+    """Primer token REAL de cada respuesta generada por el pipeline original.
+    Para condiciones sin responses.json (controles soul — el pipeline T2 no
+    guardó texto), usa los first_token_ids del pod (el greedy de la corrida —
+    misma convención que la generación)."""
     ft = {}
     for g in GROUPS:
-        rows = json.load(open(resp_dir / f"{g}_responses.json"))
-        enc = [tok(r["response"], add_special_tokens=False).input_ids for r in rows]
-        ft[g] = [e[0] if e else None for e in enc]
+        p = resp_dir / f"{g}_responses.json"
+        if p.exists():
+            rows = json.load(open(p))
+            enc = [tok(r["response"], add_special_tokens=False).input_ids for r in rows]
+            ft[g] = [e[0] if e else None for e in enc]
+        else:
+            ft[g] = [int(t) for t in states[g]["first_saved"]]
+            print(f"  [{g}] sin responses.json — usando first_token_ids del pod")
     return ft
 
 
@@ -214,7 +223,7 @@ def main():
     V = WU.shape[0]
     print(f"W_U {V}x{D} cargado (mmap)")
 
-    first_real = load_first_tokens_real(tok, resp_dir)
+    first_real = load_first_tokens_real(tok, resp_dir, states)
     autocheck_vocab = vocab_sets(tok, AUTOCHECK_WORDS)
     identity_vocab = vocab_sets(tok, IDENTITY_WORDS)
 
