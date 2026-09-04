@@ -609,6 +609,20 @@ def main():
                         jvp_out["jvp_top50_ids"][i, ell] = top
                         jvp_out["jvp_top50_logprobs"][i, ell] = lp
                         jvp_out["jvp_first_tok_logprob"][i, ell] = ft
+                        # GATE en la última capa: por homogeneidad de la RMSNorm
+                        # (eps>0) el tangente es z·eps/(mse+eps) ≈ z·1e-10 y
+                        # SUBDESBORDA a cero en el cast bf16 de la norma — el
+                        # readout es la distribución UNIFORME (logprob del primer
+                        # token ≈ -log(V)). Valida la cadena logZ/ft_val/W_U con
+                        # una respuesta conocida. (El top-50 de L59 es artefacto
+                        # de empates sobre ceros — esperado y documentado.)
+                        if ell == n_layers - 1:
+                            import math
+                            unif = -math.log(WU.shape[0])
+                            if not (unif - 0.5 <= ft <= unif + 0.5):
+                                raise RuntimeError(
+                                    f"gate L59: ft={ft:.2f} ≠ uniforme {-unif:.2f} — "
+                                    f"revisar la cadena del readout")
                     except Exception as e:
                         print(f"    JVP L{ell} falló ({type(e).__name__}: {e})", flush=True)
             if args.jbar:

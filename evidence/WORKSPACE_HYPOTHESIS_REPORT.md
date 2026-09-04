@@ -137,9 +137,19 @@ J-lens. Predicciones:
 - **Los readouts JVP guardados son BASURA**: bug del merge del topk chunked
   (`cat([vals, bestv])[:2k]` cortaba el best acumulado — el top-50 resultante
   eran los primeros 100 valores del último chunk, constantes en todas las
-  capas). Corregido en `extract_layers_jlens.py` (commit e27dcd9); los
-  readouts deben regenerarse en un pod nuevo (~1h con descarga del modelo;
-  `--skip-primal` ahorra la mitad).
+  capas). Corregido en `extract_layers_jlens.py` (commit e27dcd9) y verificado
+  sintéticamente (el buggy reproduce la firma exacta observada, el corregido
+  da el top-50 exacto); los readouts deben regenerarse en un pod nuevo (~1h
+  con descarga del modelo; `--skip-primal` ahorra la mitad).
+- **Propiedad esperada del instrumento (documentada ANTES del re-run)**: por
+  homogeneidad de la RMSNorm final (eps>0), J_norm @ h_59 = z·eps/(mse+eps)
+  ≈ z·1e-10 — un múltiplo escalar de los logits — pero el cast bf16 de la
+  norma SUBDESBORDA ese tangente a cero: el readout J-lens en L59 es la
+  distribución uniforme (logprob del primer token = -log(V) = -12.48,
+  verificado contra lo medido). El top-50 de L59 es artefacto de empates
+  sobre ceros — esperado, no un bug. La banda de P1b (L33-35) no se ve
+  afectada. Gate de validación con respuesta conocida agregado al script
+  (L59: ft ≈ -log(V) ± 0.5).
 - Mientras tanto, el lens ingenuo (válido, computado localmente desde los
   estados rescatados + W_U): match@1 = 0.0 en L5-L50 y 0.9-1.0 en L59 (el
   snap del lens ingenuo es tardío, >L50); separación JS por capa oscilante:
