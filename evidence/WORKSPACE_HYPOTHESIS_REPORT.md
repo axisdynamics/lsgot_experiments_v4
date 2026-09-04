@@ -1,4 +1,4 @@
-# Hipótesis workspace: qué quedó probado y qué falta (2026-09-02)
+# Hipótesis workspace: qué quedó probado (2026-09-02 → cerrado 2026-09-04)
 
 **Pregunta:** ¿el ancla de identidad en t=0 (v̂ proyectado antes de generar)
 es un readout del "global workspace" de
@@ -7,6 +7,16 @@ es un readout del "global workspace" de
 Anthropic y del gemma-4-e4b-it (42 capas) del repo hermano
 `axisdynamics/workspace-8b` (réplica pre-registrada del J-lens, reporte:
 `report_ES.md` en ese repo).
+
+**Veredicto final (§5): P1-P3 REFUTADAS.** El ancla no es verbalizable
+linealmente antes de la capa final — el readout J-lens es ruido en toda la
+banda media (L0-L58) y colapsa de golpe en L58→L59 (evento de una sola
+capa, no una banda gradual). La geometría del ancla (§1.2-1.3: perfil por
+capas, pico L35/dip L30, consistencia con las costuras de workspace-8b)
+sigue siendo válida — lo que se refuta es específicamente la
+verbalizabilidad temprana. Las secciones 1-4 documentan el desarrollo
+cronológico (qué se probó primero, qué faltaba, los bugs cazados en el
+camino); §5 tiene el resultado final con los números.
 
 ## 1. Lo que quedó PROBADO
 
@@ -79,12 +89,13 @@ paso L30→L35 (cos 1.0→0.505) — cruzando la costura de salida.
   ℓ). `W_U @ h_ℓ` solo es válido cerca de la final (J≈I). En la banda
   media se necesita la Jacobiana → modelo completo en GPU.
 
-### 2.2 Predicciones registradas para la re-extracción
+### 2.2 Predicciones registradas para la re-extracción (registradas aquí; resultado en §5)
 
 Re-extracción limpia (pod A100, ~40 min): 7 condiciones × 20 prompts,
 estados t=0 por capa con `output_hidden_states=True` **verificando la
 base** contra el lens final validado (20/20), + Jacobianas J_ℓ para el
-J-lens. Predicciones:
+J-lens. Predicciones (P1-P3, todas **REFUTADAS** — ver §5.1 para los
+números finales tras el re-run de 2026-09-04 con 9 condiciones):
 
 1. El readout verbal del auto-chequeo debería aparecer entre L13-L33
    (banda del workspace en este modelo) y "snap" hacia el primer token
