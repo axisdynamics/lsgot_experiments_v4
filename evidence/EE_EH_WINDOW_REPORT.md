@@ -1,9 +1,9 @@
 # E-E (Fréchet) y E-H ventana de perturbación — cierre de TIER0_REPORT.md
 
 > ⚠️ **Reescrito 2026-08-28 (noche):** la versión anterior incluía
-> chileatiende/chileatiende_sia/chileatiende_sia_v2 (34-44% de cada
+> chat_agente/chat_agente_sia/chat_agente_sia_v2 (34-44% de cada
 > respuesta es markup HTML idéntico repetido — ver
-> `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`). Esas 3 condiciones se
+> `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`). Esas 3 condiciones se
 > **eliminaron por completo** de tablas y comparaciones. El hallazgo
 > central de ambas secciones (E-E y E-H ventana) sobrevive intacto:
 > `automata_neutro` (limpio, sin markup) ya sostenía el patrón "Factor 1"
@@ -11,11 +11,11 @@
 > inyección.
 
 **Fecha:** 2026-08-22 (E-H y E-E inicial), extendido 2026-08-26 (E-E a
-10 grupos), reescrito 2026-08-28 (sin chileatiende-family). Datos:
+10 grupos), reescrito 2026-08-28 (sin chat_agente-family). Datos:
 trayectorias rescatadas de H4_rev (`trajectories/*.npz`, 767/800 = 95.9%
 cobertura — ver `perturbation/RESUMEN_SESION_2026-08-22.md`). Script:
 `analyze_tier0_perturbation.py`. JSON crudo: `EE_EH_WINDOW_REPORT.json`
-(contiene las filas de chileatiende-family con fines de auditoría — no
+(contiene las filas de chat_agente-family con fines de auditoría — no
 usar para interpretación).
 
 ## E-E — Distancia de Fréchet (perturbada vs original, post-t_inj)
@@ -131,7 +131,7 @@ identidad-con-wiring la mejore por encima del control nulo.
   tienen menos margen para alcanzar el umbral, aunque esto ya se filtra
   parcialmente por el `TAU_MIN_WINDOW=5` heredado de `recovery_analyzer.py`.
 - Las comparaciones de significancia (18 pares grupo×t_inj vs vanilla + 3
-  del par de control, 21 en total tras remover chileatiende-family) no
+  del par de control, 21 en total tras remover chat_agente-family) no
   llevan corrección por comparaciones múltiples — el único resultado
   aislado sin réplica en los otros t_inj (generic_short vs vanilla,
   t_inj=200, p=0.035) debe leerse con cautela por esto, a diferencia del

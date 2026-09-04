@@ -25,7 +25,7 @@ v̂ ni con un control.
 
 - v̂ = `v_identidad.npy` (capa final), NO v̂_L30 (ver `EF2_REPORT.md` §7).
 - Condiciones objetivo revisadas: `automata_neutro`, `vanilla`, `axis` —
-  chileatiende-family excluida (`CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`).
+  chat_agente-family excluida (`CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`).
 - α redefinido como fracción de ‖h‖ por posición (no escalar absoluto): las
   normas reales del residual stream en Gemma-4-31B son ~100-390 (medido en
   `results_local/ef2_L5_L55`), así que los α∈{0.5,1,2} literales del

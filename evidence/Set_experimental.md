@@ -40,7 +40,7 @@ No requieren RunPod ni nueva extracción; se calculan sobre
   k-NN existente.
 - **Predicción:** si "ancla" es literal, `axis`/`axis_pec_only` deberían tener
   laminaridad alta (retorno a la misma región) incluso sin colapso de
-  curvatura. `automata_neutro`/`chileatiende` podrían tener determinismo alto
+  curvatura. `automata_neutro`/`chat_agente` podrían tener determinismo alto
   (por las reglas trigger→salida) sin laminaridad — el patrón que distinguiría
   "restringido" de "anclado" es determinismo-sin-laminaridad vs
   laminaridad-con-o-sin-determinismo.
@@ -107,7 +107,7 @@ No requieren RunPod ni nueva extracción; se calculan sobre
   eso debilita la lectura de "atractor único de identidad" y la deja como
   "amortiguamiento genérico rápido" — distinción que el set actual no puede
   hacer.
-- **Condiciones prioritarias:** axis, axis_pec_only, chileatiende (para
+- **Condiciones prioritarias:** axis, axis_pec_only, chat_agente (para
   comparar un caso que sí recupera lento con uno que recupera rápido).
 - **Prioridad:** alta — reusa datos existentes, cierra un hueco real en la
   interpretación de τ.
@@ -143,7 +143,7 @@ diseñados, pero extrayendo capas o cabezas de atención que hoy se descartan.
   generación — extracción nueva, mucho más pesada en disco que hidden states.
 - **Predicción:** `axis`/`axis_pec_only` deberían mostrar atención sostenida
   o creciente hacia el tramo de identidad a lo largo de los 256 tokens;
-  `automata_neutro`/`chileatiende` deberían mostrar atención concentrada en
+  `automata_neutro`/`chat_agente` deberían mostrar atención concentrada en
   los tramos de reglas/triggers, no en ningún tramo "identitario" (no lo
   tienen). Es la prueba más directa posible del mecanismo, al costo de ser la
   más cara de extraer.
@@ -222,32 +222,32 @@ E-J/E-K/E-L/E-F2/E-H2.
 
 | ID | Estado | Fecha | Reporte |
 |---|---|---|---|
-| E-L (primer token) | ✅ corrido (limpio, sin chileatiende) | 2026-08-28 | `EL_REPORT.md` — doble disociación de v̂ ya presente en t=0 (d=10.22 axis vs vanilla); identidad = propiedad del estado de contexto |
-| E-H2 (serie temporal v̂) | ✅ corrido (limpio, sin chileatiende) | 2026-08-28 | `EH2_REPORT.md` — identidad: autocorr baja (~0.27)/ráfagas largas (~8 tokens); restricción (automata_neutro): ráfagas cortas (2.78) y proyección casi nula, sin la autocorrelación elevada que sugería la versión con chileatiende (era artefacto de esa) |
-| E-J (RDM/CKA) | ✅ recalculado (limpio, sin chileatiende) | 2026-08-28 | `EJ_REPORT.md` — reescrito desde cero. automata_neutro es la condición más distinta del panel completo (RDM/CKA/ángulos, 3 métodos independientes). Jerarquía revisada: restricción > identidad (sin el término espurio "dominio", que era el propio confound de chileatiende) |
-| E-F2 (per-capa v̂+PR) | ✅ corrido (limpio, sin chileatiende) | 2026-08-28 | `EF2_REPORT.md` — ⚠️ corrección: v_identidad.npy es de CAPA FINAL (layer_idx=-1), no L30 (verificado en sia/run_exp.py:134); el efecto crece monótonamente hacia capas tardías (d=10.43 en L55 para axis_pec_only vs automata_neutro), débil/inconsistente en L5-L25. PR tiene pico de separación distinto, en L25-L30 |
-| Corrección v̂ sin chileatiende | ✅ hecho | 2026-08-28 | `CORRECCION_DVHAT_SIN_CHILEATIENDE.md` — restricción (automata_neutro) tiene huella propia y robusta (d=−2.40 v̂, d=−1.79 PR, ambas p<0.001), independiente de chileatiende. Cifra insignia del paper (d=8.89, axis_pec_only vs chileatiende) corregida a d=5.52 (vs automata_neutro) |
-| E-K (steering causal) | ⏳ pendiente (intentado, bloqueado) | 2026-08-28 | `EK_REPORT.md` — mecanismo de intervención (vector aditivo fijo h+α·‖h‖·v̂, sostenido) es inestable en Gemma-4-31B: 17/17 combinaciones probadas (2 capas, 6 α desde 0.05, 2 modos de inyección, v̂ Y control aleatorio) degeneraron en repetición. Control aleatorio (T6) descarta que sea específico de v̂ — es el mecanismo. Pregunta causal de E-K SIGUE ABIERTA, no respondida negativamente. Requiere mecanismo de steering distinto (inyección puntual única tipo E-I, o clamping de norma) antes de reintentar. No usar chileatiende-family (confound de markup) ni v̂_L30 (casi ortogonal a v̂_final, ver EF2_REPORT.md §7) cuando se retome |
+| E-L (primer token) | ✅ corrido (limpio, sin chat_agente) | 2026-08-28 | `EL_REPORT.md` — doble disociación de v̂ ya presente en t=0 (d=10.22 axis vs vanilla); identidad = propiedad del estado de contexto |
+| E-H2 (serie temporal v̂) | ✅ corrido (limpio, sin chat_agente) | 2026-08-28 | `EH2_REPORT.md` — identidad: autocorr baja (~0.27)/ráfagas largas (~8 tokens); restricción (automata_neutro): ráfagas cortas (2.78) y proyección casi nula, sin la autocorrelación elevada que sugería la versión con chat_agente (era artefacto de esa) |
+| E-J (RDM/CKA) | ✅ recalculado (limpio, sin chat_agente) | 2026-08-28 | `EJ_REPORT.md` — reescrito desde cero. automata_neutro es la condición más distinta del panel completo (RDM/CKA/ángulos, 3 métodos independientes). Jerarquía revisada: restricción > identidad (sin el término espurio "dominio", que era el propio confound de chat_agente) |
+| E-F2 (per-capa v̂+PR) | ✅ corrido (limpio, sin chat_agente) | 2026-08-28 | `EF2_REPORT.md` — ⚠️ corrección: v_identidad.npy es de CAPA FINAL (layer_idx=-1), no L30 (verificado en sia/run_exp.py:134); el efecto crece monótonamente hacia capas tardías (d=10.43 en L55 para axis_pec_only vs automata_neutro), débil/inconsistente en L5-L25. PR tiene pico de separación distinto, en L25-L30 |
+| Corrección v̂ sin chat_agente | ✅ hecho | 2026-08-28 | `CORRECCION_DVHAT_SIN_CHAT_AGENTE.md` — restricción (automata_neutro) tiene huella propia y robusta (d=−2.40 v̂, d=−1.79 PR, ambas p<0.001), independiente de chat_agente. Cifra insignia del paper (d=8.89, axis_pec_only vs chat_agente) corregida a d=5.52 (vs automata_neutro) |
+| E-K (steering causal) | ⏳ pendiente (intentado, bloqueado) | 2026-08-28 | `EK_REPORT.md` — mecanismo de intervención (vector aditivo fijo h+α·‖h‖·v̂, sostenido) es inestable en Gemma-4-31B: 17/17 combinaciones probadas (2 capas, 6 α desde 0.05, 2 modos de inyección, v̂ Y control aleatorio) degeneraron en repetición. Control aleatorio (T6) descarta que sea específico de v̂ — es el mecanismo. Pregunta causal de E-K SIGUE ABIERTA, no respondida negativamente. Requiere mecanismo de steering distinto (inyección puntual única tipo E-I, o clamping de norma) antes de reintentar. No usar chat_agente-family (confound de markup) ni v̂_L30 (casi ortogonal a v̂_final, ver EF2_REPORT.md §7) cuando se retome |
 
 ## ⚠️ REVISIÓN HUMANA PENDIENTE — lsgot_4.md necesita actualizarse (T11)
 
 **No editado por el agente** (decisión del usuario 2026-08-28: el paper es
 de autoría compartida — Castillo, Torres Yévenes, Lanas — requiere
 revisión humana explícita, no edición mecánica). Secciones afectadas por
-el confound de markup de chileatiende-family (ver T11 abajo), con
+el confound de markup de chat_agente-family (ver T11 abajo), con
 reemplazo limpio disponible:
 
 | Línea aprox. | Contenido afectado | Reemplazo limpio |
 |---|---|---|
-| L74-79 | Tabla de condiciones — describe chileatiende/chileatiende_sia/chileatiende_sia_v2 sin advertencia de confound | `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md` |
-| L118-121 | PR: `chileatiende_sia` d=−1.89 citado como "el mayor efecto" junto a automata_neutro | `automata_neutro` (d=−1.79 vs vanilla) ya sostiene esto solo — `EJ_REPORT.md` |
-| L133-136 | Métricas de trayectoria (velocidad, SampEn, alineación P→R) de chileatiende/chileatiende_sia citadas como "outliers" | `AUTOMATA_NEUTRO_REPORT.md` (versión limpia, editada 2026-08-28) |
-| L149-154 | H4_rev τ/recovery_rate — la narrativa "chileatiende_sia recupera peor, v2 lo mejora parcialmente" | Retirado en `AXIS_PEC_ONLY_REPORT.md` conclusión #3 — sin confirmar con datos limpios |
-| **L162** | **§3.5 — "this paper's strongest single result": d=+8.89 entre axis y chileatiende** | **Corregido a d=+5.52 (axis_pec_only vs automata_neutro) en `CORRECCION_DVHAT_SIN_CHILEATIENDE.md`** — la cifra insignia del paper necesita reemplazo |
-| L173-178 | recovery_id: chileatiende-family en 0.21-0.56 | `automata_neutro` solo (0.43-0.67) ya sostiene la disociación — `EE_EH_WINDOW_REPORT.md` |
-| L191-195 | Fréchet/route-fidelity: chileatiende-family con d=0.94-2.33 | `automata_neutro` solo (d=1.07-1.35, p≤0.001 en los 3 t_inj) — `EE_EH_WINDOW_REPORT.md` |
-| L239 | Discusión: "chileatiende, chileatiende_sia... diverge from it" como parte central del argumento de §3.5 | Ídem L162 |
-| L223, L249 | Nota de limitación: "token counts... not recorded" para chileatiende_sia/_v2 | Ya no aplica — condiciones excluidas, no pendientes de medir |
+| L74-79 | Tabla de condiciones — describe chat_agente/chat_agente_sia/chat_agente_sia_v2 sin advertencia de confound | `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md` |
+| L118-121 | PR: `chat_agente_sia` d=−1.89 citado como "el mayor efecto" junto a automata_neutro | `automata_neutro` (d=−1.79 vs vanilla) ya sostiene esto solo — `EJ_REPORT.md` |
+| L133-136 | Métricas de trayectoria (velocidad, SampEn, alineación P→R) de chat_agente/chat_agente_sia citadas como "outliers" | `AUTOMATA_NEUTRO_REPORT.md` (versión limpia, editada 2026-08-28) |
+| L149-154 | H4_rev τ/recovery_rate — la narrativa "chat_agente_sia recupera peor, v2 lo mejora parcialmente" | Retirado en `AXIS_PEC_ONLY_REPORT.md` conclusión #3 — sin confirmar con datos limpios |
+| **L162** | **§3.5 — "this paper's strongest single result": d=+8.89 entre axis y chat_agente** | **Corregido a d=+5.52 (axis_pec_only vs automata_neutro) en `CORRECCION_DVHAT_SIN_CHAT_AGENTE.md`** — la cifra insignia del paper necesita reemplazo |
+| L173-178 | recovery_id: chat_agente-family en 0.21-0.56 | `automata_neutro` solo (0.43-0.67) ya sostiene la disociación — `EE_EH_WINDOW_REPORT.md` |
+| L191-195 | Fréchet/route-fidelity: chat_agente-family con d=0.94-2.33 | `automata_neutro` solo (d=1.07-1.35, p≤0.001 en los 3 t_inj) — `EE_EH_WINDOW_REPORT.md` |
+| L239 | Discusión: "chat_agente, chat_agente_sia... diverge from it" como parte central del argumento de §3.5 | Ídem L162 |
+| L223, L249 | Nota de limitación: "token counts... not recorded" para chat_agente_sia/_v2 | Ya no aplica — condiciones excluidas, no pendientes de medir |
 | L261 | Tabla de densidad de restricción (Apéndice A) — esta es análisis del **texto del prompt**, no de trayectorias generadas — NO afectada por el confound | Sin cambios necesarios |
 
 **Recomendación:** la corrección más urgente es L162 (§3.5) — es la cifra
@@ -274,35 +274,35 @@ rotación como en Gemma.
 
 **No corrido:** perturbación (H4_rev) en Qwen3 — solo trayectoria libre.
 
-## T11 — Confound de markup HTML en chileatiende-family (2026-08-28)
+## T11 — Confound de markup HTML en chat_agente-family (2026-08-28)
 
-`chileatiende`, `chileatiende_sia`, `chileatiende_sia_v2` fuerzan un wrapper
+`chat_agente`, `chat_agente_sia`, `chat_agente_sia_v2` fuerzan un wrapper
 HTML literal (`<div class="respuesta-bot"...>`) en el 100% de las
 respuestas — 43.6% / 34.6% / (misma regla, no medido directamente) de cada
 respuesta es texto idéntico repetido entre las 20 trayectorias. Mismo
 mecanismo que el fallo ya conocido de "ADN mal encarnado" (repetición
 verbatim del prompt inflando curvatura/determinismo). `automata_neutro`,
 `axis`, `vanilla` están limpias (0.0% markup) y siguen siendo válidas.
-**Resuelto 2026-08-28 (noche): chileatiende/chileatiende_sia/
-chileatiende_sia_v2 se eliminaron por completo (no solo se marcaron) de
+**Resuelto 2026-08-28 (noche): chat_agente/chat_agente_sia/
+chat_agente_sia_v2 se eliminaron por completo (no solo se marcaron) de
 EL/EH2/EJ/EF2_REPORT.md** — EJ_REPORT.md se recalculó desde cero sin esa
 familia (resultado más limpio, ver arriba); los demás se editaron
 quitando filas/pares. **Estas 3 condiciones quedan excluidas del set
 activo de condiciones del proyecto** hasta que exista una re-extracción
 con el markup removido del texto antes de tokenizar (no es un post-proceso
 sobre embeddings ya extraídos). Detalle completo y evidencia cuantitativa:
-`CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`.
+`CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`.
 
 Datos crudos usados (no están en `LSGOT_v4/data/`, que solo tiene métricas
 agregadas): `/home/plaxius/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments/gemma4_31b_combined/results_local/sia_extended_v5/*_embeddings.npz`
-y `.../perturbation/results/perturbation_sia_L30_medium/trajectories/chileatiende_sia_v2_baseline_embeddings.npz`.
+y `.../perturbation/results/perturbation_sia_L30_medium/trajectories/chat_agente_sia_v2_baseline_embeddings.npz`.
 Scripts: `LSGOT_v4/scripts/fase0/analyze_E{L,H2,J}_*.py`.
 
 **Hallazgo no anticipado por el diseño original:** el diseño de E-J asumía
 que las 4 condiciones "con identidad" (axis, axis_short, axis_pec_only,
-chileatiende_sia_v2) formarían un cluster natural en la RDM. No ocurre:
-chileatiende_sia_v2 comparte dominio/formato con chileatiende y
-chileatiende_sia (todas generan HTML sobre pensiones) y ese confound de
+chat_agente_sia_v2) formarían un cluster natural en la RDM. No ocurre:
+chat_agente_sia_v2 comparte dominio/formato con chat_agente y
+chat_agente_sia (todas generan HTML sobre pensiones) y ese confound de
 dominio domina la distancia cruda por un orden de magnitud sobre cualquier
 efecto de identidad. Cualquier corrida futura de E-J debe controlar por
 dominio antes de interpretar distancias o CKA entre condiciones de

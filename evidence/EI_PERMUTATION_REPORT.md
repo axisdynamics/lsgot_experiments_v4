@@ -71,7 +71,7 @@ celda antes de invertir en E-B.
   cruzar p<0.05 de forma confiable.
 - Solo 2 grupos (axis, axis_pec_only) — condiciones prioritarias de
   `Set_experimental.md`, no se corrió sobre el resto del panel de 10 grupos
-  (vanilla, generic_long, chileatiende, etc.), que quedaría para una
+  (vanilla, generic_long, chat_agente, etc.), que quedaría para una
   extensión futura si se decide seguir esta línea.
 - 3/240 trayectorias con `tau_tokens=None` por `insufficient_post_tokens`
   en t_inj=200 (2 en axis/along, 1 en axis/orthogonal) — excluidas del

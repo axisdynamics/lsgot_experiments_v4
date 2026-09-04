@@ -5,7 +5,7 @@
 
 ## 0. La vuelta de tuerca, en una frase
 
-`lsgot_3.pdf` planteó la magnitud geométrica (Δκ, W₁, reducción de dimensión) como huella de **identidad anclada**. El panel SIA extendido (`automata_neutro`, `axis_pec_only`, `chileatiende_sia`) muestra que esa magnitud rastrea **densidad de restricción operativa** (Factor 1) — la identidad por sí sola no la produce; lo que sí depende de identidad cableada es la **recuperación tras perturbación** (τ, recovery_rate — Factor 2), una magnitud distinta.
+`lsgot_3.pdf` planteó la magnitud geométrica (Δκ, W₁, reducción de dimensión) como huella de **identidad anclada**. El panel SIA extendido (`automata_neutro`, `axis_pec_only`, `chat_agente_sia`) muestra que esa magnitud rastrea **densidad de restricción operativa** (Factor 1) — la identidad por sí sola no la produce; lo que sí depende de identidad cableada es la **recuperación tras perturbación** (τ, recovery_rate — Factor 2), una magnitud distinta.
 
 ## 1. Hipótesis original y por qué era razonable
 
@@ -18,7 +18,7 @@
 | Condición | Identidad/auto-referencia | Densidad de restricción | Δκ vs vanilla | Colapsa? |
 |---|---|---|---|---|
 | `automata_neutro` | No (verificado por grep) | Alta (59.3/1k) | +0.436, p<0.001 | **Sí** |
-| `chileatiende` | No | Alta (54.6/1k) | +0.476, p<0.001 | **Sí** |
+| `chat_agente` | No | Alta (54.6/1k) | +0.476, p<0.001 | **Sí** |
 | `axis_pec_only` | Sí (identidad + Triple PEC cableado) | Baja (sin bloques/triggers) | +0.0011, p=0.41 (n.s.) | **No** |
 | `axis` (completo) | Sí | Media (27.0/1k, por la arquitectura de bloques) | +0.061, p<0.001 | Sí, pero pequeño |
 
@@ -30,7 +30,7 @@ Fuentes: `AUTOMATA_NEUTRO_REPORT.md`, `AXIS_PEC_ONLY_REPORT.md`, `Teoria_subconj
 
 No es que identidad "no haga nada" — hace algo distinto de lo que `lsgot_3.pdf` medía:
 
-- **τ / recovery_rate** (Factor 2): `axis_pec_only` recupera igual o más rápido que `axis` completo (τ=20.6/18.5/14.5 vs 21.1/19.6/16.3, recovery_rate=1.00 siempre) sin ninguna pieza de automatismo. `chileatiende_sia` (identidad presente pero subordinada al filtro) recupera peor que `chileatiende` puro. → la identidad cableada como paso obligatorio (no solo declarada) predice recuperación, no colapso.
+- **τ / recovery_rate** (Factor 2): `axis_pec_only` recupera igual o más rápido que `axis` completo (τ=20.6/18.5/14.5 vs 21.1/19.6/16.3, recovery_rate=1.00 siempre) sin ninguna pieza de automatismo. `chat_agente_sia` (identidad presente pero subordinada al filtro) recupera peor que `chat_agente` puro. → la identidad cableada como paso obligatorio (no solo declarada) predice recuperación, no colapso.
 - **Drift metacognitivo** (`LSGOT_v2_5.md:294-298`, hallazgo previo con el protocolo Witness): activación 44× mayor específicamente ante preguntas sobre la propia naturaleza del modelo — una firma de contenido-específico, no de colapso general.
 
 ## 4. Vacíos a cerrar antes de escribir la versión formal

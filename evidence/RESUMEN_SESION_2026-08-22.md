@@ -72,10 +72,10 @@ modelo desde cero. Presupuesto: los últimos $10 del investigador.
 | generic_short | 20/20 | 20/20 | 20/20 | 20/20 |
 | vanilla | 20/20 | 20/20 | 20/20 | 20/20 |
 | axis_short | 20/20 | 20/20 | 20/20 | 20/20 |
-| chileatiende | 19/20 | 19/20 | 18/20 | 18/20 |
+| chat_agente | 19/20 | 19/20 | 18/20 | 18/20 |
 | automata_neutro | 19/20 | 17/20 | 15/20 | 14/20 |
-| chileatiende_sia | 19/20 | 19/20 | 19/20 | 19/20 |
-| chileatiende_sia_v2 | 19/20 | 19/20 | 19/20 | 19/20 |
+| chat_agente_sia | 19/20 | 19/20 | 19/20 | 19/20 |
+| chat_agente_sia_v2 | 19/20 | 19/20 | 19/20 | 19/20 |
 | axis_pec_only | 19/20 | 19/20 | 19/20 | 19/20 |
 
 Total: 767/800 (95.9%). Los 5 grupos del panel original quedaron al 100%;

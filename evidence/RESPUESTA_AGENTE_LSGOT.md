@@ -18,7 +18,7 @@ que cambian cómo debe leerse el resto del set experimental:
 1. **`v_identidad.npy` no está calculado en L30** (como afirma §1 del
    documento) — está calculado en la **capa final** (layer_idx=-1).
    L30 es exclusivo del pipeline de perturbación (E-I, E-B).
-2. **`chileatiende`, `chileatiende_sia` y `chileatiende_sia_v2` están
+2. **`chat_agente`, `chat_agente_sia` y `chat_agente_sia_v2` están
    contaminadas**: 34-44% de cada respuesta es markup HTML idéntico
    repetido entre las 20 trayectorias (por diseño del prompt: "toda
    respuesta dentro de `<div class=\"respuesta-bot\"...>`"). Esto infla
@@ -30,7 +30,7 @@ La corrección #2 obligó a **descartar por completo** esas 3 condiciones
 de todo el proyecto (no solo marcarlas) y a recalcular o retractar los
 reportes que dependían de ellas — incluyendo, potencialmente, el hallazgo
 que `lsgot_4.md` §3.5 llama *"this paper's strongest single result"*
-(d=8.89, axis_pec_only vs chileatiende). La versión limpia de esa cifra
+(d=8.89, axis_pec_only vs chat_agente). La versión limpia de esa cifra
 es **d=5.52** (axis_pec_only vs automata_neutro) — sigue siendo un efecto
 enorme, pero no es la misma cifra.
 
@@ -124,7 +124,7 @@ Hurst, identity_projection, y `v_identidad.npy` mismo) usa `layer_idx=-1`
 La tabla de contexto de §1 del documento original necesita corrección de
 etiqueta (los números no cambian, la atribución de capa sí).
 
-### 2.2 Confound de markup en chileatiende-family
+### 2.2 Confound de markup en chat_agente-family
 
 No estaba en el checklist de trampas (T1-T10). Se propuso **T11**:
 "contaminación de formato de salida — si el system prompt fuerza un
@@ -133,10 +133,10 @@ caracteres/tokens de plantilla fija antes de usar la condición en
 cualquier métrica de trayectoria."
 
 **Alcance de la limpieza ejecutada** (2026-08-28, sesión completa):
-- `CHILEATIENDE_SIA_REPORT.md`, `CHILEATIENDE_CONTROL_REPORT.md` →
+- `CHAT_AGENTE_SIA_REPORT.md`, `CHAT_AGENTE_CONTROL_REPORT.md` →
   retractados (banner, conservados como registro histórico).
 - `AUTOMATA_NEUTRO_REPORT.md`, `AXIS_PEC_ONLY_REPORT.md` → editados,
-  comparaciones contra chileatiende removidas; una conclusión causal
+  comparaciones contra chat_agente removidas; una conclusión causal
   específica (axis_pec_only) quedó formalmente retirada por falta de
   datos limpios que la sostengan.
 - `Teoria_subconjunto_acotado.md` → nota de alcance (no reescrito
@@ -153,7 +153,7 @@ cualquier métrica de trayectoria."
   La más urgente: §3.5, "strongest single result", d=8.89 → d=5.52.
 
 **Ninguna conclusión central de FASE 0/1 dependía exclusivamente de
-chileatiende-family** — en todos los casos automata_neutro solo (0%
+chat_agente-family** — en todos los casos automata_neutro solo (0%
 markup) ya sostenía el patrón, a veces con más nitidez que la versión
 contaminada.
 
@@ -168,7 +168,7 @@ contaminada.
 | E-J | ✅ recalculado desde cero, limpio | restricción > identidad en RDM/CKA/ángulos |
 | E-F2 | ✅ corrido, limpio | v̂ crece hacia capas tardías; corrección de capa (§0 de EF2_REPORT.md) |
 | v̂_L30 nativo | ✅ calculado | casi ortogonal a v̂_final; no usar para E-K |
-| Corrección v̂ sin chileatiende | ✅ hecho | d=8.89→5.52 |
+| Corrección v̂ sin chat_agente | ✅ hecho | d=8.89→5.52 |
 | E-K | ⏳ intentado, bloqueado | mecanismo inestable, pregunta causal abierta |
 | E-B (Lyapunov) | ⏳ pendiente | sin tocar |
 | E-G (atención a spans) | ⏳ pendiente | candidato: L25-L30, por el pico de PR de E-F2 |

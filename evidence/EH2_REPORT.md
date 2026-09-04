@@ -1,11 +1,11 @@
 # E-H2 — Serie temporal de la proyección v̂ (dinámica de la dirección)
 
 > ⚠️ **Reescrito 2026-08-28 (noche):** la versión anterior incluía
-> chileatiende/chileatiende_sia/chileatiende_sia_v2 (34-44% de cada
+> chat_agente/chat_agente_sia/chat_agente_sia_v2 (34-44% de cada
 > respuesta es markup HTML idéntico repetido — ver
-> `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`). Esas 3 condiciones y el par
-> diagnóstico que dependía de ellas (chileatiende_sia vs
-> chileatiende_sia_v2) se **eliminaron por completo**, no solo se
+> `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`). Esas 3 condiciones y el par
+> diagnóstico que dependía de ellas (chat_agente_sia vs
+> chat_agente_sia_v2) se **eliminaron por completo**, no solo se
 > marcaron. El hallazgo central sobrevive intacto con `automata_neutro`
 > como única referencia de restricción limpia.
 
@@ -13,7 +13,7 @@
 **Script:** `LSGOT_v4/scripts/fase0/analyze_EH2_serie_temporal.py`
 **Datos:** embeddings libres (`sia_extended_v5`)
 **Resultados crudos:** `LSGOT_v4/scripts/fase0/EH2_results.json` (contiene
-las filas de chileatiende-family con fines de auditoría — no usar para
+las filas de chat_agente-family con fines de auditoría — no usar para
 interpretación, ver confound report)
 
 ## 1. Resumen
@@ -80,7 +80,7 @@ de t=0 es irrelevante porque es solo 1 de ~250 puntos de la serie.
   la manipulación todavía (ver Set_experimental.md, réplicas pendientes).
 - **T5**: 3 pares × 2 métricas destacadas = 6 comparaciones centrales;
   todas replican en la misma dirección.
-- **T11**: chileatiende-family eliminada por completo de este reporte.
+- **T11**: chat_agente-family eliminada por completo de este reporte.
 
 ## 5. Replicación
 
@@ -94,7 +94,7 @@ de axis vs axis_pec_only es consistente entre con/sin t=0.
 
 Restricción limpia (`automata_neutro`) no muestra la autocorrelación
 elevada que sugería la versión contaminada de este reporte (esa
-elevación —0.48-0.52— era específica de chileatiende-family, ahora
+elevación —0.48-0.52— era específica de chat_agente-family, ahora
 eliminada) — la autocorrelación de automata_neutro (0.248) es
 prácticamente igual a la de identidad. Lo que sí distingue limpiamente a
 restricción es: **ráfagas mucho más cortas** (2.78 vs 7.8-8.8) y
@@ -104,4 +104,4 @@ ráfagas largas en esa dirección. Es una lectura más modesta y más
 correcta que la de la versión anterior (que atribuía a restricción una
 dinámica de "atrapamiento" con alta persistencia — ese patrón era, en
 retrospectiva, mayormente un artefacto de la repetición de markup en
-chileatiende).
+chat_agente).

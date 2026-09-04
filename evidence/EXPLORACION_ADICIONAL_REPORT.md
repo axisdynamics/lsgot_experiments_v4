@@ -5,7 +5,7 @@
 **Datos:** todos existentes (embeddings libres, E-F2 multi-capa, trayectorias
 de perturbación rescatadas) — cero GPU nueva.
 **Condiciones usadas:** solo el set limpio (axis, axis_pec_only,
-automata_neutro, vanilla, generic_long) — chileatiende-family excluida.
+automata_neutro, vanilla, generic_long) — chat_agente-family excluida.
 
 ## Resumen
 
@@ -174,7 +174,7 @@ la magnitud exacta debe leerse con cautela.*
 
 - **T2:** todos los análisis siguen operando sobre n=1 de manipulación
   por condición — ninguno de estos hallazgos cambia esa limitación.
-- **T11:** ninguna de las 5 pruebas usa chileatiende-family.
+- **T11:** ninguna de las 5 pruebas usa chat_agente-family.
 - Nuevo cuidado (A5): T8 (falsos positivos textuales) parcialmente
   relevante — no se hizo chequeo contextual de las keywords, solo
   substring — el efecto es grande y consistente en 2 condiciones así que

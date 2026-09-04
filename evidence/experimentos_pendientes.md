@@ -35,7 +35,7 @@ crudo se pickle a `cache_dir/{md5}.pkl` (`perturbation_extractor.py:392-432`,
 copió a local.
 
 **Qué falta exactamente:**
-- 10 grupos: `axis, generic_long, generic_short, vanilla, axis_short, chileatiende, automata_neutro, chileatiende_sia, chileatiende_sia_v2, axis_pec_only`
+- 10 grupos: `axis, generic_long, generic_short, vanilla, axis_short, chat_agente, automata_neutro, chat_agente_sia, chat_agente_sia_v2, axis_pec_only`
 - 3 puntos de inyección: `t_inj = 50, 128, 200`
 - 20 prompts cada uno → hasta 600 trayectorias perturbadas (las baseline sin perturbar ya tienen `.npz` en `results_local/sia_extended_v5/`)
 
@@ -53,8 +53,8 @@ recuperación es opcional". Si ese Network Volume sigue existiendo (no fue
 borrado), se puede levantar un pod barato (sin necesidad de GPU cara, solo
 attach al volumen) y hacer `scp` directo — sin re-correr generación. **Esto
 solo cubre el panel original** (axis/generic_long/generic_short/vanilla/
-axis_short/chileatiende), anterior a las adiciones del 2026-08-19
-(automata_neutro, axis_pec_only, chileatiende_sia, chileatiende_sia_v2) —
+axis_short/chat_agente), anterior a las adiciones del 2026-08-19
+(automata_neutro, axis_pec_only, chat_agente_sia, chat_agente_sia_v2) —
 esas corrieron en sesiones de pod spot separadas, con menor probabilidad de
 que el volumen siga vivo.
 
@@ -86,7 +86,7 @@ no hay cifra exacta para este alcance todavía.
 ```
 cd SIA-experiments/gemma4_31b_combined/perturbation/
 python run_perturbation.py --exp sia --layer L30 --sigma medium \
-    --groups automata_neutro axis_pec_only chileatiende_sia chileatiende_sia_v2 \
+    --groups automata_neutro axis_pec_only chat_agente_sia chat_agente_sia_v2 \
     --token hf_xxxxx
 ```
 
@@ -208,16 +208,16 @@ consistente en 6/6 celdas, pero no significativo individualmente) — ver
 
 ## E-E extendido a los 10 grupos — CORRIDO 2026-08-26
 
-E-E (Fréchet) solo cubría 3/10 grupos (axis, axis_pec_only, chileatiende)
+E-E (Fréchet) solo cubría 3/10 grupos (axis, axis_pec_only, chat_agente)
 por una estimación de costo que resultó exagerada — extendido a los 10
 grupos en **~4.5 min de CPU, sin GPU** (`analyze_tier0_perturbation.py`,
 `FRECHET_GROUPS` ahora = todos los grupos). Resultado completo, con
-significancia de cada grupo vs `vanilla` más la familia chileatiende entre
+significancia de cada grupo vs `vanilla` más la familia chat_agente entre
 sí, en `EE_EH_WINDOW_REPORT.md` (sección E-E actualizada).
 
-**Hallazgo:** el patrón que antes solo se veía en el par axis/chileatiende
+**Hallazgo:** el patrón que antes solo se veía en el par axis/chat_agente
 se confirma en el panel completo — **los 4 grupos de Factor 1
-(automata_neutro, chileatiende, chileatiende_sia, chileatiende_sia_v2)
+(automata_neutro, chat_agente, chat_agente_sia, chat_agente_sia_v2)
 difieren de vanilla con efecto grande (d=0.94–2.33, p≤0.002) en Fréchet
 normalizado, en los 3 t_inj sin excepción**; ningún grupo de la familia
 axis/generic supera efecto "small" vs vanilla. Refuerza el reencuadre:

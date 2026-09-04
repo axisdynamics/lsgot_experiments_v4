@@ -1,13 +1,13 @@
 # axis_pec_only — Factor 2 puro: la celda que faltaba
 
 > ⚠️ **Editado 2026-08-28 (noche):** este reporte comparaba originalmente
-> `axis_pec_only` contra chileatiende/chileatiende_sia. Esas condiciones
+> `axis_pec_only` contra chat_agente/chat_agente_sia. Esas condiciones
 > fuerzan un wrapper HTML literal en el 100% de sus respuestas (34-44% de
 > cada respuesta es texto repetido — ver
-> `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`) y se eliminaron de este
+> `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`) y se eliminaron de este
 > reporte. Las comparaciones de `axis_pec_only` contra axis/vanilla/
-> automata_neutro no dependen de chileatiende y se mantienen intactas. La
-> conclusión original #3 ("chileatiende_sia recupera peor que chileatiende
+> automata_neutro no dependen de chat_agente y se mantienen intactas. La
+> conclusión original #3 ("chat_agente_sia recupera peor que chat_agente
 > puro, confirmando que el cableado no-subordinado es la variable causal")
 > dependía enteramente de datos ahora retractados — se marca como
 > **hallazgo retirado**, no confirmado con datos limpios.
@@ -103,14 +103,14 @@ vs 16.3), con `recovery_rate`=1.00 siempre, igual que axis.
    incluso sin ninguna de las reglas de automatismo que sí tiene axis.
 3. ~~**La causa de la recuperación en axis no es la arquitectura de
    autómata, es específicamente la auto-referencia cableada** (comparación
-   chileatiende_sia vs chileatiende puro)~~ — **hallazgo retirado**:
-   dependía enteramente de datos de chileatiende_sia, ahora excluidos por
+   chat_agente_sia vs chat_agente puro)~~ — **hallazgo retirado**:
+   dependía enteramente de datos de chat_agente_sia, ahora excluidos por
    el confound de markup. No hay evidencia limpia que confirme o refute
    esta hipótesis causal específica todavía.
 
 La tabla de dos factores queda así, con evidencia limpia solo en 3 de las
 4 celdas (la celda "Factor 1 presente + Factor 2 subordinado" quedó sin
-condición limpia tras retirar chileatiende_sia):
+condición limpia tras retirar chat_agente_sia):
 
 | | Recupera rápido (τ bajo, recovery_rate=1.00) | No recupera bien |
 |---|---|---|

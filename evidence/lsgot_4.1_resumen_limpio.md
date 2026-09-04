@@ -2,7 +2,7 @@
 
 **Nota de origen:** este documento es una síntesis del agente, construida
 desde cero solo con valores verificados sobre el panel limpio (sin
-chileatiende-family). **No reemplaza `lsgot_4.md`** — es un insumo para
+chat_agente-family). **No reemplaza `lsgot_4.md`** — es un insumo para
 que Castillo/Torres Yévenes/Lanas decidan qué incorporar en la próxima
 revisión. Cada cifra citada aquí tiene trazabilidad directa a un reporte
 de la sesión 2026-08-28 (`LSGOT_v4/evidence/`).
@@ -41,7 +41,7 @@ Participation ratio (capa final) vs `vanilla`:
 
 Gradual, no binario: ambos factores reducen la dimensionalidad efectiva
 de la trayectoria, con restricción contribuyendo más.
-*(`CORRECCION_DVHAT_SIN_CHILEATIENDE.md`)*
+*(`CORRECCION_DVHAT_SIN_CHAT_AGENTE.md`)*
 
 ## Hallazgo 2 — La recuperación tras perturbación está gateada por wiring, no por declaración
 
@@ -72,7 +72,7 @@ v̂ = mean(axis) − mean(generic_long), capa final, norma 1.
 | axis vs vanilla | +3.45 | identidad se separa de lo genérico |
 | axis_pec_only vs vanilla | +3.79 | wiring puro también se separa |
 | automata_neutro vs vanilla | **−2.40** | restricción diverge en el sentido *opuesto* |
-| **axis_pec_only vs automata_neutro** | **+5.52** | el mayor efecto limpio del panel *(antes reportado d=8.89 con chileatiende, contaminado — ver `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`)* |
+| **axis_pec_only vs automata_neutro** | **+5.52** | el mayor efecto limpio del panel *(antes reportado d=8.89 con chat_agente, contaminado — ver `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`)* |
 
 Identidad-con-wiring y wiring-puro caen del mismo lado; restricción-pura
 cae del lado opuesto. No es un artefacto de longitud ni de rigidez
@@ -83,7 +83,7 @@ general del prompt — es específico del contenido de identidad.
 Perturbar a lo largo vs ortogonal a v̂ no produce diferencia en
 recuperación (p>0.14, 6/6 comparaciones del panel original). La huella de
 v̂ es correlacional/estática, no funciona como cuenca de atracción
-dinámica. *(paper original, E-I — no depende de chileatiende)*
+dinámica. *(paper original, E-I — no depende de chat_agente)*
 
 ## Hallazgo 5 — Identidad ya está en el estado de contexto, no emerge del proceso
 
@@ -113,7 +113,7 @@ Identidad oscila en ráfagas largas y sostenidas hacia v̂; restricción no
 tiene una dinámica "anti-identidad" activa — simplemente no logra
 sostener activación en esa dirección (proyección media ≈0, no negativa
 de forma dinámica). *(E-H2, versión limpia — la autocorrelación elevada
-que sugería la versión contaminada con chileatiende era artefacto)*
+que sugería la versión contaminada con chat_agente era artefacto)*
 
 ## Hallazgo 7 — Restricción organiza más subespacio que identidad
 
@@ -128,7 +128,7 @@ para construir el análisis — control de circularidad T4):
 `automata_neutro` es, en distancia bruta, **la condición más distinta de
 todo el panel de 7** — más distinta de axis que axis lo está de lo
 genérico. Jerarquía: restricción > identidad, en subespacio completo, no
-solo en la dirección v̂. *(E-J, recalculado sin chileatiende)*
+solo en la dirección v̂. *(E-J, recalculado sin chat_agente)*
 
 ## Hallazgo 8 — El perfil por capa de v̂ no es donde se calculó (corrección)
 

@@ -1,9 +1,9 @@
 # E-F2 — Per-capa: proyección v̂ y participation ratio por capa
 
 > ⚠️ **Reescrito 2026-08-28 (noche):** la versión anterior incluía
-> chileatiende/chileatiende_sia/chileatiende_sia_v2 (34-44% de cada
+> chat_agente/chat_agente_sia/chat_agente_sia_v2 (34-44% de cada
 > respuesta es markup HTML idéntico repetido — ver
-> `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`). Esas 3 condiciones se
+> `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`). Esas 3 condiciones se
 > **eliminaron por completo** de tablas y comparaciones — no solo se
 > marcaron. El hallazgo central (crecimiento monótono del efecto de v̂
 > hacia capas tardías) sobrevive intacto, replicado en axis vs
@@ -56,9 +56,9 @@ separación clara identidad/genérico vs restricción concentrada en L25-L30.
   forward pass, 10 condiciones × 20 prompts (`PRIORITY_SUBSET`, mismos
   prompts que `sia_extended_v5`) × ≤256 tokens greedy.
   - **Incidente:** el proceso original murió por OOM de CUDA en la
-    condición `chileatiende` (fragmentación de memoria con atención
+    condición `chat_agente` (fragmentación de memoria con atención
     `eager` en un proceso largo). Se relanzaron las condiciones restantes
-    como procesos separados; `chileatiende` volvió a fallar en el mismo
+    como procesos separados; `chat_agente` volvió a fallar en el mismo
     punto exacto incluso con contexto CUDA limpio (confound de contenido,
     no de proceso) — se resolvió con
     `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` (fix recomendado
@@ -156,7 +156,7 @@ media de la trayectoria. Ver `EF2_results.json`, bloque `t1_check_L30`.
   estable) — no se cumple de forma limpia en L5-L25 (signos inconsistentes,
   varias comparaciones n.s.).
 - **T9:** no aplica (embeddings recién extraídos, no rescatados).
-- **T11:** chileatiende-family eliminada por completo de este reporte.
+- **T11:** chat_agente-family eliminada por completo de este reporte.
 
 ## 5. Replicación
 

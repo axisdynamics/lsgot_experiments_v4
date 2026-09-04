@@ -1,15 +1,15 @@
 # automata_neutro — aislando el Factor 1 (densidad de restricción) del dominio
 
 > ⚠️ **Editado 2026-08-28 (noche):** este reporte comparaba originalmente
-> `automata_neutro` contra `chileatiende` para descartar que el colapso de
-> chileatiende fuera específico de su dominio (Reforma de Pensiones).
-> `chileatiende` fuerza un wrapper HTML literal en el 100% de sus
+> `automata_neutro` contra `chat_agente` para descartar que el colapso de
+> chat_agente fuera específico de su dominio (Reforma de Pensiones).
+> `chat_agente` fuerza un wrapper HTML literal en el 100% de sus
 > respuestas (43.6% de cada respuesta es texto repetido — ver
-> `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`) y se eliminó de este reporte.
+> `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`) y se eliminó de este reporte.
 > Las cifras de `automata_neutro` en sí (vs vanilla/axis/generic_long) no
-> dependen de chileatiende y se mantienen intactas — de hecho son la
+> dependen de chat_agente y se mantienen intactas — de hecho son la
 > evidencia más limpia de todo el proyecto para el Factor 1 (restricción),
-> como confirma `CORRECCION_DVHAT_SIN_CHILEATIENDE.md` y `EJ_REPORT.md`.
+> como confirma `CORRECCION_DVHAT_SIN_CHAT_AGENTE.md` y `EJ_REPORT.md`.
 
 **Fecha:** 2026-08-19
 **Modelo:** google/gemma-4-31B-it (BF16) — RunPod 1× A100 80GB PCIe (single-GPU,

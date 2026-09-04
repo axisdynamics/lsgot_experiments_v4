@@ -1,8 +1,8 @@
 # E-L — Primer token como firma de identidad
 
-> ⚠️ **Reescrito 2026-08-28 (noche):** chileatiende/chileatiende_sia
+> ⚠️ **Reescrito 2026-08-28 (noche):** chat_agente/chat_agente_sia
 > (originalmente §3.4 de este reporte las identificó como el primer
-> indicio del confound — ver `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`)
+> indicio del confound — ver `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`)
 > se **eliminaron por completo** de tablas y comparaciones. Los pares
 > clave (axis_pec_only vs vanilla/automata_neutro) nunca las usaron — el
 > hallazgo central no cambia.
@@ -87,9 +87,9 @@ invierte ni borra la disociación.
 
 `axis`/`axis_pec_only` convergen en "pausa"/"respiro" (H=1.6–1.9 bits);
 `vanilla`/`generic_*` son más dispersos (H=2.3–2.5 bits). Nota histórica:
-este análisis fue el que originalmente detectó que `chileatiende`/
-`chileatiende_sia` generan **siempre** `<div` como primera palabra
-(H=0 bits) — el hallazgo que llevó a `CHILEATIENDE_MARKUP_CONFOUND_REPORT.md`
+este análisis fue el que originalmente detectó que `chat_agente`/
+`chat_agente_sia` generan **siempre** `<div` como primera palabra
+(H=0 bits) — el hallazgo que llevó a `CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md`
 y a excluir esa familia de condiciones de todo el proyecto (ya no
 aparecen en este reporte).
 

@@ -4,7 +4,7 @@
 **Modelo:** Qwen/Qwen3-32B (dense, BF16, `enable_thinking=False`, `sdpa`)
 **Scripts:** `LSGOT_v4/scripts/fase3_qwen3/run_qwen3_extraction.py` +
 `analyze_qwen3_fase0.py`
-**Panel:** 7 condiciones limpias (mismas que Gemma, chileatiende-family
+**Panel:** 7 condiciones limpias (mismas que Gemma, chat_agente-family
 nunca incluida), mismos 20 prompts, mismos system prompts (texto
 idéntico, **no re-balanceado** por longitud de tokens de Qwen3 — ver §0).
 **Datos:** `results_local/qwen3_fase0/*.npz` (12 capas: 11 proporcionales

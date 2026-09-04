@@ -32,21 +32,21 @@ perturbación. Se calculó además un v̂ nativo de L30
 (cos=0.09) y **rompe la doble disociación** axis/axis_pec_only —
 recomendación: no usarlo para steering.
 
-### Hallazgo metodológico #2 — confound de markup en chileatiende-family
+### Hallazgo metodológico #2 — confound de markup en chat_agente-family
 
-`chileatiende`, `chileatiende_sia` y `chileatiende_sia_v2` fuerzan un
+`chat_agente`, `chat_agente_sia` y `chat_agente_sia_v2` fuerzan un
 wrapper HTML literal en el 100% de sus respuestas — **34-44% de cada
 respuesta es texto idéntico repetido** entre las 20 trayectorias (mismo
 mecanismo que el fallo ya conocido de "ADN mal encarnado"). Esto infló
 artificialmente el colapso geométrico atribuido a esas condiciones en
 todo el proyecto, incluyendo **la cifra que `lsgot_4.md` llama su
-resultado más fuerte** (§3.5, d=8.89 axis_pec_only vs chileatiende).
+resultado más fuerte** (§3.5, d=8.89 axis_pec_only vs chat_agente).
 
-**Sanitización ejecutada** (chileatiende excluida de todo, no solo
+**Sanitización ejecutada** (chat_agente excluida de todo, no solo
 marcada):
 - 4 reportes de hoy (EL/EH2/EJ/EF2) — limpiados; EJ recalculado desde
   cero, resultado más nítido que el original.
-- `CHILEATIENDE_SIA_REPORT.md`, `CHILEATIENDE_CONTROL_REPORT.md` →
+- `CHAT_AGENTE_SIA_REPORT.md`, `CHAT_AGENTE_CONTROL_REPORT.md` →
   retractados.
 - `AUTOMATA_NEUTRO_REPORT.md`, `AXIS_PEC_ONLY_REPORT.md`,
   `EE_EH_WINDOW_REPORT.md` → editados/reescritos.
@@ -57,7 +57,7 @@ marcada):
   `Set_experimental.md` para revisión humana.
 
 **Verificación clave:** ninguna conclusión central dependía
-exclusivamente de chileatiende — `automata_neutro` (0% markup) sostenía
+exclusivamente de chat_agente — `automata_neutro` (0% markup) sostenía
 cada hallazgo por sí solo, a veces con más claridad que la versión
 contaminada. Cifra insignia corregida: **d=8.89 → d=5.52**.
 
@@ -92,14 +92,14 @@ respondida negativamente.
 `EK_REPORT.md` · `EXPLORACION_ADICIONAL_REPORT.md`
 
 **Correcciones y confound:**
-`CHILEATIENDE_MARKUP_CONFOUND_REPORT.md` ·
-`CORRECCION_DVHAT_SIN_CHILEATIENDE.md`
+`CHAT_AGENTE_MARKUP_CONFOUND_REPORT.md` ·
+`CORRECCION_DVHAT_SIN_CHAT_AGENTE.md`
 
 **Reportes editados por la limpieza:**
 `AUTOMATA_NEUTRO_REPORT.md` · `AXIS_PEC_ONLY_REPORT.md` ·
 `EE_EH_WINDOW_REPORT.md` · `Teoria_subconjunto_acotado.md` ·
-`CHILEATIENDE_SIA_REPORT.md` (retractado) ·
-`CHILEATIENDE_CONTROL_REPORT.md` (retractado)
+`CHAT_AGENTE_SIA_REPORT.md` (retractado) ·
+`CHAT_AGENTE_CONTROL_REPORT.md` (retractado)
 
 **Handoff y bitácora:**
 `RESPUESTA_AGENTE_LSGOT.md` (respuesta formal a NEXUS/ELAA) ·
