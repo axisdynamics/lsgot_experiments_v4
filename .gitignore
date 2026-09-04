@@ -1,6 +1,14 @@
 # Documento interno de procedencia (rutas absolutas de la máquina local) — no publicar
 FUENTES.md
 
+# Hipótesis workspace: investigación cerrada con resultado negativo (P1-P3
+# refutadas, sin evidencia de que t=0 sea el workspace) — no publicar
+evidence/WORKSPACE_HYPOTHESIS_REPORT.md
+
+# Comparación interna contra póster conceptual externo (atribución a otro
+# autor, rutas absolutas de la máquina local) — no publicar
+evidence/informe_poster_y_lsgot.md
+
 # Python
 __pycache__/
 *.py[cod]
