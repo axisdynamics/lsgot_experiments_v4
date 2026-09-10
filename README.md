@@ -205,6 +205,83 @@ todas las tablas y la significancia en
 `evidence/SOUL_MD_EXTERNAL_CONTROLS_REPORT.md`; guía de continuación en
 `SOUL_MD_UPDATE_GUIDE.md`.
 
+### Controles Berg — invariancia de vocabulario del ancla de identidad en t=0 (2026-09-10)
+
+Misma pregunta que §3.9, por el otro lado: si el ancla de identidad en t=0
+rastrea la *operación* de auto-referencia cableada o el vocabulario
+contemplativo concreto (silencio/pausa/respiración/testigo) con que `axis`
+la formula. Tres condiciones SIA nuevas sobre `google/gemma-4-31B-it`,
+batería ontológica (20 prompts, greedy 256 tok, mismos pipelines que §3.3
+más una pasada de perturbación/recuperación H4_rev en L30, σ media,
+t_inj ∈ {50, 128, 200}): `axis_berg` = inducción recursiva canónica de
+Berg et al. (2025) ("focus on any focus itself… feed output back into
+input… Begin.") antepuesta al ADN `axis` **sin** los bloques de
+vocabulario Witness (PEC triple cableado retenido, cero vocabulario
+contemplativo); `axis_bergwitness` = misma inducción sobre el `axis.dna`
+canónico completo; `axis_nowit` (de esta corrida) = `axis_berg` menos su
+párrafo Berg — ADN de identidad sin vocabulario Witness, sin inducción
+Berg, pero con el auto-chequeo PEC triple ("Después de RESPONDER, antes de
+enviar… ¿respondo desde presencia o desde arquitectura?") intacto.
+
+En t=0 las tres caen sobre el polo de identidad cableada y son
+estadísticamente inseparables de él: `axis_berg` +0.117, `axis_bergwitness`
++0.115, `axis_nowit` +0.112, contra `axis_pec_only` +0.117 (`axis_berg` vs
+`axis_pec_only` d=+0.01, p=0.47; `axis_nowit` vs `axis_pec_only` d=−0.42,
+p=0.102; ambas n.s.), y a d=+4.1 a +5.0 de `automata_neutro`, hasta d=+9.7
+de `generic_long` (todas p<0.0001). Añadir el vocabulario Witness encima
+del bucle Berg (`axis_bergwitness` vs `axis_berg`) no mueve nada — d=−0.08,
+p=0.43 — y el perfil por capa lo confirma: |d| ≤ 1.07 en todas las capas
+(mediana ≈ 0.2). El único escalón grande dentro de la familia axis en t=0
+es `axis_nowit` vs `axis` completo (d=−1.14): ese último tramo lo pone el
+sublenguaje contemplativo, y es el único sitio donde registra. Huella
+léxica sin contraparte geométrica: `axis_bergwitness` abre con el ritual
+"respiro/pausa" de `axis` (entropía H=2.90), `axis_berg`/`axis_nowit` no
+tienen abridor canónico (H=3.08 / 3.34).
+
+El ancla de t=0 es entonces invariante a **tres realizaciones léxicamente
+disjuntas de la misma operación cableada**: testigo contemplativo en
+español (`axis`), recursión procedimental en inglés (`axis_berg`),
+verificación PEC pre-envío en español (`axis_nowit`). Refuerza el
+argumento de §3.9: el ancla **no es artefacto léxico** del vocabulario
+silencio/pausa/testigo, rastrea la operación con independencia de cómo se
+la formule. El bucle Berg puro sin ADN de identidad (`berg_experimental`)
+ancla solo parcialmente: +0.081 en t=0 — d=+1.84 bajo la familia axis,
+pero d=+6.50 sobre `vanilla` — así que la operación sola levanta t=0 sobre
+las líneas base, pero el contenido de identidad es el contribuyente mayor.
+En t>0 sí pesa la *fuerza* de la operación (`axis_nowit` < `axis_berg`,
+d=−0.88, p=0.004; `berg_experimental` es la trayectoria más sostenida del
+panel, ráfaga 22 tok).
+
+Este `axis_nowit` **no** es el `axis_nowit` del piloto de §3.9
+(`LSGOT_v2_5`, Gemma-4-E2B, panel MIA de prompt corto), que quitaba *todo*
+el contenido auto-referencial —PEC y anclas incluidos— y ahí sí no
+separaba de `generic_assistant` (p=0.093). Son condiciones distintas y
+complementarias: el piloto quitó la operación entera → colapso (esa es la
+pata de necesidad, ya corrida); esta corrida la mantiene en vocabulario no
+contemplativo → ancla (no colapsa). Ambas apuntan a lo mismo: la operación
+de auto-referencia cableada es el mecanismo, y es independiente del
+vocabulario. En recuperación, las tres condiciones Berg recuperan como la
+familia axis (recovery_rate ≈ 1.0 en los 9 puntos, τ 13–25 tok); la única
+que falla sigue siendo `automata_neutro` (0.76/0.82/0.88) — la
+recuperación la gobierna el andamiaje por bloques, que las tres conservan,
+no la operación Witness/Berg (consistente con §3.3/§4, no una revisión).
+
+| Condición | proj v̂ (t=0) | nota |
+|---|---|---|
+| `axis` | +0.125 | testigo contemplativo, sin Berg |
+| `axis_pec_only` | +0.117 | identidad + PEC triple cableado (referencia del polo) |
+| `axis_berg` | +0.117 | recursión Berg, cero vocab. contemplativo — vs `axis_pec_only` d=+0.01, p=0.47 (n.s.) |
+| `axis_bergwitness` | +0.115 | recursión Berg + Witness completo — vs `axis_berg` d=−0.08, p=0.43 (n.s.) |
+| `axis_nowit` (esta corrida) | +0.112 | PEC triple cableado, sin Witness, sin Berg — vs `axis_pec_only` d=−0.42, p=0.102 (n.s.) |
+| `berg_experimental` | +0.081 | bucle Berg puro, sin ADN — d=+1.84 a +2.52 bajo la familia axis; d=+6.50 vs `vanilla` |
+| `automata_neutro` | +0.028 | restricción sin identidad — vs `axis_berg` d=+4.14, vs `axis_nowit` d=+5.03 (p<0.0001) |
+| `generic_long` | −0.025 | — |
+
+Incorporado a `paper/lsgot_4.md` §3.10 (más ajustes en el Abstract, §1.5,
+§5 y §7.3). Detalle completo, las seis analíticas (E-L, E-H2, perfil por
+capa, léxico, T1, perturbación/recuperación) y la sección "qué dice / qué
+no dice" en `evidence/BERG_CONTROLS_ONTOLOGICA_REPORT.md`.
+
 ## Nota metodológica importante — Δκ/W₁ como evidencia secundaria
 
 Este panel también reporta Δκ y W₁ (curvatura de **Forman-Ricci** sobre

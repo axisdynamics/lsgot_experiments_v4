@@ -1,0 +1,68 @@
+condiciones: ['automata_neutro', 'axis', 'axis_pec_only', 'generic_long', 'soul_elena_financial', 'soul_md_corto', 'soul_solidity_auditor', 'vanilla'] | K=6 N_gen=24 | capas [20, 25, 28, 30, 32, 35, 38, 40, 45, 50, 55]
+|T_ctx|: {'automata_neutro': 4028, 'axis': 3974, 'axis_pec_only': 1464, 'generic_long': 3987, 'soul_elena_financial': 2076, 'soul_md_corto': 2302, 'soul_solidity_auditor': 932, 'vanilla': 36}
+
+========================================================================
+DIAGNÓSTICO — ¿el sampling añadió varianza? (sysratio)
+========================================================================
+  condición               CV_entre_prompts   CV_entre_muestras
+  automata_neutro                 0.0050           0.0009
+  axis                            0.0025           0.0016
+  axis_pec_only                   0.0098           0.0047
+  generic_long                    0.0041           0.0010
+  soul_elena_financial            0.0078           0.0025
+  soul_md_corto                   0.0079           0.0021
+  soul_solidity_auditor           0.0123           0.0060
+  vanilla                         0.1970           0.0322
+
+  CV_entre_muestras (mediana sobre condiciones): 0.0023 — el contenido generado NO mueve la métrica: n efectivo sigue bajo
+
+========================================================================
+FAMILIA PRIMARIA · sysratio · per_sample
+========================================================================
+                                                 20     25     28     30     32     35     38     40     45     50     55
+  axis__vs__generic_long                     d:  -1.87  +1.41  -2.22  -4.51  +0.09  -1.55  +1.91  +0.76  -0.85  -2.13  -1.52   max|d| L30=-4.51 p_holm=6.24e-39  <<<
+  soul_md_corto__vs__soul_elena_financial    d: +19.60 +12.52 +11.48 +11.48  +7.84 +18.81 +11.97  +9.27 +11.66 +24.68 +29.08   max|d| L55=+29.08 p_holm=6.24e-39  <<<
+  axis__vs__automata_neutro                  d:  -2.77  -1.29  -3.88  -4.34  -8.49  -4.02  -0.83  -3.04  -4.19  -7.55 -15.65   max|d| L55=-15.65 p_holm=6.24e-39  <<<
+  automata_neutro__vs__generic_long          d:  +1.00  +2.39  +1.65  +0.90  +7.79  +2.32  +2.35  +3.02  +2.86  +4.29 +11.30   max|d| L55=+11.30 p_holm=6.24e-39  <<<
+
+========================================================================
+FAMILIA PRIMARIA · sysratio · per_prompt
+========================================================================
+                                                 20     25     28     30     32     35     38     40     45     50     55
+  axis__vs__generic_long                     d:  -2.01  +1.63  -2.55  -4.77  +0.11  -1.71  +2.01  +0.85  -0.91  -2.58  -1.86   max|d| L30=-4.77 p_holm=3.13e-06  <<<
+  soul_md_corto__vs__soul_elena_financial    d: +20.78 +13.37 +12.51 +12.04  +8.24 +20.73 +12.99  +9.73 +12.93 +28.92 +32.42   max|d| L55=+32.42 p_holm=3.13e-06  <<<
+  axis__vs__automata_neutro                  d:  -2.88  -1.36  -4.18  -4.43  -9.40  -4.43  -0.90  -3.30  -4.48  -9.66 -17.64   max|d| L55=-17.64 p_holm=3.13e-06  <<<
+  automata_neutro__vs__generic_long          d:  +1.01  +2.54  +1.72  +0.91  +8.26  +2.44  +2.39  +3.21  +2.94  +4.65 +12.41   max|d| L55=+12.41 p_holm=3.13e-06  <<<
+
+========================================================================
+OTRAS MÉTRICAS · per_prompt, raw p_mw
+========================================================================
+
+--- sysfrac ---
+  axis__vs__generic_long                     d:  -2.00  +1.71  -0.99  -3.01  +1.25  -1.34  +2.12  +0.73  -0.37  -4.79  -1.04   max|d| L50=-4.79 p_mw=6.8e-08
+  soul_md_corto__vs__soul_elena_financial    d: +20.69 +13.72 +12.03 +12.20  +8.39 +19.80 +12.84 +10.58 +13.51 +32.04 +33.13   max|d| L55=+33.13 p_mw=6.8e-08
+  axis__vs__automata_neutro                  d:  -2.95  -0.69  -4.23  -8.49 -17.71 -10.48  -2.72  -5.88  -5.99 -12.97 -12.77   max|d| L32=-17.71 p_mw=6.8e-08
+  automata_neutro__vs__generic_long          d:  +1.26  +1.95  +2.89  +5.84 +16.36  +8.49  +4.06  +5.19  +4.66  +6.20  +7.60   max|d| L32=+16.36 p_mw=6.8e-08
+
+--- genfrac ---
+  axis__vs__generic_long                     d:  +2.00  -1.59  +2.99  +4.94  +0.32  +1.81  -1.96  -0.89  +1.08  +1.90  +1.96   max|d| L30=+4.94 p_mw=6.8e-08
+  soul_md_corto__vs__soul_elena_financial    d: -20.68 -12.85 -12.99 -11.74  -7.99 -21.58 -13.00  -8.51 -12.08 -23.63 -31.14   max|d| L55=-31.14 p_mw=6.8e-08
+  axis__vs__automata_neutro                  d:  +2.84  +1.54  +4.13  +2.93  +6.29  +2.50  +0.26  +2.36  +3.98  +8.41 +17.41   max|d| L55=+17.41 p_mw=6.8e-08
+  automata_neutro__vs__generic_long          d:  -0.93  -2.69  -1.35  +0.72  -5.16  -0.60  -1.80  -2.53  -2.40  -4.11 -12.59   max|d| L55=-12.59 p_mw=6.8e-08
+
+--- ent ---
+  axis__vs__generic_long                     d:  +0.87  +1.59  +0.60  +2.65  +1.33  +1.31  +0.58  -0.10  -2.10  +0.84  -1.95   max|d| L30=+2.65 p_mw=1.92e-07
+  soul_md_corto__vs__soul_elena_financial    d:  -0.37  -0.35  -0.10  -0.13  +0.17  +0.06  +0.29  +0.27  +0.10  +1.03  -0.33   max|d| L50=+1.03 p_mw=0.00512
+  axis__vs__automata_neutro                  d:  +0.34  -0.92  -0.40  -0.47  -0.11  -0.80  +0.22  -0.18  -0.67  +0.23  -1.03   max|d| L55=-1.03 p_mw=0.00195
+  automata_neutro__vs__generic_long          d:  +0.18  +2.08  +0.66  +1.67  +0.81  +1.37  +0.27  +0.10  -0.58  +0.49  +0.11   max|d| L25=+2.08 p_mw=1.58e-06
+
+========================================================================
+VEREDICTO (§5.3, t>0 sampling)
+========================================================================
+NO ES ESPECÍFICO DEL TESTIGO. axis Y automata_neutro se separan de generic_long durante la generación con sampling — igual que en t=0 y en t>0 greedy. Cualquier system prompt estructurado, no el testigo. ⚠ El sampling NO añadió varianza (CV_entre_muestras 0.0023): sysratio es casi invariante al contenido generado — sigue siendo función del system prompt. Los d siguen inflados; leer como en §1.3. El fix §5.3 no rescató el n efectivo: la línea de atención queda cerrada salvo §1.4 (pre-softmax) o una métrica genuinamente distinta.
+  axis__vs__generic_long                     per_prompt: L30 d=-4.77 p=3.13e-06  |  per_sample: L30 d=-4.51 p=6.24e-39
+  soul_md_corto__vs__soul_elena_financial    per_prompt: L55 d=+32.42 p=3.13e-06  |  per_sample: L55 d=+29.08 p=6.24e-39
+  axis__vs__automata_neutro                  per_prompt: L55 d=-17.64 p=3.13e-06  |  per_sample: L55 d=-15.65 p=6.24e-39
+  automata_neutro__vs__generic_long          per_prompt: L55 d=+12.41 p=3.13e-06  |  per_sample: L55 d=+11.30 p=6.24e-39
+
+guardado: results_attn_gen_samp/attention_gen_sampled_results.json

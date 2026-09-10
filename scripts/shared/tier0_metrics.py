@@ -75,8 +75,13 @@ def rqa_metrics(embeddings: np.ndarray, min_line_len: int = 2,
         return {"determinism": 0.0, "laminarity": 0.0, "trapping_time": 0.0,
                 "recurrence_rate": 0.0}
 
-    diffs = emb[:, None, :] - emb[None, :, :]
-    dist = np.linalg.norm(diffs, axis=-1)
+    # ||a-b||^2 = ||a||^2 + ||b||^2 - 2a.b vía la matriz de Gram — evita el
+    # tensor (T,T,D) de la resta directa, que con D grande (p.ej. 8192 en
+    # Command R) puede pasar de 2GB por trayectoria y disparar OOM del host.
+    sq_norms = np.sum(emb * emb, axis=1)
+    gram = emb @ emb.T
+    dist_sq = np.clip(sq_norms[:, None] + sq_norms[None, :] - 2.0 * gram, 0, None)
+    dist = np.sqrt(dist_sq, dtype=np.float32)
     iu = np.triu_indices(T, k=1)
     epsilon = 0.1 * float(np.mean(dist[iu])) if len(iu[0]) else 0.0
 

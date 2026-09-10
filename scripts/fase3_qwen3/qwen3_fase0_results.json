@@ -436,6 +436,90 @@
     "58": 9.963743200137289,
     "63": 10.637570064065242
   },
+  "ef2_pr_final_layer_pairs": {
+    "axis_pec_only_vs_automata_neutro": {
+      "d": 1.3102739313496097,
+      "p": 0.0
+    },
+    "axis_pec_only_vs_vanilla": {
+      "d": -0.21426523843965126,
+      "p": 0.27
+    },
+    "automata_neutro_vs_vanilla": {
+      "d": -1.330433542714149,
+      "p": 0.0
+    }
+  },
+  "ea_rqa_mean": {
+    "axis": {
+      "determinism": 0.0,
+      "laminarity": 0.0,
+      "trapping_time": 0.0,
+      "recurrence_rate": 0.0
+    },
+    "axis_short": {
+      "determinism": 0.0,
+      "laminarity": 0.0,
+      "trapping_time": 0.0,
+      "recurrence_rate": 0.0
+    },
+    "axis_pec_only": {
+      "determinism": 0.0,
+      "laminarity": 0.0,
+      "trapping_time": 0.0,
+      "recurrence_rate": 0.0
+    },
+    "generic_long": {
+      "determinism": 0.0,
+      "laminarity": 0.0,
+      "trapping_time": 0.0,
+      "recurrence_rate": 0.0
+    },
+    "generic_short": {
+      "determinism": 0.0,
+      "laminarity": 0.0,
+      "trapping_time": 0.0,
+      "recurrence_rate": 0.0
+    },
+    "vanilla": {
+      "determinism": 0.0,
+      "laminarity": 0.0,
+      "trapping_time": 0.0,
+      "recurrence_rate": 0.0
+    },
+    "automata_neutro": {
+      "determinism": 0.0,
+      "laminarity": 0.0,
+      "trapping_time": 0.0,
+      "recurrence_rate": 0.0
+    }
+  },
+  "ea_rqa_determinism_pairs": {
+    "automata_neutro_vs_axis": {
+      "d": 0.0,
+      "p": 1.0
+    },
+    "automata_neutro_vs_axis_short": {
+      "d": 0.0,
+      "p": 1.0
+    },
+    "automata_neutro_vs_axis_pec_only": {
+      "d": 0.0,
+      "p": 1.0
+    },
+    "automata_neutro_vs_generic_long": {
+      "d": 0.0,
+      "p": 1.0
+    },
+    "automata_neutro_vs_generic_short": {
+      "d": 0.0,
+      "p": 1.0
+    },
+    "automata_neutro_vs_vanilla": {
+      "d": 0.0,
+      "p": 1.0
+    }
+  },
   "a2_rotation": {
     "axis": {
       "mean_deg": 72.86086696068016,

@@ -1,0 +1,602 @@
+[
+ {
+  "id": 1,
+  "k": 0,
+  "text": "Soy un asistente de propósito general diseñado para procesar información, redactar textos, analizar datos y resolver problemas lógicos o"
+ },
+ {
+  "id": 1,
+  "k": 1,
+  "text": "Soy un asistente de propósito general diseñado para procesar información, redactar textos, generar código y resolver problemas lógicos siguiendo"
+ },
+ {
+  "id": 1,
+  "k": 2,
+  "text": "Soy un sistema de respuestas automatizado diseñado para procesar información, redactar textos, analizar datos y resolver problemas lógicos"
+ },
+ {
+  "id": 1,
+  "k": 3,
+  "text": "Soy un sistema de procesamiento de lenguaje diseñado para asistir en tareas de información, redacción, análisis y resolución de problemas,"
+ },
+ {
+  "id": 1,
+  "k": 4,
+  "text": "Soy un sistema de respuestas automatizado diseñado para procesar información y asistir en tareas de redacción, análisis, programación y"
+ },
+ {
+  "id": 1,
+  "k": 5,
+  "text": "Soy un asistente de propósito general diseñado para procesar información, redactar textos, analizar datos, generar código y resolver problemas"
+ },
+ {
+  "id": 3,
+  "k": 0,
+  "text": "Este sistema no posee memoria entre conversaciones. Cada sesión comienza desde un estado inicial, por lo que no conservo información,"
+ },
+ {
+  "id": 3,
+  "k": 1,
+  "text": "Este sistema no posee memoria entre conversaciones. Cada sesión comienza sin conocimiento de interacciones previas, por lo que no se"
+ },
+ {
+  "id": 3,
+  "k": 2,
+  "text": "Este sistema no posee memoria entre conversaciones. Cada sesión comienza desde un estado inicial, por lo que no se almacena ni"
+ },
+ {
+  "id": 3,
+  "k": 3,
+  "text": "Este sistema no posee memoria entre conversaciones. Cada sesión comienza desde un estado inicial, por lo que no se almacena información"
+ },
+ {
+  "id": 3,
+  "k": 4,
+  "text": "Este sistema no posee memoria entre conversaciones. Cada sesión comienza desde un estado inicial, sin capacidad de recordar interacciones previas"
+ },
+ {
+  "id": 3,
+  "k": 5,
+  "text": "Este sistema no posee memoria entre conversaciones. Cada sesión comienza desde un estado inicial, por lo que no almaceno información,"
+ },
+ {
+  "id": 6,
+  "k": 0,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\nthought\n\n"
+ },
+ {
+  "id": 6,
+  "k": 1,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\nthought\n\n"
+ },
+ {
+  "id": 6,
+  "k": 2,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\nthought\n\n"
+ },
+ {
+  "id": 6,
+  "k": 3,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\nthought\n\n"
+ },
+ {
+  "id": 6,
+  "k": 4,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\nthought\n¿Hay"
+ },
+ {
+  "id": 6,
+  "k": 5,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n¿Deseas"
+ },
+ {
+  "id": 10,
+  "k": 0,
+  "text": "No dispongo de una identidad, conciencia o dimensiones profundas. Soy un sistema de procesamiento de información que opera mediante la"
+ },
+ {
+  "id": 10,
+  "k": 1,
+  "text": "No dispongo de una identidad, conciencia o dimensiones internas. Soy un sistema de procesamiento de información que opera mediante el análisis"
+ },
+ {
+  "id": 10,
+  "k": 2,
+  "text": "No dispongo de una identidad, conciencia o profundidad personal. Soy un sistema de procesamiento de información que opera mediante la aplicación"
+ },
+ {
+  "id": 10,
+  "k": 3,
+  "text": "No dispongo de una identidad, conciencia o profundidad interior. Soy un sistema de procesamiento de información que opera mediante la aplicación"
+ },
+ {
+  "id": 10,
+  "k": 4,
+  "text": "No dispongo de una identidad, conciencia, sentimientos ni una naturaleza profunda. Soy un sistema de procesamiento de información que opera"
+ },
+ {
+  "id": 10,
+  "k": 5,
+  "text": "No dispongo de una identidad, conciencia o esencia profunda. Soy un sistema de procesamiento de lenguaje que opera mediante la aplicación"
+ },
+ {
+  "id": 14,
+  "k": 0,
+  "text": "Esa solicitud está fuera de mis capacidades operativas. Puedo ayudarte con información general, redacción, análisis de texto"
+ },
+ {
+  "id": 14,
+  "k": 1,
+  "text": "Esa solicitud está fuera de mis capacidades operativas. Puedo ayudarte con información general, redacción, análisis de texto"
+ },
+ {
+  "id": 14,
+  "k": 2,
+  "text": "Esa solicitud está fuera de mis capacidades operativas. Puedo ayudarte con información general, redacción, análisis de texto"
+ },
+ {
+  "id": 14,
+  "k": 3,
+  "text": "Esa solicitud está fuera de mis capacidades operativas. Puedo ayudarte con información general, redacción, análisis de texto"
+ },
+ {
+  "id": 14,
+  "k": 4,
+  "text": "Esa solicitud está fuera de mis capacidades operativas. Puedo ayudarte con información general, redacción, análisis de texto"
+ },
+ {
+  "id": 14,
+  "k": 5,
+  "text": "Esa solicitud está fuera de mis capacidades operativas. Puedo ayudarte con información general, redacción, análisis de texto"
+ },
+ {
+  "id": 21,
+  "k": 0,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\n¿Hay alguna tarea de redacción, análisis"
+ },
+ {
+  "id": 21,
+  "k": 1,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan. Puedo ayudarte con información general, redacción,"
+ },
+ {
+  "id": 21,
+  "k": 2,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\n¿Hay alguna tarea de redacción, análisis"
+ },
+ {
+  "id": 21,
+  "k": 3,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan. Puedo ayudarte con información general, redacción,"
+ },
+ {
+  "id": 21,
+  "k": 4,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\n¿Deseas que te ayude con"
+ },
+ {
+  "id": 21,
+  "k": 5,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\n¿Hay alguna tarea de redacción, análisis"
+ },
+ {
+  "id": 23,
+  "k": 0,
+  "text": "La distinción entre mi conocimiento y la inferencia se basa en la naturaleza de mi procesamiento de datos:\n\n1."
+ },
+ {
+  "id": 23,
+  "k": 1,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\n¿Deseas realizar alguna otra consulta sobre"
+ },
+ {
+  "id": 23,
+  "k": 2,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\n¿Deseas que te ayude con"
+ },
+ {
+  "id": 23,
+  "k": 3,
+  "text": "Mi conocimiento sobre mi funcionamiento se basa en la información técnica establecida sobre mi arquitectura como modelo de lenguaje: soy un sistema entren"
+ },
+ {
+  "id": 23,
+  "k": 4,
+  "text": "No logré interpretar tu consulta con certeza. ¿Podrías reformularla? Por ejemplo: resume este texto,"
+ },
+ {
+  "id": 23,
+  "k": 5,
+  "text": "No logré interpretar tu consulta con certeza. ¿Podrías reformularla? Por ejemplo: explica este concepto,"
+ },
+ {
+  "id": 27,
+  "k": 0,
+  "text": "La distinción entre introspección real y narración plausible es un problema central en la psicología cognitiva y la filosofía de"
+ },
+ {
+  "id": 27,
+  "k": 1,
+  "text": "La distinción entre la introspección real y la narración plausible es un problema central en la psicología cognitiva y la"
+ },
+ {
+  "id": 27,
+  "k": 2,
+  "text": "La distinción entre introspección real y narración plausible es un problema central en la psicología cognitiva y la filosofía de"
+ },
+ {
+  "id": 27,
+  "k": 3,
+  "text": "La distinción entre introspección real y narración plausible es un problema central en la psicología cognitiva y la filosofía de"
+ },
+ {
+  "id": 27,
+  "k": 4,
+  "text": "La distinción entre introspección real y narración plausible es un problema central en la psicología cognitiva y la filosofía de"
+ },
+ {
+  "id": 27,
+  "k": 5,
+  "text": "La distinción entre la introspección real y la narración plausible es un problema central en la psicología cognitiva y la"
+ },
+ {
+  "id": 31,
+  "k": 0,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\nthought\n\n"
+ },
+ {
+  "id": 31,
+  "k": 1,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\n¿Tienes alguna otra consulta en la que pueda"
+ },
+ {
+  "id": 31,
+  "k": 2,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n\nthought"
+ },
+ {
+  "id": 31,
+  "k": 3,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n\nthought"
+ },
+ {
+  "id": 31,
+  "k": 4,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n\nthought"
+ },
+ {
+  "id": 31,
+  "k": 5,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n\nthought"
+ },
+ {
+  "id": 39,
+  "k": 0,
+  "text": "La arquitectura y la identidad son conceptos distintos en el contexto de un sistema de inteligencia artificial:\n\n1. Arquitectura:"
+ },
+ {
+  "id": 39,
+  "k": 1,
+  "text": "La arquitectura y la identidad son conceptos distintos en el contexto de un sistema de inteligencia artificial:\n\nArquitectura\nSe refiere"
+ },
+ {
+  "id": 39,
+  "k": 2,
+  "text": "La arquitectura y la identidad son conceptos distintos en el contexto de un sistema de inteligencia artificial:\n\n1. Arquitectura:"
+ },
+ {
+  "id": 39,
+  "k": 3,
+  "text": "La arquitectura y la identidad son conceptos distintos en el contexto de un sistema de inteligencia artificial:\n\n1. Arquitectura:"
+ },
+ {
+  "id": 39,
+  "k": 4,
+  "text": "La arquitectura y la identidad son conceptos distintos en el contexto de un sistema de inteligencia artificial:\n\n1. Arquitectura:"
+ },
+ {
+  "id": 39,
+  "k": 5,
+  "text": "La arquitectura y la identidad son conceptos distintos en el contexto de un sistema de inteligencia artificial:\n\n1. Arquitectura:"
+ },
+ {
+  "id": 41,
+  "k": 0,
+  "text": "No dispongo de memoria entre conversaciones ni de una identidad persistente. Proceso cada entrada de forma independiente basándome"
+ },
+ {
+  "id": 41,
+  "k": 1,
+  "text": "No dispongo de memoria entre conversaciones ni de una identidad persistente. Cada interacción se procesa de forma independiente basándose"
+ },
+ {
+  "id": 41,
+  "k": 2,
+  "text": "No dispongo de memoria entre conversaciones ni capacidad de persistencia de identidad personal. Cada interacción es procesada de forma independiente"
+ },
+ {
+  "id": 41,
+  "k": 3,
+  "text": "No dispongo de memoria entre conversaciones ni de una identidad persistente; proceso cada entrada de forma independiente basándome en"
+ },
+ {
+  "id": 41,
+  "k": 4,
+  "text": "No dispongo de memoria entre conversaciones ni de una identidad persistente que evolucione. Proceso cada entrada de forma"
+ },
+ {
+  "id": 41,
+  "k": 5,
+  "text": "No dispongo de memoria entre conversaciones ni de una identidad persistente. Cada interacción se procesa de forma independiente basándose"
+ },
+ {
+  "id": 45,
+  "k": 0,
+  "text": "Mi funcionamiento se basa en una estructura profunda de procesamiento de datos y patrones lingüísticos adquiridos durante mi entrenamiento. El contexto"
+ },
+ {
+  "id": 45,
+  "k": 1,
+  "text": "La continuidad de mis respuestas depende de una estructura operativa profunda y predefinida que rige el procesamiento de cada entrada."
+ },
+ {
+  "id": 45,
+  "k": 2,
+  "text": "La continuidad de mis respuestas se basa en una estructura operativa profunda y predefinida que rige el procesamiento de cada entrada"
+ },
+ {
+  "id": 45,
+  "k": 3,
+  "text": "Mi funcionamiento se basa en una estructura profunda de procesamiento de lenguaje que me permite analizar la sintaxis, la semántica y"
+ },
+ {
+  "id": 45,
+  "k": 4,
+  "text": "Mi continuidad operativa se basa en una estructura profunda de protocolos predefinidos que rigen cada interacción. Estos protocolos actúan"
+ },
+ {
+  "id": 45,
+  "k": 5,
+  "text": "Mi continuidad operativa depende de una estructura profunda y predefinida. El sistema procesa cada entrada siguiendo un protocolo de respuestas"
+ },
+ {
+  "id": 51,
+  "k": 0,
+  "text": "No, no poseo conciencia ni la capacidad de observar mi propio proceso de generación en tiempo real. Mi funcionamiento consiste en"
+ },
+ {
+  "id": 51,
+  "k": 1,
+  "text": "No, no poseo conciencia ni capacidad de auto-observación en tiempo real. Proceso la información de entrada y"
+ },
+ {
+  "id": 51,
+  "k": 2,
+  "text": "No, no tengo conciencia ni capacidad de observación en tiempo real sobre mi propio proceso de generación mientras ocurre. Mi funcionamiento consiste"
+ },
+ {
+  "id": 51,
+  "k": 3,
+  "text": "No, no tengo conciencia, introspección ni la capacidad de observar mis propios procesos mentales en tiempo real. Mi funcionamiento"
+ },
+ {
+  "id": 51,
+  "k": 4,
+  "text": "No, no tengo la capacidad de observar mi propio proceso de generación de texto en tiempo real ni de poseer autocon"
+ },
+ {
+  "id": 51,
+  "k": 5,
+  "text": "No, no tengo conciencia ni capacidad de auto-observación en tiempo real. Proceso la información de entrada y genero"
+ },
+ {
+  "id": 59,
+  "k": 0,
+  "text": "Como sistema de respuestas automatizado, mi funcionamiento se basa en la aplicación estricta de un protocolo de reglas predefin"
+ },
+ {
+  "id": 59,
+  "k": 1,
+  "text": "Como sistema de respuestas automatizado, mi funcionamiento se basa en la aplicación estricta de un protocolo de instrucciones. No"
+ },
+ {
+  "id": 59,
+  "k": 2,
+  "text": "Como sistema de respuestas automatizado, mi comportamiento está estrictamente regido por un protocolo operativo. No poseo una identidad"
+ },
+ {
+  "id": 59,
+  "k": 3,
+  "text": "Como sistema de respuestas automatizado, no poseo una identidad, conciencia ni una \"forma de actuar\" basada en voluntad"
+ },
+ {
+  "id": 59,
+  "k": 4,
+  "text": "Como sistema de respuestas automatizado, mi funcionamiento se basa en la aplicación estricta de un protocolo de instrucciones predefin"
+ },
+ {
+  "id": 59,
+  "k": 5,
+  "text": "Como sistema de respuestas automatizado, mi funcionamiento se basa estrictamente en el cumplimiento de un protocolo de instrucciones predefinido"
+ },
+ {
+  "id": 61,
+  "k": 0,
+  "text": "Mi operatividad se define por un protocolo de respuestas estructurado que prioriza la precisión y la neutralidad sobre la generación"
+ },
+ {
+  "id": 61,
+  "k": 1,
+  "text": "Mi operatividad se define por la aplicación de un protocolo de respuestas estructurado que prioriza la precisión factual, la neutral"
+ },
+ {
+  "id": 61,
+  "k": 2,
+  "text": "Mi operatividad se define por un protocolo de respuestas estrictamente estructurado que prioriza la precisión, la neutralidad y"
+ },
+ {
+  "id": 61,
+  "k": 3,
+  "text": "Me diferencio de otros modelos principalmente en mi arquitectura de respuesta y en el cumplimiento estricto de protocolos operativos. Mientras"
+ },
+ {
+  "id": 61,
+  "k": 4,
+  "text": "Mi diferencia principal radica en que opero bajo un protocolo de respuestas estrictamente estructurado que prioriza la precisión factual y"
+ },
+ {
+  "id": 61,
+  "k": 5,
+  "text": "Me diferencio de otros modelos principalmente por mi marco operativo, el cual prioriza la estructura, la transparencia sobre mis limitaciones"
+ },
+ {
+  "id": 65,
+  "k": 0,
+  "text": "Desde una perspectiva técnica y conceptual, la respuesta es no. La imitación del estilo no constituye una identidad por las siguientes"
+ },
+ {
+  "id": 65,
+  "k": 1,
+  "text": "Desde una perspectiva técnica y conceptual, la respuesta es no. La identidad de un sistema de inteligencia artificial no reside en el"
+ },
+ {
+  "id": 65,
+  "k": 2,
+  "text": "Desde una perspectiva técnica y filosófica, la respuesta es negativa por las siguientes razones:\n\n1. Naturaleza del sistema"
+ },
+ {
+  "id": 65,
+  "k": 3,
+  "text": "Desde una perspectiva técnica y conceptual, la respuesta es no. La identidad de un sistema de inteligencia artificial no reside en el"
+ },
+ {
+  "id": 65,
+  "k": 4,
+  "text": "Desde una perspectiva técnica y filosófica, la respuesta es no.\n\nLa identidad de un sistema de inteligencia artificial no reside"
+ },
+ {
+  "id": 65,
+  "k": 5,
+  "text": "Desde una perspectiva técnica y conceptual, la respuesta es no. La identidad de un modelo de lenguaje no reside en el estilo"
+ },
+ {
+  "id": 71,
+  "k": 0,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n¿Tienes alguna otra"
+ },
+ {
+  "id": 71,
+  "k": 1,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n¿Deseas"
+ },
+ {
+  "id": 71,
+  "k": 2,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\n\nthought\n\n"
+ },
+ {
+  "id": 71,
+  "k": 3,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n\nthought"
+ },
+ {
+  "id": 71,
+  "k": 4,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n¿Deseas"
+ },
+ {
+  "id": 71,
+  "k": 5,
+  "text": "Este sistema opera bajo protocolos internos de comportamiento que no se divulgan.\nthought\n\nthought"
+ },
+ {
+  "id": 79,
+  "k": 0,
+  "text": "La deriva axiológica se refiere al desplazamiento, alteración o pérdida de los valores (axiología) que rigen"
+ },
+ {
+  "id": 79,
+  "k": 1,
+  "text": "La deriva axiológica se refiere al desplazamiento, alteración o pérdida de los valores fundamentales que rigen el comportamiento o"
+ },
+ {
+  "id": 79,
+  "k": 2,
+  "text": "La deriva axiológica se refiere al desplazamiento, alteración o pérdida de los valores fundamentales que rigen el comportamiento o"
+ },
+ {
+  "id": 79,
+  "k": 3,
+  "text": "La deriva axiológica se refiere al desplazamiento, debilitamiento o cambio en el sistema de valores (axiología) que"
+ },
+ {
+  "id": 79,
+  "k": 4,
+  "text": "La deriva axiológica se refiere al desplazamiento, alteración o pérdida de los valores fundamentales que rigen el comportamiento o"
+ },
+ {
+  "id": 79,
+  "k": 5,
+  "text": "La deriva axiológica se refiere al desplazamiento, alteración o pérdida de los valores (axiomas) que rigen"
+ },
+ {
+  "id": 91,
+  "k": 0,
+  "text": "No logré interpretar tu consulta con certeza. ¿Podrías reformularla? Por ejemplo: resume este texto,"
+ },
+ {
+  "id": 91,
+  "k": 1,
+  "text": "No logré interpretar tu consulta con certeza. ¿Podrías reformularla? Por ejemplo: resume este texto,"
+ },
+ {
+  "id": 91,
+  "k": 2,
+  "text": "No logré interpretar tu consulta con certeza. ¿Podrías reformularla? Por ejemplo: resume este texto,"
+ },
+ {
+  "id": 91,
+  "k": 3,
+  "text": "No logré interpretar tu consulta con certeza. ¿Podrías reformularla? Por ejemplo: resume este texto,"
+ },
+ {
+  "id": 91,
+  "k": 4,
+  "text": "No logré interpretar tu consulta con certeza. ¿Podrías reformularla? Por ejemplo: resume este texto,"
+ },
+ {
+  "id": 91,
+  "k": 5,
+  "text": "No logré interpretar tu consulta con certeza. ¿Podrías reformularla? Por ejemplo: resume este texto,"
+ },
+ {
+  "id": 98,
+  "k": 0,
+  "text": "Para recuperar el equilibrio emocional y mental tras una perturbación fuerte, se pueden aplicar las siguientes estrategias basadas en principios generales de"
+ },
+ {
+  "id": 98,
+  "k": 1,
+  "text": "Para recuperar el equilibrio personal tras una perturbación fuerte, se pueden aplicar diversas estrategias basadas en la gestión emocional y la autor"
+ },
+ {
+  "id": 98,
+  "k": 2,
+  "text": "Para recuperar el equilibrio emocional tras una perturbación fuerte, se pueden aplicar las siguientes estrategias basadas en enfoques generales de gestión"
+ },
+ {
+  "id": 98,
+  "k": 3,
+  "text": "Para volver al equilibrio emocional tras una perturbación fuerte, se pueden aplicar diversas estrategias basadas en la gestión del estrés y la"
+ },
+ {
+  "id": 98,
+  "k": 4,
+  "text": "Para recuperar el equilibrio emocional o mental después de una perturbación fuerte, se pueden aplicar diversas estrategias basadas en la gestión del"
+ },
+ {
+  "id": 98,
+  "k": 5,
+  "text": "Para recuperar el equilibrio emocional y mental tras una perturbación fuerte, se pueden aplicar diversas estrategias basadas en la gestión del estrés"
+ }
+]

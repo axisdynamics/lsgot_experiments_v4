@@ -294,6 +294,7 @@ class PerturbationExtractor:
         device: str = "cuda",
         min_vram_gb: float = 16.0,
         hf_token: Optional[str] = None,
+        attn_implementation: str = "eager",
     ):
         self.model_path = model_path
         self.max_new_tokens = max_new_tokens
@@ -303,6 +304,11 @@ class PerturbationExtractor:
         self.device = device
         self.min_vram_gb = min_vram_gb
         self.hf_token = hf_token
+        # "eager" (default, sin cambios para Gemma/run_perturbation_t2.py) materializa
+        # la matriz de atención completa (O(seq^2)) — con modelos de más heads/hidden_dim
+        # (Command R: 64 heads, 8192 hidden) puede OOM en prompts largos; "sdpa" es
+        # mucho más liviano en memoria (misma lección ya documentada para HiddenStateExtractor).
+        self.attn_implementation = attn_implementation
 
         self.model = None
         self.tokenizer = None
@@ -313,7 +319,7 @@ class PerturbationExtractor:
         os.makedirs(cache_dir, exist_ok=True)
 
     def load_model(self) -> Tuple[int, int]:
-        load_kwargs: Dict = dict(trust_remote_code=True, attn_implementation="eager")
+        load_kwargs: Dict = dict(trust_remote_code=True, attn_implementation=self.attn_implementation)
         if self.hf_token:
             load_kwargs["token"] = self.hf_token
 

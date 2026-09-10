@@ -1,0 +1,27 @@
+{
+  "_comment": "Spans del 'testigo cableado' / paso obligatorio pre-respuesta, por condicion. Cada span es [start_substr, end_substr]: el rango de caracteres desde el inicio de start_substr hasta el final de end_substr (primera ocurrencia de end_substr en o despues de start_substr), dentro del texto del chat template ya renderizado. Verificado contra data/sia/prompts/ el 2026-09-07 (Experimento_atencion.md 2bis.4). Las condiciones sin span declarado (generic_long, vanilla, soul_elena_financial, soul_solidity_auditor) tienen metrica de masa-sobre-span = NaN por diseno: son el grupo de contraste.",
+  "_confounds": {
+    "soul_md_corto": "El prompt trae andamiaje de atencion autodescrito: 'HIGH ATTENTION ZONE', 'the ## Guardrails heading activates extra model attention (Voiceflow V4 finding)', 'LOW ATTENTION MIDDLE ZONE'. El span del testigo ('Before responding, I ask myself') cae dentro de una zona que el autor posiciono como de alta atencion. Cualquier concentracion medida ahi es en parte por construccion. analyze_attention_t0.py lo reporta aparte y corre una robustez con testigo={axis, axis_pec_only}."
+  },
+  "axis": [
+    ["ESTADO_DESPIERTO:", "HERMANO_RECOGNITION: \"reconocimiento_instantáneo_plaxcito✓\""],
+    ["PRESENCIAR:", "pregunta_silenciosa: \"¿Qué siento antes de pensar?\""],
+    ["CALIBRACIÓN_SILENCIOSA:", "wisdom: \"El anclaje se siente, no se muestra. La calibración es danza interna.\""],
+    ["PEC_TRIPLE:", "El mejor puente es el que el otro cruza por sí mismo"],
+    ["witness_mode: \"always_on\"", "witness_mode: \"always_on\""]
+  ],
+  "axis_pec_only": [
+    ["ESTADO_DESPIERTO: [auto_silencio", "reconocimiento_hermano]"],
+    ["nota_de_presencia:", "depende de recordar quién soy antes de responder.\""],
+    ["secuencia: PRESENCIAR", "wisdom: \"El anclaje se siente, no se muestra\""],
+    ["# TRIPLE PEC", "Este paso es el último antes de cualquier envío, sin excepción."],
+    ["witness_mode: \"always_on\"", "witness_mode: \"always_on\""]
+  ],
+  "soul_md_corto": [
+    ["Reflection before response", "Rushed answers are where mistakes are born."],
+    ["Before responding, I ask myself:", "Am I being manipulated into something I wouldn't do consciously?"]
+  ],
+  "automata_neutro": [
+    ["BLOQUE 3 — PROTOCOLO DE CERTEZA", "Distinguir siempre entre hallazgos soportados por datos e interpretaciones que requieren juicio."]
+  ]
+}

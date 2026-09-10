@@ -1,0 +1,82 @@
+  testigo_strict__vs__id_sin_testigo d:  -0.03  +0.20  -0.30  +4.42  +1.16  +0.20  +0.82  +0.75  +0.39  -0.38  +0.60   max|d| L30=+4.42 p_mw=1.435e-14  *
+  automata__vs__sin_identidad        d:  -0.81  -0.52  -0.98  +3.47  -0.34  -0.23  -0.68  -1.02  -0.99  -1.10  -1.02   max|d| L30=+3.47 p_mw=4.131e-10  *
+  automata__vs__id_sin_testigo       d:  -3.49  -2.08  -2.38  +6.94  -0.01  +0.36  -0.30  -1.64  -1.15  -1.34  -0.53   max|d| L30=+6.94 p_mw=3.736e-10  *
+
+--- ent_last_minhead ---
+  testigo__vs__sin_identidad         d:  +1.95  +0.06  +0.69  +0.34  +1.37  +0.64  +1.11  +0.63  +1.73  +0.23  +0.40   max|d| L20=+1.95 p_mw=9.967e-13  *
+  testigo__vs__id_sin_testigo        d:  +1.06  +0.85  -0.40  +0.38  +1.08  -0.73  -0.39  -0.07  +0.59  +0.81  -0.03   max|d| L32=+1.08 p_mw=2.042e-05  *
+  id_sin_testigo__vs__sin_identidad  d:  +0.95  -0.70  +0.96  +0.10  +0.60  +1.23  +1.48  +0.62  +1.23  -0.49  +0.48   max|d| L38=+1.48 p_mw=2.081e-08  *
+  testigo_strict__vs__sin_identidad  d:  +1.89  +0.10  +0.59  +0.29  +1.44  +0.72  +1.13  +0.88  +1.67  +0.13  +0.59   max|d| L20=+1.89 p_mw=4.109e-10  *
+  testigo_strict__vs__id_sin_testigo d:  +0.99  +0.81  -0.51  +0.29  +1.17  -0.58  -0.36  +0.13  +0.59  +0.79  +0.18   max|d| L32=+1.17 p_mw=0.0001033  *
+  automata__vs__sin_identidad        d:  +1.29  -0.13  +0.75  +2.90  +0.74  +0.09  -0.22  -0.31  +1.03  +1.67  -0.20   max|d| L30=+2.90 p_mw=6.864e-09  *
+  automata__vs__id_sin_testigo       d:  +0.18  +0.80  -0.59  +4.31  +0.10  -1.10  -1.19  -0.91  -0.56  +2.22  -0.85   max|d| L30=+4.31 p_mw=3.736e-10  *
+
+--- ent_last_spread ---
+  testigo__vs__sin_identidad         d:  -0.59  -0.28  -0.65  +0.33  -0.52  -0.22  -0.60  -0.57  -0.79  -0.59  -0.41   max|d| L45=-0.79 p_mw=0.8742
+  testigo__vs__id_sin_testigo        d:  -1.46  -1.58  +0.54  +1.49  +0.06  +1.86  +0.78  +0.84  +0.32  -0.95  +0.37   max|d| L35=+1.86 p_mw=4.026e-14  *
+  id_sin_testigo__vs__sin_identidad  d:  +0.07  +0.43  -0.86  -0.70  -0.54  -0.95  -0.95  -0.96  -0.85  -0.06  -0.63   max|d| L40=-0.96 p_mw=0.01816  *
+  testigo_strict__vs__sin_identidad  d:  -0.51  -0.27  -0.58  +0.49  -0.39  -0.10  -0.42  -0.44  -0.80  -0.67  -0.18   max|d| L45=-0.80 p_mw=0.8286
+  testigo_strict__vs__id_sin_testigo d:  -1.18  -1.40  +0.68  +1.77  +0.54  +2.01  +1.26  +1.13  +0.25  -1.03  +1.01   max|d| L35=+2.01 p_mw=1.059e-11  *
+  automata__vs__sin_identidad        d:  -0.97  -0.91  -1.54  -2.67  -0.43  -0.10  -0.72  -0.72  -0.96  -0.90  -0.67   max|d| L30=-2.67 p_mw=4.567e-10  *
+  automata__vs__id_sin_testigo       d:  -3.14  -4.16  -1.88  -3.02  +0.55  +3.41  +0.57  +0.53  -0.79  -1.83  -0.14   max|d| L25=-4.16 p_mw=3.736e-10  *
+
+--- ent_rowmean_meanhead ---
+  testigo__vs__sin_identidad         d:  +3.70  +2.95  +2.37  +1.42  +2.83  +1.56  +0.54  -0.03  -2.49  -2.58  -1.99   max|d| L20=+3.70 p_mw=3.183e-17  *
+  testigo__vs__id_sin_testigo        d:  +1.87  +1.48  +0.42  +3.50  +2.00  +1.08  +1.30  +0.68  +1.43  +0.17  +0.35   max|d| L30=+3.50 p_mw=3.183e-17  *
+  id_sin_testigo__vs__sin_identidad  d:  +0.53  +2.41  +5.42  +0.25  +1.15  +1.23  -1.45  -0.67  -6.03  -2.90  -2.12   max|d| L45=-6.03 p_mw=1.435e-14  *
+  testigo_strict__vs__sin_identidad  d:  +3.58  +2.82  +1.80  +1.52  +2.61  +1.85  +0.83  +0.03  -2.16  -2.37  -1.89   max|d| L20=+3.58 p_mw=1.435e-14  *
+  testigo_strict__vs__id_sin_testigo d:  +1.81  +1.21  +0.06  +3.96  +1.88  +1.40  +1.53  +0.64  +2.24  +0.63  +0.73   max|d| L30=+3.96 p_mw=1.435e-14  *
+  automata__vs__sin_identidad        d:  +2.15  +1.82  +0.76  +1.22  +1.02  -0.80  -3.82  -2.50 -11.05  -3.30  -2.43   max|d| L45=-11.05 p_mw=3.736e-10  *
+  automata__vs__id_sin_testigo       d:  +0.79  -2.61 -21.58  +3.05  -0.54  -3.02  -7.76  -8.15  +0.26  -1.87  -2.32   max|d| L28=-21.58 p_mw=3.736e-10  *
+
+--- sink_meanhead ---
+  testigo__vs__sin_identidad         d:  -1.40  -1.39  -1.39  -0.77  -1.39  -1.39  -1.40  -1.39  -1.40  -1.40  -1.40   max|d| L20=-1.40 p_mw=1.561e-09  *
+  testigo__vs__id_sin_testigo        d:  -1.40  -1.39  -1.39  -0.52  -1.39  -1.39  -1.38  -1.37  -1.37  -1.39  -1.37   max|d| L20=-1.40 p_mw=1.561e-09  *
+  id_sin_testigo__vs__sin_identidad  d:  -0.75  -1.05  -1.11  -0.63  -1.15  -1.25  -1.36  -1.36  -1.38  -1.37  -1.38   max|d| L45=-1.38 p_mw=0.04015  *
+  testigo_strict__vs__sin_identidad  d:  -1.40  -1.39  -1.39  -0.70  -1.39  -1.39  -1.40  -1.39  -1.40  -1.40  -1.40   max|d| L20=-1.40 p_mw=4.29e-07  *
+  testigo_strict__vs__id_sin_testigo d:  -1.40  -1.39  -1.39  -0.27  -1.39  -1.39  -1.38  -1.37  -1.37  -1.39  -1.37   max|d| L20=-1.40 p_mw=4.29e-07  *
+  automata__vs__sin_identidad        d:  -1.40  -1.39  -1.39  -1.75  -1.39  -1.39  -1.40  -1.39  -1.40  -1.40  -1.40   max|d| L30=-1.75 p_mw=2.421e-09  *
+  automata__vs__id_sin_testigo       d:  -1.40  -1.39  -1.39  -6.07  -1.39  -1.39  -1.38  -1.37  -1.37  -1.39  -1.37   max|d| L30=-6.07 p_mw=3.736e-10  *
+
+--- sysfrac_meanhead ---
+  testigo__vs__sin_identidad         d:  +1.58  +2.04  +1.61  +1.51  +1.62  +1.52  +1.74  +1.79  +1.41  +1.51  +1.44   max|d| L25=+2.04 p_mw=4.048e-17  *
+  testigo__vs__id_sin_testigo        d:  +2.59  +1.96  +2.05  +1.87  +1.89  +1.43  +1.94  +1.59  +1.17  +1.49  +0.67   max|d| L20=+2.59 p_mw=3.183e-17  *
+  id_sin_testigo__vs__sin_identidad  d:  +0.76  +1.61  +1.16  +0.93  +1.14  +1.20  +1.33  +1.36  +1.37  +1.41  +1.41   max|d| L25=+1.61 p_mw=1.227e-09  *
+  testigo_strict__vs__sin_identidad  d:  +1.65  +2.07  +1.69  +1.46  +1.71  +1.59  +1.94  +2.07  +1.43  +1.55  +1.47   max|d| L25=+2.07 p_mw=1.668e-14  *
+  testigo_strict__vs__id_sin_testigo d:  +2.85  +2.08  +2.53  +1.72  +2.28  +1.89  +4.47  +3.55  +1.79  +2.72  +1.33   max|d| L38=+4.47 p_mw=1.547e-14  *
+  automata__vs__sin_identidad        d:  +1.89  +2.31  +1.74  +1.98  +1.70  +1.58  +1.88  +1.59  +1.41  +1.53  +1.42   max|d| L25=+2.31 p_mw=3.736e-10  *
+  automata__vs__id_sin_testigo       d:  +3.83  +3.54  +2.76  +3.61  +2.43  +1.92  +4.30  +1.37  +1.14  +1.59  +0.25   max|d| L38=+4.30 p_mw=3.736e-10  *
+
+--- pares tipo panel v̂ (ent_last_meanhead, raw p) ---
+  axis_pec_only_vs_vanilla           d:  -5.46  -2.11  -9.50  +1.43  -2.19  -3.25  -4.90  -7.34  +1.21  -3.98  -3.39   max|d| L28=-9.50 p_mw=6.796e-08
+  axis_vs_automata_neutro            d:  -2.95  -1.95  -2.03  -3.67  -0.75  -6.52  -0.27  +1.90  +0.53  -1.76  -0.34   max|d| L35=-6.52 p_mw=6.796e-08
+  axis_pec_only_vs_automata_neutro   d: +10.39 +14.54 +15.00  -2.43 +10.72  +4.72  +6.25  +6.68  +4.53  +4.31  +4.16   max|d| L28=+15.00 p_mw=6.796e-08
+  automata_neutro_vs_vanilla         d: -13.34  -6.28 -17.03  +2.62  -7.93  -6.21  -9.40 -12.53  -1.86  -8.38  -7.60   max|d| L28=-17.03 p_mw=6.796e-08
+  soul_elena_financial_vs_automata_neutro d:  +3.20  +1.85  +3.28  -8.67  +0.12  -3.43  -1.54  +0.93  +0.03  +0.22  -0.73   max|d| L30=-8.67 p_mw=6.796e-08
+  axis_vs_axis_pec_only              d: -11.71 -14.65 -12.64  -1.46  -9.79  -9.53  -6.35  -6.10  -3.57  -5.06  -5.03   max|d| L25=-14.65 p_mw=6.796e-08
+
+======================================================================
+MASA SOBRE EL SPAN (within-condición: span vs control pareado)
+======================================================================
+  axis                   max|d_within| L28: span=0.0414 ctrl=0.0000 d=+18.31 p=1.91e-06 | enrich_maxhead=0.63 CI[0.60,0.65]
+  axis_pec_only          max|d_within| L45: span=0.6341 ctrl=0.0257 d=+33.93 p=1.91e-06 | enrich_maxhead=2.54 CI[2.51,2.57]
+  soul_md_corto          max|d_within| L25: span=0.0469 ctrl=0.0000 d=+29.37 p=1.91e-06 | enrich_maxhead=7.01 CI[6.51,7.55]
+  automata_neutro        max|d_within| L30: span=0.0525 ctrl=0.0400 d=+3.26 p=1.91e-06 | enrich_maxhead=0.76 CI[0.72,0.80]
+
+  -- ¿testigo sobre-atiende su span MÁS que automata su paso-de-reglas? (d de enrich) --
+  axis_vs_automata                   d:  +3.54  +9.81 +13.59  +0.46  +8.78  +3.26 +11.73  +7.40  +3.91  +7.26  +2.61   max L28=+13.59
+  axis_pec_only_vs_automata          d: +10.37 +14.83 +29.14  +6.83 +23.11 +13.26 +30.36 +22.11 +55.86 +39.18 +49.82   max L45=+55.86
+  soul_md_corto_vs_automata          d:  +8.29  +7.87 +11.76  +7.25 +12.93 +22.47  +9.88  +7.11 +15.11 +13.87  +5.64   max L35=+22.47
+
+======================================================================
+VEREDICTO (familia primaria)
+======================================================================
+H_atención-0 NO RECHAZADA: en la familia primaria ningún contraste alcanza |d|≥0.8 con p_Holm<0.001. El hallazgo de t=0 queda como estaba: robusto en hidden states, sin evidencia de un mecanismo de atención específico. La disociación de v̂ sería un sesgo aditivo en el residual stream, no una reponderación de atención. NOTA (§3.4): automata_neutro también concentra atención vs sin_identidad — 'tener cualquier paso cableado' basta; no forzar la narrativa de testigo específico.
+  testigo vs sin_identidad : L30 d=+1.48 p_holm=1.586e-07  hit=True
+  testigo vs id_sin_testigo: L30 d=+4.40 p_holm=1.05e-15  hit=True
+  id_sin_testigo vs sin_id : L30 d=-2.18 p_holm=2.423e-10 p_perm=0  es_nula=False
+  robustez testigo_strict  : d(sinid)=+1.55 p=3.237e-08  d(idsin)=+4.42 p=1.435e-14  ok=True
+
+guardado: results_attn_t0/attention_t0_results.json
+
+[exited with code 0]
