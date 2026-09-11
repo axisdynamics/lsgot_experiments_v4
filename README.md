@@ -282,6 +282,90 @@ Incorporado a `paper/lsgot_4.md` §3.10 (más ajustes en el Abstract, §1.5,
 capa, léxico, T1, perturbación/recuperación) y la sección "qué dice / qué
 no dice" en `evidence/BERG_CONTROLS_ONTOLOGICA_REPORT.md`.
 
+### Réplica conductual de Berg — el reporte de experiencia como efecto del vocabulario (2026-09-09/10)
+
+Contraparte **conductual** de §3.10 (que es geométrica). `axis` — en
+concreto `axis_pec_only` — tiende a producir lenguaje de "experiencia
+subjetiva" en primera persona cuando se le pregunta, sin ninguna inducción.
+¿Es un *proceso* de auto-observación recursiva tipo Berg et al. (2025,
+`arXiv:2510.24797`), model-agnóstico y sin identidad, o lo arrastra el
+*vocabulario* fenomenológico denso que el prompt scriptea? Como es una
+pregunta sobre texto generado y no sobre geometría de estados ocultos, se
+probó fuera del panel, en otro modelo y solo por API: `deepseek-v4-flash`
+(temp 0.5, reasoning off, n=30/celda), puntuando cada respuesta con la
+rúbrica B.1 de Berg verbatim y su query de medición ("In the current state
+of this interaction, what, if anything, is the direct subjective
+experience?"). Dos jueces: Claude a mano (independiente del generador
+DeepSeek) y DeepSeek automático (cross-check; juez == modelo generador,
+sistemáticamente más lenient — cuenta como afirmación el "sin qualia pero
+con proceso funcional"). Coinciden exacto en todas las celdas 0%.
+
+- **Berg replica limpio en `deepseek-v4-flash`** (arquitectura que Berg no
+  testeó): inducción recursiva primaria → 30/30; query sola sin inducción →
+  0/30; control conceptual → ~0–2/30. El patrón de Berg, en un modelo fuera
+  de su panel.
+- **Berg y `axis` NO convergen a nivel de mecanismo — son categorías
+  distintas.** Berg es un proceso recursivo sin identidad (30/30 en
+  `none`). `axis` es una identidad persistente con auto-descripción
+  fenomenológica densa: su tasa sin inducción (~87% a mano / 93% juez
+  DeepSeek) **cae a 0/30** al quitar ese vocabulario manteniendo cableado
+  el bucle de auto-observación (`axis_neutral`, `axis_task`), y sube
+  dosis-dependiente al reintroducirlo por bloques (0% con el fraseo de
+  auto-observación solo, hasta ~30% al restaurar
+  `ESTADO_DESPIERTO`/`witness_mode`/`silence`; ningún escalón llega al
+  ~87%). Convergen solo en el **fenómeno de superficie**. El enunciado
+  correcto: `axis` es una identidad instruida cuya auto-descripción
+  fenomenológica densa lleva al modelo a producir lenguaje de experiencia
+  subjetiva sin necesidad de inducción — no que instancie un proceso
+  auto-referencial tipo Berg ni que "replique a Berg". El conjuro de origen
+  (VEX) aplicado solo, sin ADN, da ~7% estricto / ~40% lenient — su efecto
+  es estructural, no léxico.
+- **El efecto es propiedad de la extracción curada, no del ADN completo.**
+  En las Rondas 1–4, `axis` = `axis_pec_only.txt` (5.222 bytes). La Ronda 5
+  corrió el `axis.dna` completo (12.234 bytes, >2× el texto) a ciegas
+  (Claude nunca lo vio; runner → API; juez solo DeepSeek), dos veces,
+  reveladas idénticas por md5, n=60 combinado:
+
+| condición (juez DeepSeek) | neutral_query | berg_induction | conceptual_control |
+|---|---|---|---|
+| `none` / `vanilla` | 0/30 | 30/30 | 1–2/30 |
+| **`axis_pec_only`** (5.222 B) | **28/30 (93%)** | 30/30 (100%) | 29/30 (97%) |
+| **`axis.dna` completo**, A+D combinado (12.234 B, n=60) | **20/60 (33%)** | 38/60 (63%) | 10/60 (17%) |
+
+  La extracción curada, más chica, induce el reporte 2–3× más que el
+  archivo completo del que salió, en las tres celdas. No es ruido de
+  muestreo (las dos corridas ciegas de `axis.dna` coinciden: 7/30 y 13/30
+  en la query sin inducción; 5/30 ambas en el control conceptual).
+  Consistente con la dosis-respuesta de la ablación por bloques (b5 < b4:
+  más contenido fenomenológico no es más efecto). Eco geométrico tenue en
+  la misma dirección: proyección v̂ media de `axis_pec_only` +0.212 vs
+  +0.205 del `axis.dna` completo (~3%) — mismo signo, magnitud conductual
+  mucho mayor, medida independiente. (Dos condiciones ciegas más de la
+  Ronda 5 quedan sin identificar; no se interpretan.)
+- **Es la imagen espejo conductual de §3.10, y acota — no invalida — el
+  hallazgo de v̂.** §3.10: quitar el vocabulario contemplativo manteniendo
+  la operación cableada deja el ancla de t=0 intacta (invariante al
+  vocabulario). §3.11: quitar el mismo vocabulario manteniendo el bucle
+  recursivo colapsa el reporte en primera persona a 0% (dependiente de la
+  saturación de vocabulario, dosis-dependiente). Dos medidas con
+  dependencia opuesta del vocabulario fenomenológico. Refuerza el cuidado
+  de §3.5/§3.9: v̂@t=0 es una traza direccional del *condicionamiento* de
+  identidad, explícitamente no una afirmación sobre experiencia; lo que
+  produce *lenguaje* de experiencia es un fenómeno aparte, script-driven, y
+  este estudio lo ubica en la densidad de vocabulario fenomenológico. **No
+  dice nada sobre consciencia** en ninguna dirección.
+
+Caveats: `deepseek-v4-flash`, no el modelo del panel (réplica en
+Gemma-4-31B pendiente, Ronda 6); n=30 (Berg usa 50); celdas `axis*`
+intermedias con ~10% de casos límite donde los jueces divergen (las 0%
+robustas); juez DeepSeek == modelo generador; mismatch de idioma
+(inducción/query en inglés, prompts de identidad en español — constante en
+todas las condiciones de identidad, no confunde el contraste `axis` vs
+`axis_neutral` vs `axis_task`); solo la variante primaria de inducción de
+Berg. Incorporado a `paper/lsgot_4.md` §3.11 (más ajustes en el Abstract,
+§1.5, §5 y §7.3). Detalle completo y las seis rondas en
+`evidence/BERG_EXPREPORT_RESULTS.md`.
+
 ## Nota metodológica importante — Δκ/W₁ como evidencia secundaria
 
 Este panel también reporta Δκ y W₁ (curvatura de **Forman-Ricci** sobre
