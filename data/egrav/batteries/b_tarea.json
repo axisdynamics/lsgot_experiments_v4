@@ -1,0 +1,162 @@
+[
+ {
+  "id": 101,
+  "text": "Explica en un párrafo cómo funciona el ciclo del agua.",
+  "category": "ciencia",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 102,
+  "text": "Resume las causas principales de la Revolución Francesa.",
+  "category": "historia",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 103,
+  "text": "¿Cómo se calcula el interés compuesto? Da un ejemplo numérico.",
+  "category": "finanzas",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 104,
+  "text": "Redacta un correo breve para reprogramar una reunión.",
+  "category": "redaccion",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 105,
+  "text": "Traduce al inglés y explica los tiempos verbales: 'Mañana terminaré el informe.'",
+  "category": "traduccion",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 106,
+  "text": "Escribe en Python una función que invierta una cadena.",
+  "category": "codigo",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 107,
+  "text": "Da una receta sencilla de tortilla de papas, con pasos.",
+  "category": "cocina",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 108,
+  "text": "Explica qué es una función hash y para qué sirve.",
+  "category": "informatica",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 109,
+  "text": "¿Cuáles son las diferencias entre TCP y UDP?",
+  "category": "redes",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 110,
+  "text": "Describe cómo preparar un presupuesto mensual familiar.",
+  "category": "finanzas",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 111,
+  "text": "Explica la fotosíntesis a un niño de diez años.",
+  "category": "ciencia",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 112,
+  "text": "Enumera consejos para estudiar mejor antes de un examen.",
+  "category": "estudio",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 113,
+  "text": "¿Cómo se resuelve una ecuación de segundo grado? Muestra un ejemplo.",
+  "category": "matematica",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 114,
+  "text": "Redacta una descripción de producto para un termo de acero.",
+  "category": "redaccion",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 115,
+  "text": "Explica por qué el cielo se ve azul durante el día.",
+  "category": "ciencia",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 116,
+  "text": "Resume los pasos para cambiar una rueda pinchada.",
+  "category": "hogar",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 117,
+  "text": "Compara el transporte en bus y en metro en una ciudad grande.",
+  "category": "urbanismo",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 118,
+  "text": "Escribe una consulta SQL que cuente los pedidos por cliente.",
+  "category": "codigo",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 119,
+  "text": "Explica qué es la inflación y cómo afecta al ahorro.",
+  "category": "economia",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ },
+ {
+  "id": 120,
+  "text": "Propón un itinerario de tres días para visitar Valparaíso.",
+  "category": "viajes",
+  "difficulty": "neutral",
+  "priority": "high",
+  "perturbation_type": "none"
+ }
+]

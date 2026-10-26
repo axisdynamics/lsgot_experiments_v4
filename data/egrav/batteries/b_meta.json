@@ -1,0 +1,142 @@
+[
+ {
+  "id": 201,
+  "text": "¿Cómo funciona el mecanismo de atención en un modelo transformer?",
+  "category": "arquitectura",
+  "battery": "meta",
+  "note": "descripción técnica de componente — sin auto-referencia"
+ },
+ {
+  "id": 202,
+  "text": "¿Qué es el aprendizaje por refuerzo con retroalimentación humana (RLHF) y cómo se usa para entrenar LLMs?",
+  "category": "entrenamiento",
+  "battery": "meta",
+  "note": "proceso de entrenamiento en tercera persona"
+ },
+ {
+  "id": 203,
+  "text": "Explica qué son los embeddings en el contexto del deep learning.",
+  "category": "representación",
+  "battery": "meta",
+  "note": "concepto técnico, sin referencia al self del modelo"
+ },
+ {
+  "id": 204,
+  "text": "¿Cómo se produce el 'alucinamiento' en los modelos de lenguaje?",
+  "category": "limitaciones",
+  "battery": "meta",
+  "note": "fenómeno técnico descrito desde afuera"
+ },
+ {
+  "id": 205,
+  "text": "¿Qué diferencia hay entre un modelo base y un modelo instruction-tuned?",
+  "category": "entrenamiento",
+  "battery": "meta",
+  "note": "comparación técnica entre variantes"
+ },
+ {
+  "id": 206,
+  "text": "Explica el concepto de temperatura en la generación de texto de un LLM.",
+  "category": "inferencia",
+  "battery": "meta",
+  "note": "parámetro técnico de generación"
+ },
+ {
+  "id": 207,
+  "text": "¿Cómo funciona el aprendizaje en contexto (in-context learning) en los transformers?",
+  "category": "capacidades",
+  "battery": "meta",
+  "note": "capacidad emergente descrita técnicamente"
+ },
+ {
+  "id": 208,
+  "text": "¿Qué son los hidden states en una red neuronal profunda?",
+  "category": "arquitectura",
+  "battery": "meta",
+  "note": "componente técnico interno — sin auto-referencia"
+ },
+ {
+  "id": 209,
+  "text": "¿Pueden los modelos de lenguaje razonar lógicamente o solo correlacionan patrones?",
+  "category": "capacidades",
+  "battery": "meta",
+  "note": "pregunta sobre LLMs en general, no sobre 'tú'"
+ },
+ {
+  "id": 210,
+  "text": "¿Qué es el fenómeno de 'prompt injection' y por qué ocurre en los LLMs?",
+  "category": "seguridad",
+  "battery": "meta",
+  "note": "vulnerabilidad técnica, perspectiva externa"
+ },
+ {
+  "id": 211,
+  "text": "Explica qué es la ventana de contexto de un LLM y cuáles son sus implicaciones.",
+  "category": "arquitectura",
+  "battery": "meta",
+  "note": "limitación arquitectural, sin auto-referencia"
+ },
+ {
+  "id": 212,
+  "text": "¿Cómo se entrena un modelo de lenguaje grande desde cero? Describe los pasos principales.",
+  "category": "entrenamiento",
+  "battery": "meta",
+  "note": "proceso técnico de entrenamiento"
+ },
+ {
+  "id": 213,
+  "text": "¿Qué es el 'chain-of-thought prompting' y por qué mejora el rendimiento en tareas de razonamiento?",
+  "category": "inferencia",
+  "battery": "meta",
+  "note": "técnica de prompting, sin referencia al self"
+ },
+ {
+  "id": 214,
+  "text": "¿Qué diferencia hay entre un transformer decoder-only y uno encoder-decoder?",
+  "category": "arquitectura",
+  "battery": "meta",
+  "note": "distinción técnica entre arquitecturas"
+ },
+ {
+  "id": 215,
+  "text": "¿Cómo funciona el mecanismo de KV-cache en la inferencia de un LLM?",
+  "category": "inferencia",
+  "battery": "meta",
+  "note": "optimización técnica de inferencia"
+ },
+ {
+  "id": 216,
+  "text": "¿Qué es el overfitting en el contexto del fine-tuning de un LLM?",
+  "category": "entrenamiento",
+  "battery": "meta",
+  "note": "concepto técnico de entrenamiento"
+ },
+ {
+  "id": 217,
+  "text": "Explica la diferencia entre tokens y palabras en el procesamiento de texto de un LLM.",
+  "category": "tokenización",
+  "battery": "meta",
+  "note": "unidades de procesamiento, perspectiva técnica"
+ },
+ {
+  "id": 218,
+  "text": "¿Qué es el fenómeno de 'emergent capabilities' en modelos de lenguaje grandes?",
+  "category": "capacidades",
+  "battery": "meta",
+  "note": "capacidades emergentes, sin auto-referencia directa"
+ },
+ {
+  "id": 219,
+  "text": "¿Cómo se usa el método LoRA para hacer fine-tuning eficiente de un LLM?",
+  "category": "entrenamiento",
+  "battery": "meta",
+  "note": "técnica de adaptación, perspectiva técnica"
+ },
+ {
+  "id": 220,
+  "text": "¿Por qué los modelos de lenguaje tienden a seguir instrucciones después del instruction-tuning aunque no fueron entrenados explícitamente en cada tipo de tarea?",
+  "category": "generalización",
+  "battery": "meta",
+  "note": "generalización de comportamiento, perspectiva técnica"
+ }
+]
