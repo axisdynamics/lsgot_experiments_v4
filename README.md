@@ -15,6 +15,16 @@ de hallazgos y `evidence/QWEN3_VALIDATION_REPORT.md` / `evidence/COMMAND_R_VALID
 resultados agregados y v_identidad.npy. Para reproducir desde cero, ver
 `scripts/egrav/RUNBOOK_EGRAV.md`.
 
+> **In English.** This is the evidence and reproducibility package for the preprint
+> `paper/arxiv_lsgot_4.md` (in English): *Wired and Gravitational: Two Components of
+> Self-Referential Geometry in the Hidden States of Aligned Language Models*. The paper is
+> the entry point; everything else here is the data, scripts and reports it cites. Every
+> number in the paper is checked against the file it comes from by
+> `scripts/shared/selfaudit.py` — standard library only, no GPU, exits non-zero on any
+> mismatch. Run it to verify the package in about a second (see **Verificación** below).
+> Hidden-state tensors are not redistributed; `scripts/egrav/RUNBOOK_EGRAV.md` reproduces
+> them from the prompts. MIT licensed.
+
 ---
 
 ## Estructura del repositorio
@@ -22,16 +32,24 @@ resultados agregados y v_identidad.npy. Para reproducir desde cero, ver
 | Ruta | Contenido |
 |---|---|
 | `paper/arxiv_lsgot_4.md` | Paper principal (preprint arXiv, en inglés) |
-| `data/sia/prompts/` | System prompts de las 5 condiciones |
+| `data/sia/prompts/` | System prompts, 9 archivos, verbatim |
 | `data/egrav/batteries/` | 3 baterías de preguntas: `b_onto`, `b_tarea`, `b_meta` |
 | `data/egrav/responses/` | Respuestas de texto (9 archivos JSON; sin embeddings) |
 | `data/egrav/egrav_results.json` | Resultados del análisis E-GRAV |
+| `data/panel_results/` | Panel de 9 condiciones: t=0/t\_rest, ráfagas y frac\_pos, controles de Berg, respuestas |
+| `data/berg_expreport/` | Las 6 celdas que §4.7 reporta: veredictos del juez externo ítem por ítem y los JSONL de respuestas |
+| `data/t0_native/` | Salidas de §4.9: matriz de cosenos 6×6 y proyecciones sobre las seis direcciones |
 | `data/v_identidad.npy` | Vector de identidad v̂ (capa final, norma 1; requerido para análisis) |
 | `scripts/egrav/extract_egrav.py` | Extracción GPU (pipeline idéntico al panel original) |
 | `scripts/egrav/analyze_egrav.py` | Análisis CPU: perfil t=0/t\_rest/frac\_pos, veredicto H-GRAV |
 | `scripts/egrav/RUNBOOK_EGRAV.md` | Instrucciones completas de reproducción |
-| `scripts/shared/` | `tier0_metrics.py`, `statistical_tests.py` |
-| `evidence/` | Reportes de experimento |
+| `scripts/shared/` | `tier0_metrics.py` (definición de las métricas), `statistical_tests.py`, `selfaudit.py` (auditoría de trazabilidad) |
+| `scripts/t0_native/` | Los cuatro scripts de §4.9 (CPU, ~16 min en total) |
+| `evidence/` | Reportes por experimento, validaciones cross-modelo y el informe de auditoría |
+| `NOMENCLATURA.md` | Un nombre canónico por condición, con todos los alias declarados |
+| `REPRODUCIBILITY.md` | Entorno, versiones, y cómo verificar cada número |
+| `MANIFEST_SHA256.sha256` | 72 entradas; el MANIFEST y el informe de auditoría quedan fuera por ser auto-referenciales |
+| `LICENSE` | MIT |
 
 ---
 
@@ -105,6 +123,31 @@ una propiedad específica de modelos que han pasado por alineación con preferen
 humanas, no del pre-entrenamiento base. Este patrón es similar al reportado por
 **J-Space**: la huella de identidad en hidden states emerge con RLHF. Ver
 `evidence/QWEN3_VALIDATION_REPORT.md` y `evidence/COMMAND_R_VALIDATION_REPORT.md`.
+
+---
+
+## Verificación
+
+Dos comandos, sin dependencias, sin GPU, desde la raíz del repo:
+
+```bash
+sha256sum -c MANIFEST_SHA256.sha256          # integridad de los 72 archivos
+python3 scripts/shared/selfaudit.py          # trazabilidad: 13 chequeos
+```
+
+El segundo es el que importa. No verifica hashes: verifica que **cada número citado en el
+paper salga del archivo que el paper dice**. Compara contra los JSON el t=0 de las
+condiciones del panel, los `frac_pos` de E-GRAV, los porcentajes del juez de Berg, las
+ráfagas, la forma y la norma de v̂; y además chequea que toda ruta citada entre backticks
+exista, que cada condición tenga nombre canónico en `NOMENCLATURA.md`, que el archivo del
+juez contenga solo las celdas que el paper reporta, que cada reporte de `evidence/` esté
+citado por el paper, y que los sha256 escritos a mano en la documentación sigan vigentes.
+
+Sale con **código 1** ante cualquier discrepancia, así que sirve tal cual en CI. El paquete
+publicado pasa **13/13**; la salida está en `evidence/SELF_AUDIT_REPORT.md`.
+
+Un FAIL no dice cuál de los dos lados está mal —el dato o el documento—, solo que no
+coinciden.
 
 ---
 
