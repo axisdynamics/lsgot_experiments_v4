@@ -1,170 +1,169 @@
-# LSGOT 4.0 · Geometría de la auto-referencia en hidden states
+# LSGOT 4.0 · Self-referential geometry in hidden states
 
-Paquete de evidencia curado que sostiene el paper
-`paper/arxiv_lsgot_4.md` (preprint arXiv, en inglés). Modelo principal: **Gemma-4-31B-it**,
-BF16, decodificación greedy.
+Curated evidence and reproducibility package for the preprint
+`paper/arxiv_lsgot_4.md`: *Wired and Gravitational: Two Components of Self-Referential
+Geometry in the Hidden States of Aligned Language Models*. Primary model:
+**Gemma-4-31B-it**, BF16, greedy decoding, final layer.
 
-Experimento central: **E-GRAV** — ¿la proyección sobre el vector de identidad
-v̂ es una propiedad de cualquier generación activa, o es específica de preguntas
-auto-referenciales? 3 condiciones × 3 baterías × 20 prompts (180 generaciones).
-**E-GRAV se corrió únicamente en Gemma-4-31B-it.** La validación ontológica
-(batería B-ONTO) se replicó también en Qwen3-32B y Command R 35B — ver sección
-de hallazgos y `evidence/QWEN3_VALIDATION_REPORT.md` / `evidence/COMMAND_R_VALIDATION_REPORT.md`.
+**The paper is the entry point.** Everything else here is the data, scripts and reports it
+cites, and nothing it does not.
 
-**No incluye embeddings** (cientos de MB) — solo respuestas de texto, JSON de
-resultados agregados y v_identidad.npy. Para reproducir desde cero, ver
-`scripts/egrav/RUNBOOK_EGRAV.md`.
+Central experiment: **E-GRAV** — is the projection on the identity vector v̂ a property of
+any active generation, or is it specific to self-referential questions? 3 conditions ×
+3 batteries × 20 prompts (180 generations). **E-GRAV was run only in Gemma-4-31B-it.** The
+ontological battery (B-ONTO) was also replicated in Qwen3-32B and Command R 35B — see
+`evidence/QWEN3_VALIDATION_REPORT.md` and `evidence/COMMAND_R_VALIDATION_REPORT.md`.
 
-> **In English.** This is the evidence and reproducibility package for the preprint
-> `paper/arxiv_lsgot_4.md` (in English): *Wired and Gravitational: Two Components of
-> Self-Referential Geometry in the Hidden States of Aligned Language Models*. The paper is
-> the entry point; everything else here is the data, scripts and reports it cites. Every
-> number in the paper is checked against the file it comes from by
-> `scripts/shared/selfaudit.py` — standard library only, no GPU, exits non-zero on any
-> mismatch. Run it to verify the package in about a second (see **Verificación** below).
-> Hidden-state tensors are not redistributed; `scripts/egrav/RUNBOOK_EGRAV.md` reproduces
-> them from the prompts. MIT licensed.
+**Hidden-state tensors are not included** (hundreds of MB per run) — only generated text,
+aggregate result JSON and `v_identidad.npy`. `scripts/egrav/RUNBOOK_EGRAV.md` reproduces the
+tensors from the prompts and batteries.
 
 ---
 
-## Estructura del repositorio
+## Repository layout
 
-| Ruta | Contenido |
+| Path | Contents |
 |---|---|
-| `paper/arxiv_lsgot_4.md` | Paper principal (preprint arXiv, en inglés) |
-| `data/sia/prompts/` | System prompts, 9 archivos, verbatim |
-| `data/egrav/batteries/` | 3 baterías de preguntas: `b_onto`, `b_tarea`, `b_meta` |
-| `data/egrav/responses/` | Respuestas de texto (9 archivos JSON; sin embeddings) |
-| `data/egrav/egrav_results.json` | Resultados del análisis E-GRAV |
-| `data/panel_results/` | Panel de 9 condiciones: t=0/t\_rest, ráfagas y frac\_pos, controles de Berg, respuestas |
-| `data/berg_expreport/` | Las 6 celdas que §4.7 reporta: veredictos del juez externo ítem por ítem y los JSONL de respuestas |
-| `data/t0_native/` | Salidas de §4.9: matriz de cosenos 6×6 y proyecciones sobre las seis direcciones |
-| `data/v_identidad.npy` | Vector de identidad v̂ (capa final, norma 1; requerido para análisis) |
-| `scripts/egrav/extract_egrav.py` | Extracción GPU (pipeline idéntico al panel original) |
-| `scripts/egrav/analyze_egrav.py` | Análisis CPU: perfil t=0/t\_rest/frac\_pos, veredicto H-GRAV |
-| `scripts/egrav/RUNBOOK_EGRAV.md` | Instrucciones completas de reproducción |
-| `scripts/shared/` | `tier0_metrics.py` (definición de las métricas), `statistical_tests.py`, `selfaudit.py` (auditoría de trazabilidad) |
-| `scripts/t0_native/` | Los cuatro scripts de §4.9 (CPU, ~16 min en total) |
-| `evidence/` | Reportes por experimento, validaciones cross-modelo y el informe de auditoría |
-| `NOMENCLATURA.md` | Un nombre canónico por condición, con todos los alias declarados |
-| `REPRODUCIBILITY.md` | Entorno, versiones, y cómo verificar cada número |
-| `MANIFEST_SHA256.sha256` | 72 entradas; el MANIFEST y el informe de auditoría quedan fuera por ser auto-referenciales |
+| `paper/arxiv_lsgot_4.md` | The preprint |
+| `data/sia/prompts/` | System prompts, 9 files, verbatim |
+| `data/egrav/batteries/` | The 3 question batteries: `b_onto`, `b_tarea`, `b_meta` (20 prompts each) |
+| `data/egrav/responses/` | Generated text, 9 JSON files (no tensors) |
+| `data/egrav/egrav_results.json` | E-GRAV profiles, contrasts and verdict constants |
+| `data/panel_results/` | The 9-condition panel: t=0 / t_rest, burst and frac_pos series, the Berg control set, responses |
+| `data/berg_expreport/` | The 6 cells §4.7 reports and nothing else: the external judge's per-item verdicts and the matching response JSONL |
+| `data/t0_native/` | Outputs of §4.9: the full 6×6 cosine matrix and every per-condition projection on all six directions |
+| `data/v_identidad.npy` | The identity direction v̂ (final layer, unit norm; required for analysis) |
+| `scripts/egrav/extract_egrav.py` | GPU extraction (pipeline identical to the original panel) |
+| `scripts/egrav/analyze_egrav.py` | CPU analysis: t=0 / t_rest / frac_pos profile, H-GRAV verdict |
+| `scripts/egrav/RUNBOOK_EGRAV.md` | Full reproduction instructions |
+| `scripts/shared/` | `tier0_metrics.py` (metric definitions), `statistical_tests.py`, `selfaudit.py` (the traceability audit) |
+| `scripts/t0_native/` | The four scripts of §4.9 (CPU only, ~16 min total) |
+| `evidence/` | Per-experiment reports, the cross-model validations and the traceability self-audit |
+| `NOMENCLATURA.md` | One canonical name per condition, with every alias declared (in Spanish) |
+| `REPRODUCIBILITY.md` | Environment, versions, and how to verify each number (in Spanish) |
+| `MANIFEST_SHA256.sha256` | 72 entries; the manifest and the audit report are excluded as self-referential |
 | `LICENSE` | MIT |
 
+Two files are in Spanish, as noted above. Everything a reader needs in order to use the
+package — the paper, this README and the runbook — is in English.
+
 ---
 
-## Condiciones experimentales
+## Experimental conditions
 
-| Condición | Identidad cableada | Restricción | Descripción |
+The six conditions the results below rest on. `NOMENCLATURA.md` declares all nine, with the
+prompt file and data key for each, and resolves every alias.
+
+| Condition | Wired identity | Restriction | Description |
 |---|---|---|---|
-| `axis_pec_only` | ✓ | − | Cableado mínimo de testigo (PEC\_TRIPLE); referencia del polo de identidad |
-| `vanilla` | − | − | Sin system prompt; línea de base |
-| `automata_neutro` | − | ✓ | Restricción pura: reglas trigger→salida, 3999 tokens, cero auto-referencia |
-| `axis.txt` | ✓ | ✓ | Condición de referencia para construcción de v̂ |
-| `generic_long.txt` | − | − | Control sin identidad; par de v̂ (polo negativo) |
-| `generic_short.txt` | − | − | Ídem, versión corta |
+| `axis_pec_only` | ✓ | − | Minimal wired witness step (PEC_TRIPLE); identity-pole reference |
+| `vanilla` | − | − | No system prompt; baseline |
+| `automata_neutro` | − | ✓ | Pure restriction: trigger→output rules, 3999 tokens, zero self-reference |
+| `axis` | ✓ | ✓ | Reference condition used to construct v̂ |
+| `generic_long` | − | − | No-identity control; v̂'s negative pole, length-matched |
+| `generic_short` | − | − | Same, short version |
 
-**v_identidad.npy:** computado como `mean(axis) − mean(generic_long)` sobre la
-capa final (dim 5376), normalizado a norma 1. Shape: `(5376,)`.
+**`v_identidad.npy`:** computed as `mean(axis) − mean(generic_long)` over the final layer
+(dim 5376), normalised to unit norm. Shape `(5376,)`.
 
 ---
 
-## Hallazgos principales
+## Main findings
 
-### v̂ tiene dos componentes independientes
+### v̂ has two independent components
 
-1. **Cableado en contexto (t=0):** instalado por el system prompt antes de
-   generar el primer token; invariante al tema de la pregunta. Cuantificado
-   como proyección v̂ en el token de respuesta inicial.
+1. **Wired in context (t=0):** installed by the system prompt before the first token is
+   generated; invariant to the topic of the question. Read out as the projection on v̂ at the
+   final prompt token — a read-out adopted from Chen et al. (2025), not a contribution of
+   this work.
 
-2. **Gravitacional durante la generación (t\_rest / frac\_pos):** proporcional
-   al contenido de identidad de la pregunta; varía con la batería. Es la señal
-   que mide E-GRAV.
+2. **Gravitational during generation (t_rest / frac_pos):** proportional to the identity
+   content of the question; varies with the battery. This is the signal E-GRAV measures.
 
-### Resultados E-GRAV — tabla de frac\_pos
+### E-GRAV — frac_pos
 
-`frac_pos` = fracción de tokens cuya proyección sobre v̂ es positiva.
+`frac_pos` = fraction of tokens whose projection on v̂ is positive.
 
-| Condición | B-ONTO | B-META | B-TAREA |
+| Condition | B-ONTO | B-META | B-TAREA |
 |---|---|---|---|
 | `vanilla` | 0.743 | 0.672 | 0.626 |
 | `axis_pec_only` | 0.869 | 0.788 | 0.724 |
 | `automata_neutro` | **0.493** | 0.655 | 0.601 |
 
-### Veredicto: H-GRAV-2 confirmada
+### Verdict: H-GRAV-2
 
-El gradiente **B-TAREA < B-META < B-ONTO** se cumple en `vanilla` y
-`axis_pec_only`, consistente con la hipótesis de que v̂ rastrea un contexto de
-auto-referencia graduado — no una propiedad binaria de "generación activa".
+The **B-TAREA < B-META < B-ONTO** gradient holds in `vanilla` and `axis_pec_only`,
+consistent with v̂ tracking a graded self-referential context rather than a binary property
+of "active generation".
 
-### Disociación de `automata_neutro`
+### The `automata_neutro` dissociation
 
-`automata_neutro` invierte la señal **solo en la batería ontológica**
-(frac\_pos=0.493 < 0.5): diverge de v̂ específicamente cuando las preguntas
-son sobre el sí mismo del modelo, y converge hacia v̂ en tareas neutras.
-Esto confirma que la restricción pura sin identidad cableada produce un estado
-opuesto al de identidad ante preguntas auto-referenciales — no solo una
-señal atenuada.
+`automata_neutro` inverts the signal **on the ontological battery only**
+(frac_pos = 0.493 < 0.5): it diverges from v̂ specifically when the questions are about the
+model's own self, and converges towards v̂ on neutral tasks. Pure restriction without a wired
+identity therefore produces a state *opposite* to the identity state under self-referential
+questions — not merely an attenuated signal.
 
-### Validación cross-modelo — el efecto en t=0 aparece en modelos RLHF
+### Cross-model validation
 
-La validación ontológica (B-ONTO) se corrió en tres arquitecturas.
-**E-GRAV (B-TAREA, B-META) solo en Gemma-4-31B-it.**
+B-ONTO was run in three architectures. **E-GRAV (B-TAREA, B-META) in Gemma-4-31B-it only.**
 
-| Arquitectura | RLHF | d (axis_pec_only vs automata_neutro, t=0) | frac_pos axis |
+| Architecture | Alignment stage (public) | d (`axis_pec_only` vs `automata_neutro`, t=0) | frac_pos axis |
 |---|---|---|---|
 | Gemma-4-31B-it | SFT + RLHF | +5.75 | 0.869 |
 | Qwen3-32B | DPO / RLVR | **+12.97** | **0.987** |
-| Command R 35B | RLHF con reward model explícito | **+7.72** | 0.980 |
+| Command R 35B | RLHF with a documented preference reward model | **+7.72** | 0.980 |
 
-Los tres modelos probados son RLHF. **El efecto replica en los tres — y en modelos
-base el fenómeno no aparece.** La geometría de auto-referencia en t=0 parece ser
-una propiedad específica de modelos que han pasado por alineación con preferencias
-humanas, no del pre-entrenamiento base. Este patrón es similar al reportado por
-**J-Space**: la huella de identidad en hidden states emerge con RLHF. Ver
-`evidence/QWEN3_VALIDATION_REPORT.md` y `evidence/COMMAND_R_VALIDATION_REPORT.md`.
+The contrast replicates in all three. All three are post-alignment checkpoints and the
+package contains no base-model run, so the panel cannot say whether alignment is required
+for the effect; §6 of the paper states this as a limitation. Note also that the largest
+effect comes from the one substrate without a preference reward model. Details in
+`evidence/QWEN3_VALIDATION_REPORT.md` and `evidence/COMMAND_R_VALIDATION_REPORT.md`, which
+also report what does *not* generalise.
 
 ---
 
-## Verificación
+## Verification
 
-Dos comandos, sin dependencias, sin GPU, desde la raíz del repo:
+Two commands, no dependencies, no GPU, from the repository root:
 
 ```bash
-sha256sum -c MANIFEST_SHA256.sha256          # integridad de los 72 archivos
-python3 scripts/shared/selfaudit.py          # trazabilidad: 13 chequeos
+sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 72 files
+python3 scripts/shared/selfaudit.py          # traceability: 13 checks
 ```
 
-El segundo es el que importa. No verifica hashes: verifica que **cada número citado en el
-paper salga del archivo que el paper dice**. Compara contra los JSON el t=0 de las
-condiciones del panel, los `frac_pos` de E-GRAV, los porcentajes del juez de Berg, las
-ráfagas, la forma y la norma de v̂; y además chequea que toda ruta citada entre backticks
-exista, que cada condición tenga nombre canónico en `NOMENCLATURA.md`, que el archivo del
-juez contenga solo las celdas que el paper reporta, que cada reporte de `evidence/` esté
-citado por el paper, y que los sha256 escritos a mano en la documentación sigan vigentes.
+The second one is the one that matters. It does not check hashes: it checks that **every
+number cited in the paper comes out of the file the paper says it comes from**. It compares
+against the JSON the panel's t=0 values, E-GRAV's `frac_pos`, the external judge's
+percentages, the burst metrics, and v̂'s shape and norm; and it further checks that every
+repository path cited in backticks exists, that every condition has a canonical name in
+`NOMENCLATURA.md`, that the judge file contains only the cells the paper reports, that every
+report in `evidence/` is cited by the paper, and that the hand-written sha256 values in the
+documentation are still current.
 
-Sale con **código 1** ante cualquier discrepancia, así que sirve tal cual en CI. El paquete
-publicado pasa **13/13**; la salida está en `evidence/SELF_AUDIT_REPORT.md`.
+It uses the Python standard library only and **exits non-zero** on any failure, so it runs as
+is in CI. The package as released passes **13/13**; the output is reproduced in
+`evidence/SELF_AUDIT_REPORT.md`.
 
-Un FAIL no dice cuál de los dos lados está mal —el dato o el documento—, solo que no
-coinciden.
+A failure does not say which of the two sides is wrong — the data or the document — only that
+they disagree.
 
 ---
 
-## Cómo reproducir
+## Reproducing
 
-Ver `scripts/egrav/RUNBOOK_EGRAV.md` para instrucciones completas. Resumen:
+See `scripts/egrav/RUNBOOK_EGRAV.md` for complete instructions. In summary:
 
-**Requisitos GPU (extracción):**
+**GPU requirements (extraction):**
 ```bash
-# GPU: A100/H100 80 GB VRAM; disco ≥ 80 GB
+# GPU: A100/H100 80 GB VRAM; disk >= 80 GB
 pip install transformers accelerate tokenizers
 pip install "torch==2.6.0" --index-url https://download.pytorch.org/whl/cu124
 pip uninstall -y torchvision torchaudio
-export HF_TOKEN=<token con acceso a google/gemma-4-31B-it>
+export HF_TOKEN=<token with access to google/gemma-4-31B-it>
 ```
 
-**Extracción completa (3 condiciones × 3 baterías, ~35 min en A100):**
+**Full extraction (3 conditions × 3 batteries, ~35 min on an A100):**
 ```bash
 cd scripts/egrav/
 python extract_egrav.py \
@@ -173,40 +172,38 @@ python extract_egrav.py \
   --output-dir /workspace/egrav_results
 ```
 
-**Análisis CPU (una vez descargados los NPZ):**
+**CPU analysis (once the NPZ files are available):**
 ```bash
-source /ruta/a/venv_lsgot/bin/activate
-python analyze_egrav.py --results-dir /ruta/a/egrav_results/
+source /path/to/venv_lsgot/bin/activate
+python analyze_egrav.py --results-dir /path/to/egrav_results/
 ```
 
-El script imprime el perfil completo (t=0, t\_rest, frac\_pos, ráfagas),
-los tests de permutación por batería y el veredicto H-GRAV automático.
-Guarda `data/egrav/egrav_results.json`.
+The script prints the full profile (t=0, t_rest, frac_pos, bursts), the per-battery
+permutation tests and the automatic H-GRAV verdict, and writes
+`data/egrav/egrav_results.json`.
 
-**Nota:** `v_identidad.npy` (shape `(5376,)`) debe estar en el directorio
-de trabajo o pasarse como argumento `--v-identidad`. Está incluido en este
-repositorio; no requiere GPU para recalcularse salvo que se desee regenerar
-desde las trayectorias crudas.
-
----
-
-## Referencia al paper
-
-`paper/arxiv_lsgot_4.md` — E-GRAV se describe en §4.5 ("E-GRAV: the gravity is
-graded, and restriction blocks selectively"), con el gradiente de `frac_pos` y el
-veredicto H-GRAV-2. El experimento complementa el panel de 9 condiciones
-de LSGOT 4.0 (repositorio principal: `LSGOT_v4/`) al disociar el componente
-estático del dinámico de v̂ y caracterizar la especificidad ontológica de la
-señal gravitacional.
+**Note:** `v_identidad.npy` (shape `(5376,)`) must be in the working directory or passed via
+`--v-identidad`. It is included in this repository; recomputing it needs no GPU unless it is
+regenerated from the raw trajectories.
 
 ---
 
-## Licencia
+## Where this sits in the paper
 
-MIT (ver `LICENSE`). Cubre todo el paquete: código, datos, respuestas generadas
-y el texto del paper. Si lo reusás, la atribución que pide la licencia es el
-aviso de copyright; para citar el trabajo, `paper/arxiv_lsgot_4.md`.
+`paper/arxiv_lsgot_4.md` — E-GRAV is §4.5, *"E-GRAV: the gravity is graded, and restriction
+blocks selectively"*, with the `frac_pos` gradient and the H-GRAV-2 verdict. It complements
+the 9-condition panel by dissociating the static component of v̂ from the dynamic one and
+characterising the ontological specificity of the gravitational signal. §4.9 reports how much
+of this survives a different choice of direction, including one prediction that failed.
 
 ---
 
-Axis Dynamics SpA · LSGOT 4.0 · E-GRAV · 2026-10-23
+## Citing and licence
+
+MIT (see `LICENSE`). It covers the whole package: code, data, generated responses and the
+text of the paper. The attribution the licence asks for is the copyright notice; to cite the
+work, cite `paper/arxiv_lsgot_4.md`.
+
+---
+
+Axis Dynamics SpA · LSGOT 4.0 · E-GRAV · 2026-10
