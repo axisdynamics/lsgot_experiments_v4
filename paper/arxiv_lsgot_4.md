@@ -222,8 +222,10 @@ intervention rather than as a prompt condition.
 
 **Recurrence quantification.** The RQA implementation follows standard CRQA practice,
 including the Theiler window that excludes the trivial autocorrelation band around the main
-diagonal (Theiler, 1986). We report RQA mainly to document that it does not generalize
-(§4.6).
+diagonal (Theiler, 1986). The threshold is relative but **not scale-free**: ε is a fixed
+fraction of each trajectory's own mean pairwise distance, and outside Gemma that fraction falls
+below the detection floor, which is the reason the metric reads 0.0000 there (§4.6). We report
+RQA mainly to document that it does not generalize.
 
 ---
 
@@ -335,7 +337,7 @@ cos(v̂, v̂_t0) = 0.220. Unless a section says otherwise, every number in §4 i
 | **burst_mean** | mean length of maximal consecutive runs of `p_t > 0`, in tokens. |
 | **max/mean** | ratio of maximum to mean burst length; a regularity rather than magnitude statistic. |
 | **PR** | participation ratio `(Σλ)²/Σλ²` of the trajectory covariance spectrum (Gram trick, T≪D), i.e. effective dimension. |
-| **RQA determinism** | fraction of recurrent points on diagonal lines ≥2 in the T×T recurrence matrix, ε = 10% of the trajectory's own mean pairwise distance, Theiler window 3. |
+| **RQA determinism** | fraction of recurrent points on diagonal lines ≥2 in the T×T recurrence matrix, ε = 10% of the trajectory's own mean pairwise distance, Theiler window 3. Relative to each trajectory but not scale-free; §4.6 reports what that costs across architectures. |
 
 *Convention check.* Two pipelines compute t=0 differently in principle (`embeddings[:,0,:]`
 versus a separately captured `t0_embeddings`) and identically in practice: on the seven panel
@@ -750,9 +752,14 @@ not anchoring (d = 0.22 / — / 0.28, n.s.).
   (12/12 layers, d=−1.33 in the final layer), but the **sign flips** in Command R: 64.0 for
   `automata_neutro` versus 52.1 for `vanilla` (d=+1.36).
 - **RQA determinism.** 0.0000 in all 8 Command R conditions and all 7 Qwen3 conditions at the
-  same relative threshold that gave d=+1.35 in Gemma. No token pair in any trajectory in
-  either new model crosses the recurrence threshold. The metric produces no signal outside the
-  original architecture.
+  same relative threshold that gave d=+1.35 in Gemma. That zero is the **detection floor of the
+  threshold, not a property of the models**: at ε = 10% of each trajectory's own mean pairwise
+  distance, no token pair crosses it in 160 of 160 Command R trajectories, so the statistic has
+  no denominator rather than no signal. Fixing the recurrence *rate* at 5% instead — which
+  requires ε at 58–87% of the mean distance, not 10% — makes determinism measurable in all
+  three substrates. It then orders recovery failure in Gemma (AUC = 1.000 across the nine
+  conditions) and not at all in Command R (ρ = 0.00 to +0.05 across a complete eight-condition
+  panel). The instrument is mono-model; it is not absent outside Gemma.
 - **Recovery after perturbation.** Clean only in Gemma (see §4.8's scope note).
 - **And, directly relevant to §4.5: `vanilla`'s natural gravity is itself
   architecture-specific in magnitude.** frac_pos for `vanilla` on the ontological battery is
@@ -806,15 +813,18 @@ consciousness in either direction.
 | Directional perturbation | is recovery faster along v̂ than orthogonal to it? | 6/6 comparisons p>0.14 | rules out a literal attractor |
 | Activation steering | does injecting `h + α‖h‖v̂` push behaviour toward identity? | 17/17 runs degenerated into repetition | **no causal evidence**; open |
 | Graph curvature (Δκ/W₁) | does curvature carry the signal? | simple baselines beat it 4/4, with both Forman-Ricci and genuine Ollivier-Ricci; no clean pattern in any of the three substrates | excluded from the framework |
-| RQA determinism | recurrence to similar states? | 0.0000 outside Gemma | excluded |
+| RQA determinism | recurrence to similar states? | below the detection floor of the ε=10% threshold outside Gemma (no recurrent pair in 160 of 160 Command R trajectories); measurable in all three substrates at a fixed recurrence rate, but orders recovery failure only in Gemma (AUC 1.000, n=9) and not at all in Command R (ρ = 0.00 to +0.05, n=8) | excluded as a cross-model instrument |
 | First-token lexical control | do the effects survive controlling for the first generated word? | Jaccard down to 0.00, effect survives and strengthens | reassuring, not definitive |
-| Traceability self-audit | can every number cited in the papers be traced to a file in the package? | 13/13 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
+| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 13/13 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
 
 Perturbation and recovery (τ, recovery_rate, Fréchet path fidelity) are **outside the scope
-of this paper**: eight of nine conditions recover to ~100% with or without the wired step,
-and the only condition that fails is `automata_neutro` (recovery_rate 0.77/0.82/0.88 at three
-injection points). Recovery is predicted by automaton-like rule density, not by self-reference
-wiring — a dissociable second phenomenon that deserves its own analysis.
+of this paper**. In Gemma, seven of nine conditions recover to ~100% with or without the wired
+step, and the two that fail are `automata_neutro` (recovery_rate 0.765/0.824/0.875 at three
+injection points) and `soul_jarvis` (0.850/1.000/0.895). What the two failures share is the
+absence of a wired self-referential step; they do not share rule density — `automata_neutro` is
+236 lines of trigger→output rules and `soul_jarvis` is a prose persona document of half that
+length — and the pattern does not generalize: in Command R no condition recovers at 100% across
+all three injection points. A dissociable second phenomenon that deserves its own analysis.
 
 ---
 
@@ -1140,8 +1150,9 @@ result should be read as support for the other.
    vary the phenomenological self-description, score externally — is the obvious
    next run and is not in this paper (§4.7, §5.3).
 10. **Metrics we excluded are excluded on evidence, but their exclusion narrows the claim.**
-   Curvature and RQA are gone; participation ratio survives in two of three architectures with
-   the sign inverted in the third. What remains is two directions read at
+   Curvature is gone; RQA is excluded as a cross-model instrument — measurable everywhere at a
+   scale-free threshold, but ordering nothing outside Gemma — and participation ratio survives
+   in two of three architectures with the sign inverted in the third. What remains is two directions read at
    four times — thinner than the nine-metric panel the project started with, with the
    compensation that §4.9 makes the second direction a robustness check rather than a second
    metric.
