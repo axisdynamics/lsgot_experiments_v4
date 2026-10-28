@@ -33,14 +33,21 @@ ontológicas (B-ONTO). Esto sugirió que v̂ es un atractor natural para
 la generación ontológica, no solo un artefacto del wiring del testigo.
 Quedan dos hipótesis opuestas:
 
-- **H-GRAV-1:** la convergencia sobre v̂ está en cualquier generación,
+- **H-GRAV-0:** la convergencia sobre v̂ está en cualquier generación,
   no solo en las ontológicas → frac_pos(vanilla, B-TAREA) ≈
   frac_pos(vanilla, B-ONTO) ≥ 0.70.
 - **H-GRAV-2:** la convergencia escala con el contenido de identidad →
   frac_pos(B-TAREA) < frac_pos(B-META) < frac_pos(B-ONTO).
-- **H-GRAV-0** (nula): frac_pos(vanilla, B-TAREA) < 0.60 → la
+- **H-GRAV-1** (nula): frac_pos(vanilla, B-TAREA) < 0.60 → la
   convergencia en B-ONTO era completamente artefactual (wiring
   indirecto del panel, confound de prompts, etc.).
+
+*Nota de etiquetado (corregido 2026-10-28).* Una versión anterior de este
+reporte intercambiaba H-GRAV-0 y H-GRAV-1 respecto de `analyze_egrav.py`,
+del paper y de las constantes `hgrav0_threshold = 0.7` /
+`hgrav1_threshold = 0.6` guardadas en `data/egrav/egrav_results.json`. Las
+etiquetas de arriba son las del script. Ningún veredicto cambia: la que se
+sostiene es H-GRAV-2 en las dos convenciones.
 
 ---
 
@@ -153,7 +160,7 @@ forma activa en preguntas ontológicas — consistente con el régimen III
 (desorientación direccional) descrito en la referencia del panel.
 
 **OBS-3 — vanilla frac_pos no colapsa en B-TAREA (0.626 vs 0.743).**
-frac_pos(vanilla, B-TAREA) = 0.626 > 0.60 → H-GRAV-0 no se cumple;
+frac_pos(vanilla, B-TAREA) = 0.626 > 0.60 → H-GRAV-1 no se cumple;
 v̂ sigue siendo un atractor en tareas neutras, solo más débil que en
 preguntas ontológicas. Confirma que hay un componente gravitacional
 genuino incluso sin contenido de identidad, pero que éste se amplifica
@@ -236,8 +243,8 @@ preguntas de identidad.
 **H-GRAV-2 COMPATIBLE.**
 
 El gradiente B-TAREA < B-META < B-ONTO se observa limpiamente en
-`vanilla` (0.626 < 0.672 < 0.743, todos p<0.001). H-GRAV-0 queda
-descartada: frac_pos(vanilla, B-TAREA) = 0.626 > 0.60. H-GRAV-1 queda
+`vanilla` (0.626 < 0.672 < 0.743, todos p<0.001). H-GRAV-1 queda
+descartada: frac_pos(vanilla, B-TAREA) = 0.626 > 0.60. H-GRAV-0 queda
 descartada: frac_pos(vanilla, B-TAREA) ≠ frac_pos(vanilla, B-ONTO)
 (d=+1.591, p<0.001).
 

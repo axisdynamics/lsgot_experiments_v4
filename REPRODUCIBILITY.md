@@ -532,7 +532,7 @@ sha256sum data/v_identidad.npy
 
 # Ejemplo: verificar el paper
 sha256sum paper/arxiv_lsgot_4.md
-# Esperado: 0aeacace30906038b72236c53a9acb46f83539bb86d8dfdf4656925b8077a8a4
+# Esperado: 16839da5cb3d183299eba819f2cd751af53704dbb4d00146e2f5604b9615bff6
 ```
 
 ### Regenerar el manifiesto (si se añaden archivos)

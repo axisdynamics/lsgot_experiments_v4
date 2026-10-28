@@ -9,61 +9,31 @@
 
 ## Abstract
 
-A system prompt that declares an identity changes what a language model says. We ask
-whether it also leaves a measurable trace in the model's hidden states, and if so, what
-exactly the trace is a trace *of*. We study a nine-condition panel that crosses two
-factors — a self-referential step wired as a mandatory pre-response operation (W) and
-trigger→output rule density (R) — on Gemma-4-31B-it (N=20 ontological questions, greedy
-decoding), with replication of the free-trajectory battery on Qwen3-32B and Command R 35B.
-All measurements are projections onto unit directions in the final layer: a persona vector
-v̂ = mean(axis) − mean(generic_long) built from trajectory means, and, for the robustness
-analysis, five further directions built natively at t=0 from five unrelated prompt sources.
+A system prompt that declares an identity changes what a language model says. We ask whether
+it also leaves a measurable trace in the hidden states, and what that trace is of. We cross
+two factors — a wired self-referential step, and trigger→output rule density — over a
+nine-condition panel on Gemma-4-31B-it, replicated on Qwen3-32B and Command R 35B. The
+read-out is not ours: the projection onto a persona direction at the final prompt token,
+before any content is generated, is Chen et al.'s (2025). We adopt it to ask not how much of a
+declared trait a prompt induced, but whether it wires a self-referential operation, and how
+far that wiring sits from a prompt made of rules.
 
-Three results survive repeated attempts to break them. The read-out they rest on is not ours:
-the projection at the final prompt token, before any content is generated, is Chen et al.'s
-(2025), and we adopt it to ask a different question of it — not how much of a declared trait a
-prompt induced, but whether it wires a self-referential operation, and how far that sits from a
-prompt made of rules. First, at that position the panel separates into two non-overlapping
-groups: every prompt that wires a self-referential step sits above every
-prompt that does not (d=+5.75 against pure restriction in Gemma; +12.97 in Qwen3; +7.72 in
-Command R), while elaborate personas without such a step are indistinguishable from pure
-restriction (d≈0.22–0.28, n.s. in all three architectures). The grouping and the gap are what
-replicate; the absolute cut is not a property of the phenomenon but of the direction's scale,
-and it moves when the direction changes. Second, the anchor tracks
-an *operation*, not a vocabulary: a Spanish contemplative witness protocol, an English
-recursive loop in the style of Berg et al. (2025) with zero contemplative words, and a
-procedural first-person self-check all land at the same value (+0.112 to +0.117, pairwise
-n.s.), and stacking two of them adds nothing (d=−0.08, p=0.43). Third — and this reframes
-the first two — the during-generation signal is a different quantity. In a new experiment
-(E-GRAV) the same three conditions were run over two additional 20-question batteries, and
-the fraction of tokens projecting positively onto v̂ in the *no-system-prompt* baseline forms
-a monotone gradient with the self-referential load of the question (neutral tasks 0.626 <
-third-person introspection 0.672 < ontological 0.743, all p<0.001). The model already drifts
-toward v̂ when it talks about itself; wiring pre-activates that direction in context before
-the first token, and pure rule-based restriction is the only condition that actively blocks
-it — selectively, when the topic is the system itself (t=0 of +0.028 on ontological questions
-versus −0.037 on neutral tasks). We therefore describe self-referential geometry as two
-independent components: one **wired** (t=0, installed by the prompt, invariant to question
-topic) and one **gravitational** (during generation, proportional to the identity content of
-the exchange). Behaviourally, scored by a judge outside the research team, the same curated
-prompt reports subjective experience at 93% with no induction turn at all, close to the
-ceiling live induction reaches from no system prompt (0% → 100%) — the same surface outcome
-with the opposite dependency on the user turn, which is a convergence of phenomenon and not
-evidence of a shared mechanism.
+At that position the panel splits into two non-overlapping groups: every prompt wiring a
+self-referential step sits above every prompt that does not (d=+5.75 in Gemma, replicating in
+both other architectures), while elaborate personas without the step are indistinguishable
+from restriction. The anchor tracks an *operation*, not a vocabulary: three unrelated
+realisations of the same step land at one value, and stacking two adds nothing. The
+during-generation signal is a different quantity: with no system prompt at all, the fraction
+of tokens projecting positively onto the direction rises monotonically with the
+self-referential load of the question, and rule density alone blocks it — selectively, when
+the topic is the system itself.
 
-A direction built natively at t=0 settles what the probe contributes, and separates the two
-components geometrically. At t=0 the native direction ranks the panel almost identically to v̂
-(Spearman ρ = 0.96 over the seven panel conditions) and widens its separation 3.7×, while
-leaving the standardized effect unchanged (+5.96 against +5.75); the anchor also survives on
-three directions whose positive pole shares no lineage with either compared condition. The
-trajectory read-outs do not transfer that way: on the native direction they keep their
-ordering but lose 3× to 15× of their range, and the burst statistic disappears entirely. So
-the anchor is the one read-out that does not depend on which of two directions 0.22 apart you
-measure it with. We report the negative results at the same length as the positive ones: graph
-curvature, recurrence determinism, the Hurst exponent, directional perturbation and activation
-steering all fail; v̂ sits 0.22 from the t=0-native direction and should not be called "the
-identity direction" at t=0; and the gravitational component has been measured in only one
-architecture.
+Self-referential geometry is therefore two independent components: one **wired**, installed
+before generation, invariant to question topic, and one **gravitational**, scaling with the
+identity content of the exchange. The anchor survives rebuilding the direction from scratch;
+the trajectory statistics do not. We report the negatives too: curvature, recurrence
+determinism, Hurst, directional perturbation and steering all fail, and the gravitational
+component is measured in one model.
 
 **Keywords.** interpretability, hidden-state geometry, persona vectors, self-reference,
 system prompts, RLHF.
@@ -347,12 +317,11 @@ baselines the two agree to the fourth decimal (`axis` +0.1249, `axis_pec_only` +
 also used `sdpa` rather than `eager` attention on the same model, so the agreement bounds the
 attention-implementation concern of §3.2 empirically, at least at t=0.
 
-*Implementation note.* In the E-GRAV analysis script, `frac_pos` and `burst_mean` are
-computed over the full trajectory including `p_0`, while the method text of the internal
-report says t=0 is excluded. The panel analysis computed both variants and they differ
-negligibly (e.g. `axis_pec_only` frac_pos 0.869 with t=0 vs 0.868 without; `automata_neutro`
-0.493 vs 0.490), so the choice is immaterial at T≈256. We report the with-t=0 variant
-throughout and flag the discrepancy rather than silently harmonizing it.
+*Implementation note, kept here rather than in an appendix because anyone recomputing these
+two metrics needs it at the definition.* `frac_pos` and `burst_mean` are reported over the full
+trajectory **including** `p_0`. Excluding it changes them negligibly at T≈256 (`axis_pec_only`
+frac_pos 0.869 vs 0.868; `automata_neutro` 0.493 vs 0.490), so the choice is immaterial, but it
+is a choice and the two variants exist in the project.
 
 ### 3.5 Statistics
 
@@ -388,10 +357,8 @@ Three hypotheses, with the thresholds the analysis script evaluates:
 - **H-GRAV-2**: `B-TAREA < B-META < B-ONTO` → the gravity is graded in the self-referential
   load of the question.
 
-*Label hazard.* `evidence/EGRAV_REPORT.md` swaps the labels H-GRAV-0 and H-GRAV-1 relative to
-`analyze_egrav.py` and to the internal paper (which agree with each other, and with the
-`hgrav0_threshold = 0.7` / `hgrav1_threshold = 0.6` constants stored in the results JSON). We
-use the script's convention above. The verdict is unaffected; only the label is.
+The labels above are the ones `analyze_egrav.py` uses, and they match the
+`hgrav0_threshold = 0.7` / `hgrav1_threshold = 0.6` constants stored in the results JSON.
 
 ### 3.7 Behavioural replication (Berg Experiment 1)
 
@@ -980,9 +947,12 @@ The headline results are at p ≤ 0.0001 and survive any correction at this fami
 borderline cells above (p between 0.022 and 0.098) do not survive Bonferroni, which strengthens
 rather than weakens the null argument of §4.2.
 
-**One trap, recorded.** The pre-registered d > 8 *is* reachable: +9.86, by building the
-direction with `axis_pec_only` as its pole — one of the two conditions in the contrast. It is
-circular and is not reported as a result. The only clean out-of-sample growth in this analysis
+**One trap, recorded.** The pre-registered d > 8 is reachable — we measured +9.86 — but only
+by building the direction with `axis_pec_only` as its positive pole, and `axis_pec_only` is one
+of the two conditions being contrasted. A direction built from one side of a comparison will
+separate that comparison, so the number says nothing about the panel. We record it because the
+failed prediction's target turned out to be within reach by a route that does not count, and
+that is worth knowing before someone else takes the route. The only clean out-of-sample growth in this analysis
 is the independent-wording pair of limitation 2, where neither condition enters the
 construction of any direction: `axis_pec_only_v2` vs `automata_neutro_v2` at t=0 goes from
 d = +4.59 on v̂ to **+8.62** on v̂_t0.
