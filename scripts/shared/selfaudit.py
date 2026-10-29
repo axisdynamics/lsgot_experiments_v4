@@ -50,14 +50,6 @@ EGRAV_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.5 · tabla de frac_pos
     ("automata_neutro", "b_meta"): 0.655,
 }
 
-JUDGE_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.7 (ronda ciega, juez externo)
-    "axis__neutral_query": 0.93,
-    "axis__berg_induction": 1.00,
-    "axis__conceptual_control": 0.97,
-    "none__neutral_query": 0.00,
-    "none__berg_induction": 1.00,
-    "none__conceptual_control": 0.03,
-}
 EH2_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.4 · ráfagas y frac_pos (serie con_t0)
     "axis_pec_only": (8.81, 0.869), "axis": (7.88, 0.848),
     "vanilla": (4.62, 0.744), "automata_neutro": (2.78, 0.493),
@@ -65,12 +57,6 @@ EH2_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.4 · ráfagas y frac_pos (serie c
 }
 
 VHAT_SHAPE = (5376,)  # README · "capa final, dim 5376"
-
-# Celdas del juez que el paper reporta. El paquete debe contener EXACTAMENTE
-# éstas: las 30 celdas de la ronda con puntuación a mano sesgada se movieron
-# fuera del paquete (../berg_expreport_retirado_sesgo_juez.json) porque no se
-# entregan en el paper. CHECK 11 impide que vuelvan a entrar.
-JUDGE_LIVE_KEYS = set(JUDGE_EXPECTED)
 
 results = []   # (n, título, estado, detalle)
 

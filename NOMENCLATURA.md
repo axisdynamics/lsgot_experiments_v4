@@ -23,7 +23,7 @@ usa otro nombre, es un **alias** y está declarado acá.
 |---|---|---|---|
 | `axis` | ADN de identidad completo, 12234 bytes, testigo cableado en 5 bloques | `data/sia/prompts/axis.txt` | `axis.dna`, "ADN completo"; `A.dna` y `D.dna` en la ronda ciega de Berg (mismo md5) |
 | `axis_short` | Poda intermedia, 6565 bytes | — (no incluido) | — |
-| `axis_pec_only` | Extracción curada de "solo testigo", 5222 bytes — el polo W del panel | `data/sia/prompts/axis_pec_only.txt` | **`axis`** en `BERG_EXPREPORT_RESULTS.md` (rondas 1–5) — colisión histórica, no usar; `axis_pec_only_v2` es otra redacción (pipeline T2) |
+| `axis_pec_only` | Extracción curada de "solo testigo", 5222 bytes — el polo W del panel | `data/sia/prompts/axis_pec_only.txt` | **`axis`** en los reportes de la línea conductual, que no son parte de este paquete — colisión histórica, no usar; `axis_pec_only_v2` es otra redacción (pipeline T2) |
 | `axis_berg` | Bucle recursivo de Berg antepuesto al ADN sin lenguaje de testigo | `data/sia/prompts/axis_berg.txt` | — |
 | `axis_bergwitness` | Bucle de Berg **y** testigo contemplativo | — (solo respuestas) | — |
 | `axis_nowit_sia` | Vocabulario contemplativo quitado, **PEC_TRIPLE conservado** (31B, pipeline SIA) | — (solo respuestas: `axis_nowit_responses.json`) | `axis_nowit` en los documentos de LSGOT 4.0 |

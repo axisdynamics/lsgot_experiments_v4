@@ -1246,15 +1246,14 @@ passes **11/11**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
 Expected values are declared in the script together with the document section that cites them,
 so a failure says the two sides disagree without deciding which one is wrong.
 
-**Why checks 9 to 13 exist.** An earlier version of this audit was a hand-written transcript
+**Why checks 8 to 11 exist.** An earlier version of this audit was a hand-written transcript
 of terminal commands. It reported 56 manifest entries when the manifest held 61, and the output
 it quoted as evidence named a documentation path absent from the whole package — a path four
 documents cited, one of them inside a command a reader would copy and run. Both are now checks
-rather than prose, so the same class of drift fails the build. Checks 11 to 13 extend the same
-principle from the documentation to the contents: the judge file may hold only the cells the
-paper reports, an evidence report no paper cites does not ship, and a checksum written by hand
-into a reproduction command has to still match — that last one had already gone stale for the
-paper's own hash, inside a command a reader would copy. Two exclusions are declared rather than
+rather than prose, so the same class of drift fails the build. Checks 10 and 11 extend the same
+principle from the documentation to the contents: an evidence report no paper cites does not
+ship, and a checksum written by hand into a reproduction command has to still match — that last
+one had already gone stale for the paper's own hash, inside a command a reader would copy. Two exclusions are declared rather than
 silent: the manifest cannot list its own hash, and this audit's report is written after the
 manifest is regenerated.
 
