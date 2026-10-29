@@ -1,9 +1,9 @@
 # Wired and Gravitational: Two Components of Self-Referential Geometry in the Hidden States of Aligned Language Models
 
-**Authors.** ⟨author list — to complete⟩
+**Authors.** Jorge Castillo Sepúlveda, Marco Torres Yévenes, Juan Carlos Lanas
 **Affiliation.** Axis Dynamics SpA, Santiago, Chile.
 **Correspondence.** mtorres@exis.cl
-**Preprint.** LSGOT 4.0 · evidence package `LSGOT_4_FINAL` · 2026-10-23.
+**Preprint.** LSGOT 4.0 · evidence package `LSGOT_4_FINAL` · 2026-10-29.
 
 ---
 
