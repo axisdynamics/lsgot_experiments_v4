@@ -40,7 +40,7 @@ tensors from the prompts and batteries.
 | `evidence/` | Per-experiment reports, the cross-model validations and the traceability self-audit |
 | `NOMENCLATURA.md` | One canonical name per condition, with every alias declared (in Spanish) |
 | `REPRODUCIBILITY.md` | Environment, versions, and how to verify each number (in Spanish) |
-| `MANIFEST_SHA256.sha256` | 67 entries; the manifest and the audit report are excluded as self-referential |
+| `MANIFEST_SHA256.sha256` | 73 entries; the manifest and the audit report are excluded as self-referential |
 | `LICENSE` | MIT |
 
 Two files are in Spanish, as noted above. Everything a reader needs in order to use the
@@ -127,7 +127,7 @@ also report what does *not* generalise.
 Two commands, no dependencies, no GPU, from the repository root:
 
 ```bash
-sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 67 files
+sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 73 files
 python3 scripts/shared/selfaudit.py          # traceability: 13 checks
 ```
 

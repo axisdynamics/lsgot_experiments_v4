@@ -11,7 +11,7 @@ This file is the short path for someone who wants to **reproduce the result**.
 ## 0 · What you can check with no GPU at all, in one second
 
 ```bash
-sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 67 files
+sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 73 files
 python3 scripts/shared/selfaudit.py          # traceability: 13 checks, exits non-zero on failure
 ```
 

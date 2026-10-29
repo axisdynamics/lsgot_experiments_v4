@@ -419,7 +419,11 @@ def check_commands(repo):
     import re
     from pathlib import PurePosixPath
     scripts = {q.name: q for q in repo.rglob("*.py")}
-    flags = {n: set(re.findall(r'"(--[a-z][a-z-]*)"', q.read_text(errors="replace")))
+    # argparse se escribe con comillas simples o dobles: las dos cuentan
+    # argparse se escribe con comillas simples o dobles: las dos cuentan
+    # argparse se escribe con comillas simples o dobles: \x22 y \x27 cubren las dos
+    qpat = re.compile(r'[\x22\x27](--[a-z][a-z-]*)[\x22\x27]')
+    flags = {n: set(qpat.findall(q.read_text(errors="replace")))
              for n, q in scripts.items()}
     invoke = re.compile(r"\bpython3?\s+(?:-\w+\s+)*([\w./-]+\.py)")
 
