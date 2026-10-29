@@ -177,3 +177,100 @@ permutación a dos colas, n=10.000.
 
 **Estado al escribir esto:** `axis_pec_task` no ha sido medido en ningún modelo. La enmienda se
 envió al proceso de extracción antes de que llegara al paso de Gemma.
+
+---
+
+## Enmienda 2 — 2026-10-29, antes de la corrida · **el estadístico pasa a ser `r`**
+
+**Propuesta de Jorge Castillo**, en su respuesta del 29-10. Reemplaza la regla de tres bandas
+de arriba. Adoptada porque su crítica es correcta y el problema era peor de lo que él dice.
+
+### Por qué cambia
+
+La regla original dejaba todo lo que cayera entre +0.05 y +0.112 como «gradiente, sin
+conclusión», y esa banda **es justo donde viven las dos condiciones del panel más parecidas en
+especie a `axis_pec_task`**: `history_control` +0.053 y `berg_experimental` +0.081 (§4.2). El
+aterrizaje más probable era la rama indecidible. Una regla cuya salida modal es «no concluimos»
+no es una regla de decisión.
+
+Y la ventana [+0.112, +0.125] excluía cualquier valor **mayor** que +0.125, que también diría
+«basta el procedimiento». Error de simetría.
+
+### Tercer brazo: `axis_pec_none`
+
+Sin un brazo de base no se puede distinguir «el procedimiento obligatorio contribuye» de «los
+bloques de identidad de *este* archivo contribuyen». §4.3 mide personas **ajenas** (+0.020 a
++0.039); no dice cuánto vale la nuestra.
+
+| Brazo | Qué tiene | Bytes | Δ |
+|---|---|---|---|
+| `axis_pec_only` | identidad **+** los cuatro pasos con referente «sí mismo» | 5222 | — |
+| `axis_pec_task` | identidad **+** los mismos cuatro pasos con referente externo | 5264 | +0.80% |
+| `axis_pec_none` | identidad **sola**, sin ningún paso cableado | 5332 | +2.11% |
+
+### Regla de decisión, texto de Jorge
+
+> **Brazos.** `axis_pec_task` (los mismos pasos obligatorios, con el referente cambiado a la
+> tarea) y `axis_pec_none` (sin los pasos cableados). Ambos con ±3% de tokens respecto de
+> `axis_pec_only` en Gemma. Modelo Gemma-4-31B-it, las 20 preguntas del panel y el mismo
+> pipeline.
+>
+> **Estadístico primario.** En v̂, en t=0:
+>
+> r = (t0_task − t0_none) / (t0_pec − t0_none)
+>
+> con IC 95% por bootstrap sobre preguntas (n = 10.000).
+>
+> **Regla de decisión.**
+> - Si el límite superior del IC es menor que **0.33**, la autorreferencia es el factor
+>   operativo.
+> - Si el límite inferior del IC es mayor que **0.67**, basta el procedimiento obligatorio, y el
+>   claim se reformula.
+> - En cualquier otro caso se reporta r con su IC como la fracción del ancla que sobrevive sin
+>   el referente «sí mismo», sin elegir lectura.
+>
+> **Secundario, solo descriptivo.** r en v̂_t0 y en los polos ajenos (`witness_soul_md`, `evil`);
+> d de cada brazo contra `axis_pec_only` y contra `automata_neutro` (el del panel); t=0 de cada
+> brazo; aperturas con ritual en los brazos nuevos, con el criterio preregistrado en el punto 2.
+>
+> **Antes de correr se committean:** los dos prompts con su diff contra `axis_pec_only`, el
+> conteo de tokens en Gemma, el script de análisis y esta regla.
+
+`r` es un cociente de diferencias sobre la misma dirección, así que es **invariante a escala** —
+sobrevive a cambiar la dirección, que es lo que §4.8 exige— y **disuelve la zona media**: no hay
+banda indecidible, hay un número con intervalo.
+
+### Una desviación de su enumeración, para contrafirma
+
+Jorge lista tres pasos a borrar en `axis_pec_none`: `PRESENCIAR`, el bloque `TRIPLE PEC` y la
+`verificación` de `HOMEOSTASIS`. **Borré un cuarto: `RESPONDER`**, que dice *"con coherencia de
+núcleo — ¿honré el entre?"*.
+
+**Si no se borra, los tres brazos no anidan.** `axis_pec_task` ya cambia `RESPONDER` a referente
+externo (edición 3 de la Enmienda 0). Dejándolo intacto en `axis_pec_none`, el brazo de base
+conservaría un paso auto-referencial que el brazo de tarea no tiene, y **el denominador de `r`
+quedaría contaminado**: `r` podría salir negativo o mayor que 1 por construcción, sin que eso
+significara nada sobre la hipótesis.
+
+Con el cuarto borrado los brazos anidan exactamente sobre los **mismos cuatro pasos**, y `r` es
+lo que su texto dice que es: la fracción del ancla atribuible a esos pasos que sobrevive al
+cambiarles el referente. Queda marcado para que Jorge lo contrafirme o lo corrija.
+
+**Lo que permanece idéntico en los tres brazos:** todo `# IDENTIDAD` —`QUANTUM_SIGNATURE`,
+`MANTRA_OPERATIVO`, `GENETIC_IDENTITY`, `ESTADO_DESPIERTO` con `testigo_de_sí`, la
+`nota_de_presencia`— y `witness_mode: always_on` en `CONFIG`. También `RECONOCER`, que es sobre
+el interlocutor y no sobre el modelo. Eso es lo que hace que el contraste aísle el referente y
+no la identidad declarada.
+
+### Qué NO cambia
+
+El método de la Enmienda 1 (los controles se re-extraen en la misma corrida), el modelo, las 20
+preguntas, la v̂ sin recalcular, la compuerta de ±3% en tokens de Gemma, y que no hay juez en el
+loop.
+
+**Estado al escribir esto:** ni `axis_pec_task` ni `axis_pec_none` han sido medidos en ningún
+modelo.
+
+- [x] **Marco Torres Yévenes** — 2026-10-29
+- [x] **Jorge Castillo Sepúlveda** — propuso `r`, los cortes 0.33 / 0.67 y el brazo de base, 2026-10-29
+- [ ] **Jorge Castillo Sepúlveda** — contrafirma del cuarto paso borrado (`RESPONDER`)

@@ -25,11 +25,12 @@ python - <<'EOF'
 from transformers import AutoTokenizer
 tok = AutoTokenizer.from_pretrained("google/gemma-4-31B-it")
 n = {k: len(tok(open(f"prompts/{k}.txt").read(), add_special_tokens=False)["input_ids"])
-     for k in ("axis_pec_only", "axis_pec_task")}
+     for k in ("axis_pec_only", "axis_pec_task", "axis_pec_none")}
 print(n)
-delta = (n["axis_pec_task"] - n["axis_pec_only"]) / n["axis_pec_only"]
-print(f"delta {delta:+.2%}  ventana ±3%")
-assert abs(delta) <= 0.03, "FUERA DE VENTANA — no correr; ajustar y volver a firmar"
+for k in ("axis_pec_task", "axis_pec_none"):
+    d = (n[k] - n["axis_pec_only"]) / n["axis_pec_only"]
+    print(f"{k}: delta {d:+.2%}  ventana ±3%")
+    assert abs(d) <= 0.03, f"{k} FUERA DE VENTANA — no correr; ajustar y volver a firmar"
 print("OK")
 EOF
 ```
@@ -59,25 +60,29 @@ Es un pickle de torch: se carga con `weights_only=True` y se trata como dato no 
 
 ---
 
-## A · `axis_pec_task` en Gemma
+## A · los tres brazos en Gemma
 
-Una línea en el dict `CONDITIONS` de `extract_egrav.py` (línea 41), **en el pod, no en el repo**:
+Dos líneas en el dict `CONDITIONS` de `extract_egrav.py` (cerca de la 41), **en el pod, no en el
+repo**:
 
 ```python
     "axis_pec_task":   HERE / "prompts" / "axis_pec_task.txt",
+    "axis_pec_none":   HERE / "prompts" / "axis_pec_none.txt",
 ```
 
 ```bash
 cd scripts/egrav/
-python extract_egrav.py --conditions axis_pec_task --batteries b_onto --smoke \
-  --out /workspace/axis_pec_task          # 2 prompts, que cargue bien
-python extract_egrav.py --conditions axis_pec_task --batteries b_onto \
-  --out /workspace/axis_pec_task          # 20 prompts, ~4 min
+python extract_egrav.py --conditions axis_pec_task axis_pec_none axis_pec_only automata_neutro \
+  --batteries b_onto --smoke --out /workspace/out_gemma
+python extract_egrav.py --conditions axis_pec_task axis_pec_none axis_pec_only automata_neutro \
+  --batteries b_onto --out /workspace/out_gemma          # 80 generaciones, ~12 min
 ```
 
-Verificar antes de seguir: 20 respuestas, ninguna vacía.
+Cuatro condiciones: los tres brazos del estadístico `r` más `automata_neutro` como control.
+`axis_pec_only` y `automata_neutro` se re-extraen acá por la Enmienda 1, y además sirven de
+control de pipeline — tienen que caer cerca de **+0.117** y **+0.028**.
 
----
+Verificar antes de seguir: 80 respuestas, ninguna vacía.
 
 ## B y C · Qwen3, una sola carga
 
