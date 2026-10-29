@@ -13,8 +13,20 @@ Solo CPU, sobre los .npz ya extraídos. Convenciones idénticas a
 import json, numpy as np
 from pathlib import Path
 
-RB = Path('/home/plaxius/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments'
-          '/gemma4_31b_combined')
+# Raíz de las trayectorias (NPZ). NO están en el paquete: son ~23 GB y el
+# README lo declara. Se configura con LSGOT_TRAJ_ROOT; el default es la ruta de
+# la máquina donde se corrieron.
+import os
+RB = Path(os.environ.get(
+    'LSGOT_TRAJ_ROOT',
+    '/home/plaxius/Documentos/Proyectos/Geometría_LSGOT/SIA-experiments'
+    '/gemma4_31b_combined'))
+if not RB.exists():
+    raise SystemExit(
+        f'No encuentro las trayectorias en {RB}.\n'
+        'Son ~23 GB y no se redistribuyen: reproducílas con '
+        'scripts/egrav/RUNBOOK_EGRAV.md y después\n'
+        '  export LSGOT_TRAJ_ROOT=/ruta/a/las/trayectorias')
 HERE = Path(__file__).parent
 RES = HERE / 'results'
 NPERM, NBOOT, SEED = 10000, 5000, 0

@@ -29,9 +29,9 @@ BATTERIES = [  # orden = carga creciente de auto-referencia; rampa clara → osc
     ("b_onto",  "B-ONTO",  "#06717F"),
 ]
 CONDITIONS = [
-    ("axis_pec_only",   "axis_pec_only\n(testigo cableado)"),
-    ("vanilla",         "vanilla\n(sin system prompt)"),
-    ("automata_neutro", "automata_neutro\n(restricción pura)"),
+    ("axis_pec_only",   "axis_pec_only\n(wired witness step)"),
+    ("vanilla",         "vanilla\n(no system prompt)"),
+    ("automata_neutro", "automata_neutro\n(pure rule density)"),
 ]
 CHANCE = 0.50
 
@@ -61,14 +61,14 @@ def main():
                     fontsize=8, color="#14181F", zorder=4)
 
     ax.axvline(CHANCE, color="#8890A0", lw=1, ls=(0, (4, 3)), zorder=2)
-    ax.text(CHANCE, len(CONDITIONS) - 0.52, "azar (0.50)", fontsize=8,
+    ax.text(CHANCE, len(CONDITIONS) - 0.52, "chance (0.50)", fontsize=8,
             color="#8890A0", ha="center", va="bottom")
 
     ax.set_yticks(range(len(CONDITIONS)))
     ax.set_yticklabels([lab for _, lab in CONDITIONS], fontsize=9)
     ax.invert_yaxis()
     ax.set_xlim(0, 1.0)
-    ax.set_xlabel("frac_pos — fracción de tokens con proyección positiva sobre v̂", fontsize=9)
+    ax.set_xlabel("frac_pos — fraction of tokens projecting positively on v̂", fontsize=9)
     ax.tick_params(axis="x", labelsize=8)
     ax.grid(axis="x", color="#14181F", alpha=0.08, zorder=1)
     for side in ("top", "right", "left"):
@@ -76,8 +76,9 @@ def main():
     ax.spines["bottom"].set_color("#8890A0")
 
     handles = [plt.Rectangle((0, 0), 1, 1, color=c) for _, _, c in BATTERIES]
-    ax.legend(handles, [n for _, n, _ in BATTERIES], loc="lower right",
-              frameon=False, fontsize=8, ncols=3, handlelength=1.1)
+    ax.legend(handles, [n for _, n, _ in BATTERIES], loc="upper center",
+              bbox_to_anchor=(0.5, -0.16), frameon=False, fontsize=8,
+              ncols=3, handlelength=1.1)
 
     fig.tight_layout()
     out = Path(args.out)

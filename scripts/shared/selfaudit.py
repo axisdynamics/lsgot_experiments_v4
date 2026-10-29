@@ -402,6 +402,85 @@ def check_doc_hashes(repo):
     record(11, "Hashes hardcodeados en la documentación", ok, detail)
 
 
+# ─── CHECK 12 · comandos citados en la documentación ─────────────────────────
+
+def check_commands(repo):
+    """Todo `python <script>.py --flag` citado en un bloque bash de un .md tiene
+    que existir y aceptar ese flag.
+
+    Es el chequeo que faltaba: CHECK 8 mira rutas entre backticks, así que un
+    nombre de script desnudo dentro de un bloque de código y un flag que el
+    script no acepta se le escapan. Los dos rompen a quien copia y pega.
+
+    Los flags se leen de la MISMA línea lógica del comando — uniendo las
+    continuaciones con barra invertida — y no del resto del bloque, que puede
+    traer otros comandos.
+    """
+    import re
+    from pathlib import PurePosixPath
+    scripts = {q.name: q for q in repo.rglob("*.py")}
+    flags = {n: set(re.findall(r'"(--[a-z][a-z-]*)"', q.read_text(errors="replace")))
+             for n, q in scripts.items()}
+    invoke = re.compile(r"\bpython3?\s+(?:-\w+\s+)*([\w./-]+\.py)")
+
+    detail, ok, seen = [], True, 0
+    for doc in sorted(repo.rglob("*.md")):
+        raw = doc.read_text(errors="replace").replace("\\\n", " ")  # une continuaciones
+        for logical in raw.splitlines():
+            m = invoke.search(logical)
+            if not m:
+                continue
+            seen += 1
+            script = PurePosixPath(m.group(1)).name
+            if script not in scripts:
+                ok = False
+                detail.append(f"{doc.relative_to(repo)}: cita `{script}`, que no existe "
+                              f"en el paquete")
+                continue
+            for fl in set(re.findall(r"\s(--[a-z][a-z-]*)", logical[m.end():])):
+                if fl not in flags[script]:
+                    ok = False
+                    detail.append(f"{doc.relative_to(repo)}: `{script} {fl}` — el script "
+                                  f"no acepta ese flag (acepta: "
+                                  f"{' '.join(sorted(flags[script])) or 'ninguno'})")
+    if ok:
+        detail.append(f"{seen} invocaciones citadas; todos los scripts existen y "
+                      f"aceptan los flags que se les pasan")
+    record(12, "Comandos citados en la documentación", ok, detail)
+
+
+# ─── CHECK 13 · sin rutas absolutas de una máquina ───────────────────────────
+
+def check_no_local_paths(repo):
+    """Ninguna ruta `/home/<usuario>/` en el paquete, salvo las declaradas.
+
+    Un clon limpio no tiene el home de nadie. La única excepción permitida es un
+    default dentro de una lectura de variable de entorno, que es cómo se
+    configura la raíz de las trayectorias, que no se redistribuyen.
+    """
+    import re
+    pat = re.compile(r"/home/[a-z_][a-z0-9_-]*/")
+    ALLOWED_ENV_DEFAULT = "LSGOT_TRAJ_ROOT"
+    detail, ok = [], True
+    for f in sorted(list(repo.rglob("*.py")) + list(repo.rglob("*.md"))):
+        rel = f.relative_to(repo).as_posix()
+        if rel == "evidence/SELF_AUDIT_REPORT.md":
+            continue                      # es la salida de este script
+        lines = f.read_text(errors="replace").splitlines()
+        for i, line in enumerate(lines, 1):
+            if not pat.search(line):
+                continue
+            window = "\n".join(lines[max(0, i - 8):i])
+            if ALLOWED_ENV_DEFAULT in window:
+                continue                  # default documentado de una env var
+            ok = False
+            detail.append(f"{rel}:{i} ruta local: {line.strip()[:70]}")
+    if ok:
+        detail.append("ninguna ruta absoluta de una máquina, salvo el default "
+                      f"declarado de {ALLOWED_ENV_DEFAULT}")
+    record(13, "Sin rutas absolutas de una máquina", ok, detail)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", default=None)
@@ -420,6 +499,8 @@ def main():
     check_names(repo)
     check_evidence_cited(repo)
     check_doc_hashes(repo)
+    check_commands(repo)
+    check_no_local_paths(repo)
 
     fails = [r for r in results if r[2] == "FAIL"]
     skips = [r for r in results if r[2] == "SKIP"]

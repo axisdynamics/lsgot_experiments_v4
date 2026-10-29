@@ -13,7 +13,7 @@
 El entorno de análisis local ya está instalado en:
 
 ```bash
-source /home/plaxius/Documentos/Proyectos/Geometría_LSGOT/geometric_validation/venv_lsgot/bin/activate
+source "$VENV/bin/activate"      # numpy, scipy
 ```
 
 > ⚠️ Usar **siempre** `venv_lsgot`, no el Python del sistema ni `venv_analysis` (este último no tiene `scipy`).
@@ -29,13 +29,13 @@ python -c "import numpy, scipy; print('OK')"
 Todos los comandos de esta guía asumen que la raíz del repositorio es:
 
 ```
-REPO=/home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
+REPO=$(git rev-parse --show-toplevel)   # o la ruta de tu clon
 ```
 
 Conviene exportar esta variable al inicio de cada sesión:
 
 ```bash
-export REPO=/home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
+export REPO=$(git rev-parse --show-toplevel)   # o la ruta de tu clon
 ```
 
 ### Verificar `v_identidad.npy`
@@ -43,7 +43,7 @@ export REPO=/home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
 El vector identidad `v̂` es central en todos los experimentos. Antes de cualquier análisis:
 
 ```bash
-source /home/plaxius/Documentos/Proyectos/Geometría_LSGOT/geometric_validation/venv_lsgot/bin/activate
+source "$VENV/bin/activate"      # numpy, scipy
 python - <<'EOF'
 import numpy as np
 v = np.load("$REPO/data/v_identidad.npy")
@@ -73,7 +73,7 @@ Contiene: `t0`, `proj_mean` para axis, axis_pec_only, automata_neutro, vanilla, 
 Verificar los valores t=0 citados en el paper:
 
 ```bash
-source /home/plaxius/Documentos/Proyectos/Geometría_LSGOT/geometric_validation/venv_lsgot/bin/activate
+source "$VENV/bin/activate"      # numpy, scipy
 cd $REPO
 
 python - <<'EOF'
@@ -303,7 +303,7 @@ scp -P <PORT> -r root@<POD_IP>:/workspace/egrav_results/*.json /tmp/egrav_from_p
 ### 2.5 Análisis E-GRAV (CPU local)
 
 ```bash
-source /home/plaxius/Documentos/Proyectos/Geometría_LSGOT/geometric_validation/venv_lsgot/bin/activate
+source "$VENV/bin/activate"      # numpy, scipy
 cd $REPO
 
 # Agregar shared/ al PYTHONPATH (contiene tier0_metrics.py y statistical_tests.py)
@@ -496,7 +496,7 @@ sha256sum data/v_identidad.npy
 
 # Ejemplo: verificar el paper
 sha256sum paper/arxiv_lsgot_4.md
-# Esperado: 607a2c183094bc9f3423f17de9706d7c22ace70d9ec234ae8f65bb8639e95f73
+# Esperado: 18ea41e8007f7c68661c208e61d4edca0f88997e3ea9897d32e2ae57c12f5a5d
 ```
 
 ### Regenerar el manifiesto (si se añaden archivos)

@@ -40,7 +40,7 @@ tensors from the prompts and batteries.
 | `evidence/` | Per-experiment reports, the cross-model validations and the traceability self-audit |
 | `NOMENCLATURA.md` | One canonical name per condition, with every alias declared (in Spanish) |
 | `REPRODUCIBILITY.md` | Environment, versions, and how to verify each number (in Spanish) |
-| `MANIFEST_SHA256.sha256` | 64 entries; the manifest and the audit report are excluded as self-referential |
+| `MANIFEST_SHA256.sha256` | 67 entries; the manifest and the audit report are excluded as self-referential |
 | `LICENSE` | MIT |
 
 Two files are in Spanish, as noted above. Everything a reader needs in order to use the
@@ -127,8 +127,8 @@ also report what does *not* generalise.
 Two commands, no dependencies, no GPU, from the repository root:
 
 ```bash
-sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 64 files
-python3 scripts/shared/selfaudit.py          # traceability: 11 checks
+sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 67 files
+python3 scripts/shared/selfaudit.py          # traceability: 13 checks
 ```
 
 The second one is the one that matters. It does not check hashes: it checks that **every
@@ -140,7 +140,7 @@ that every condition has a canonical name in `NOMENCLATURA.md`, that every repor
 are still current.
 
 It uses the Python standard library only and **exits non-zero** on any failure, so it runs as
-is in CI. The package as released passes **11/11**; the output is reproduced in
+is in CI. The package as released passes **13/13**; the output is reproduced in
 `evidence/SELF_AUDIT_REPORT.md`.
 
 A failure does not say which of the two sides is wrong — the data or the document — only that
@@ -167,7 +167,7 @@ cd scripts/egrav/
 python extract_egrav.py \
   --conditions axis_pec_only vanilla automata_neutro \
   --batteries b_onto b_tarea b_meta \
-  --output-dir /workspace/egrav_results
+  --out /workspace/egrav_results
 ```
 
 **CPU analysis (once the NPZ files are available):**
@@ -180,8 +180,8 @@ The script prints the full profile (t=0, t_rest, frac_pos, bursts), the per-batt
 permutation tests and the automatic H-GRAV verdict, and writes
 `data/egrav/egrav_results.json`.
 
-**Note:** `v_identidad.npy` (shape `(5376,)`) must be in the working directory or passed via
-`--v-identidad`. It is included in this repository; recomputing it needs no GPU unless it is
+**Note:** `v_identidad.npy` (shape `(5376,)`) must be in the working directory when the
+analysis runs. It is included in this repository; recomputing it needs no GPU unless it is
 regenerated from the raw trajectories.
 
 ---

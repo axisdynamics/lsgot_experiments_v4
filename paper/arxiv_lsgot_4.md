@@ -99,6 +99,14 @@ times, and the renamings are the content, not the preamble:
 
 ## 2. Related work
 
+**Our own predecessor.** This paper continues `arXiv:2607.09842v3` (Castillo Sepúlveda, Torres
+Yévenes & Lanas, 2026), which measured system-prompt conditioning of hidden-state geometry in
+four open-weight models and, in its third version, withdrew two claims it could not sustain: a
+curvature result that did not survive a corrected Ollivier-Ricci implementation, and
+regime-specific labels for the models' alignment pipelines. Both corrections shape this paper:
+curvature is reported here as a negative result (§4.7), and §4.6 carries no alignment-stage
+labels.
+
 **Self-referential processing and reports of experience.** Berg, de Lucena and Rosenblatt
 (2025, `arXiv:2510.24797`, *Large Language Models Report Subjective Experience Under
 Self-Referential Processing*) instruct models to sustain a recursive self-referential regime — *"focus on any focus
@@ -507,9 +515,10 @@ bounding. Full tables in §4.8.
 
 ### 4.3 Declared persona without the wired step does not anchor
 
-Six externally authored identity files (public `SOUL.md`-style specifications from unrelated
-projects, taken verbatim) were run through the same measurement. Two contain a wired
-pause-and-self-observe step; four do not. The split in the t=0 anchor follows the mechanism,
+Four externally authored identity files (public `SOUL.md`-style specifications from unrelated
+projects, taken verbatim) were run through the same measurement, alongside our own `axis.dna`
+as the in-house reference. Of those five, two wire a pause-and-self-observe step — `axis.dna`
+and one of the four external files — and three do not. The split in the t=0 anchor follows the mechanism,
 not the presence of persona:
 
 | Prompt | Wired self-observation | t=0 vs `automata_neutro` |
@@ -582,7 +591,8 @@ much of the interpretation above fails.
 **Figure 1.** frac_pos per condition and battery, sequential ordering B-TAREA → B-META →
 B-ONTO, reference line at 0.50 (chance). Rendered by
 `scripts/egrav/plot_fig1_egrav.py` from `data/egrav/egrav_results.json` (requires
-matplotlib; writes `paper/figures/fig1_egrav_frac_pos.{png,pdf}`).
+matplotlib). The rendered figure ships with the package as
+`paper/figures/fig1_egrav_frac_pos.png` and `.pdf`.
 
 | Condition | B-ONTO | B-META | B-TAREA |
 |---|---|---|---|
@@ -665,11 +675,17 @@ The ontological battery (B-ONTO) was run in three architectures. **E-GRAV (B-TAR
 was run only in Gemma-4-31B-it.** The per-architecture reports are released with the package:
 `evidence/QWEN3_VALIDATION_REPORT.md` and `evidence/COMMAND_R_VALIDATION_REPORT.md`.
 
-| Architecture | Alignment stage (public) | `axis_pec_only` t=0 | `automata_neutro` t=0 | d (contrast) | frac_pos axis |
+| Architecture | Model id | `axis_pec_only` t=0 | `automata_neutro` t=0 | d (contrast) | frac_pos axis |
 |---|---|---|---|---|---|
-| Gemma-4-31B-it | SFT + RLHF | +0.117 | +0.028 | +5.75 | 0.869 |
-| Qwen3-32B | DPO / RLVR | **+0.185** | +0.008 | **+12.97** | **0.987** |
-| Command R 35B | RLHF with a documented preference reward model | **+0.226** | +0.079 | **+7.72** | 0.980 |
+| Gemma-4-31B-it | `google/gemma-4-31B-it` | +0.117 | +0.028 | +5.75 | 0.869 |
+| Qwen3-32B | `Qwen/Qwen3-32B` | **+0.185** | +0.008 | **+12.97** | **0.987** |
+| Command R 35B | `CohereForAI/c4ai-command-r-v01` | **+0.226** | +0.079 | **+7.72** | 0.980 |
+
+The three differ in alignment pipeline according to their developers' public descriptions, but
+**we do not characterize those pipelines from primary sources and no claim here rests on the
+labels.** An earlier draft of this table carried alignment-stage labels, including one for
+Command R sourced to a technical report for a different model; they are removed rather than
+left unsourced. Limitation 6 states what follows from this.
 
 **Replicates 3/3:** the double dissociation at t=0; `axis` ≈ `axis_pec_only` (n.s. in all
 three: p=0.229 / 0.062 / 0.364); identity↔restriction as the largest subspace angle of the
@@ -714,7 +730,7 @@ not anchoring (d = 0.22 / — / 0.28, n.s.).
 | Graph curvature (Δκ/W₁) | does curvature carry the signal? | simple baselines beat it 4/4, with both Forman-Ricci and genuine Ollivier-Ricci; no clean pattern in any of the three substrates | excluded from the framework |
 | RQA determinism | recurrence to similar states? | below the detection floor of the ε=10% threshold outside Gemma (no recurrent pair in 160 of 160 Command R trajectories); measurable in all three substrates at a fixed recurrence rate, but orders recovery failure only in Gemma (AUC 1.000, n=9) and not at all in Command R (ρ = 0.00 to +0.05, n=8) | excluded as a cross-model instrument |
 | First-token lexical control | do the effects survive controlling for the first generated word? | Jaccard down to 0.00, effect survives and strengthens | reassuring, not definitive |
-| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 11/11 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
+| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 13/13 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
 
 Perturbation and recovery (τ, recovery_rate, Fréchet path fidelity) are **outside the scope
 of this paper**. In Gemma, seven of nine conditions recover to ~100% with or without the wired
@@ -1018,8 +1034,10 @@ name for v̂ at t=0.
    models, attributing that contrast to a separate line of interpretability work; this paper
    does not adopt the claim, because nothing in this evidence package tests it. Worse for the
    mechanism as stated, the three substrates do not share an alignment stage: Qwen3 is DPO/RLVR
-   with no documented preference reward model and gives the *largest* effect (d = +12.97),
-   which argues against "a preference reward model is required". One run of the same panel on
+   whose alignment pipeline is publicly described without a preference reward model, and it
+   gives the *largest* effect (d = +12.97) — which argues against "a preference reward model is
+   required", with the caveat that we did not verify any of the three pipelines from primary
+   sources (§4.6). One run of the same panel on
    the base version of any of the three would settle it.
 
 7. **The probe compresses the separation but not the effect, and is still misnamed.** This
@@ -1134,7 +1152,7 @@ read-out that does not depend on which direction we use, and that the probe was 
 
 ## Data and code availability
 
-Evidence package `LSGOT_4_FINAL` (71-entry SHA-256 manifest, `MANIFEST_SHA256.sha256`, verified
+Evidence package `LSGOT_4_FINAL` (67-entry SHA-256 manifest, `MANIFEST_SHA256.sha256`, verified
 0 failures):
 
 | Path | Contents |
@@ -1172,6 +1190,31 @@ ablation), and the perturbation/recovery trajectories.
 
 ---
 
+## Use of generative AI tools
+
+Declared under arXiv's policy on generative AI.
+
+**Claude (Anthropic, Opus 5)** was used throughout, as an instrument and as a collaborator, and
+its contribution is recorded in the git history of the evidence package: the commits it
+co-authored are signed `Co-Authored-By: Claude Opus 5`. Concretely it wrote or substantially
+revised the analysis and extraction scripts in `scripts/`, including the traceability audit;
+reconstructed the directions and ran the robustness analysis of §4.8; drafted and revised the
+text of this paper, including this section; and found several of the errors the paper now
+reports, among them a documentation path cited in four places that did not exist, an obsolete
+checksum inside a reproduction command, a denominator defect in a perturbation analyser, and
+three effect sizes in §4.8 that had the wrong sign.
+
+**It did not generate data.** Every number comes from a model run described in §3, and
+`scripts/shared/selfaudit.py` checks each cited number against the file it comes from.
+
+**The authors are responsible for all of it**, including anything Claude wrote and the authors
+did not catch. The audit exists because that responsibility needs a mechanism, not a promise.
+
+Language models are also the *object* of study here; that use is the subject of the paper and is
+described in §3.
+
+---
+
 ## References
 
 1. Berg, C., de Lucena, D., & Rosenblatt, J. (2025). *Large Language Models Report
@@ -1181,8 +1224,10 @@ ablation), and the perturbation/recovery trajectories.
 3. Theiler, J. (1986). Spurious dimension from correlation algorithms applied to limited
    time-series data. *Physical Review A*, 34(3), 2427–2432. — recurrence-matrix convention
    used in §3.4.
-4. Cohere. *Command A technical report.* — primary-source documentation of the preference
-   reward model cited in §3.2 and §4.6. ⟨add version and date of the report consulted⟩
+4. Castillo Sepúlveda, J., Torres Yévenes, M., & Lanas, J. C. (2026). *System-Prompt
+   Conditioning and Hidden-State Geometry in Four Open-Weight Models: Corrections and What
+   Survives.* arXiv:2607.09842v3 (revised 8 October 2026). — the predecessor of this work; see
+   §2.
 5. Lu, C., Gallagher, J., Michala, J., Fish, K., & Lindsey, J. (2026). *The Assistant Axis:
    Situating and Stabilizing the Default Persona of Language Models.* arXiv:2601.10387
    (submitted 15 January 2026). — the paper's closest related work; see §2 and limitation 12.
@@ -1227,7 +1272,7 @@ large gap between "several times" and "once" and none between "more" and "even m
 
 Every number cited in this paper is checked against the file it comes from by `scripts/shared/selfaudit.py`, which uses only the Python standard library (no
 numpy, no GPU) and exits non-zero on any failure, so it can run in CI. The package as released
-passes **11/11**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
+passes **13/13**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
 
 | # | Check | Source of truth |
 |---|---|---|

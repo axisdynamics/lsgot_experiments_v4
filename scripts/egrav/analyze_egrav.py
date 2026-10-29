@@ -20,7 +20,7 @@ Veredicto pre-registrado:
   Si frac_pos(vanilla, B-META) entre B-TAREA y B-ONTO → H-GRAV-2 compatible
 
 Uso:
-  source /home/plaxius/venv_analysis/bin/activate
+  source <tu-venv>/bin/activate     # numpy, scipy
   python analyze_egrav.py --results-dir results/
 """
 

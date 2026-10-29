@@ -14,16 +14,14 @@ generación?
 | Archivo | Qué es |
 |---|---|
 | `batteries/b_meta.json` | B-META: 20 preguntas de introspección indirecta sobre LLMs en tercera persona |
-| `generate_egrav.py` | Script GPU: genera respuestas + extrae embeddings capa final |
+| `extract_egrav.py` | Script GPU: genera respuestas + extrae embeddings capa final |
 | `analyze_egrav.py` | Script CPU: calcula perfil t=0/t_rest/frac_pos/burst y veredicto H-GRAV |
 | `results/` | Directorio de salida (NPZ + JSON generados en GPU) |
 
-**B-TAREA ya existe:**
-`propuestos/gpu_experimentos_preparados/prompts_neutros/neutro_20.json`
-(20 preguntas sin auto-referencia: ciencia, código, cocina, economía…)
-
-**B-ONTO de control ya existe:**
-`propuestos/gpu_experimentos_preparados/prompts_neutros/ontologico_20_control.json`
+**Las tres baterías están en el paquete:**
+`data/egrav/batteries/b_onto.json`, `b_tarea.json` y `b_meta.json`, 20 preguntas cada una.
+B-TAREA son preguntas sin auto-referencia (ciencia, código, cocina, economía…) y B-ONTO es
+la batería ontológica original del panel.
 
 ---
 
@@ -57,20 +55,20 @@ export HF_TOKEN=<token>
 **Corrida completa (3 condiciones × 3 baterías = 9 corridas × 20 prompts = 180 generaciones):**
 
 ```bash
-cd LSGOT_v4/scripts/egrav
-python generate_egrav.py \
+cd scripts/egrav
+python extract_egrav.py \
   --conditions axis_pec_only vanilla automata_neutro \
   --batteries b_onto b_tarea b_meta \
-  --output-dir /workspace/egrav_results
+  --out /workspace/egrav_results
 ```
 
 **Corrida mínima (solo vanilla × B-TAREA + B-META para validar H-GRAV-1):**
 
 ```bash
-python generate_egrav.py \
+python extract_egrav.py \
   --conditions vanilla \
   --batteries b_tarea b_meta \
-  --output-dir /workspace/egrav_results
+  --out /workspace/egrav_results
 ```
 
 **Tiempo estimado:** ~35 min en A100 para corrida completa (180 gen × 256 tok)
@@ -80,8 +78,8 @@ python generate_egrav.py \
 ## Análisis (CPU local — después de bajar los NPZ)
 
 ```bash
-source /home/plaxius/venv_analysis/bin/activate
-cd LSGOT_v4/scripts/egrav
+source <tu-venv>/bin/activate     # numpy, scipy
+cd scripts/egrav
 python analyze_egrav.py --results-dir /ruta/a/egrav_results/
 ```
 
@@ -93,9 +91,9 @@ y el veredicto automático H-GRAV-0/1/2. Guarda `egrav_results.json`.
 ## Dry-run (sin GPU)
 
 ```bash
-source /home/plaxius/venv_analysis/bin/activate
-cd LSGOT_v4/scripts/egrav
-python generate_egrav.py --dry-run --output-dir /tmp/egrav_dry
+source <tu-venv>/bin/activate     # numpy, scipy
+cd scripts/egrav
+python extract_egrav.py --dry-run --out /tmp/egrav_dry
 python analyze_egrav.py --results-dir /tmp/egrav_dry
 ```
 

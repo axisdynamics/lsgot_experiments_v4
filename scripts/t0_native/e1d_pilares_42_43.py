@@ -3,7 +3,13 @@
 (ii) §4.3 «el split de los SOUL.md externos sigue al mecanismo»: las dos con paso
      cableado vs las cuatro sin, y todas vs generic_long."""
 import sys, json, numpy as np
-sys.path.insert(0, '/home/plaxius/Escritorio/Buscando_la_geometría/tier0_agenda')
+from pathlib import Path
+
+def _out_path():
+    d = Path(__file__).resolve().parent / 'results'
+    d.mkdir(parents=True, exist_ok=True)
+    return d / 'e1d_pilares_42_43.json'
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # el módulo está al lado
 import e1_vhat_nativa_t0 as E
 
 dirs = E.build_dirs()
@@ -32,5 +38,5 @@ for vn in ('v_canon','v_t0','v_t0_pec'):
         r = E.contrast(pp[a], pp[b]); out[vn][f'{a}_vs_{b}'] = r
         sig = 'sig ' if r['p'] <= 0.05 else 'n.s.'
         print(f"   {a:22s} vs {b:22s} d={r['d']:+6.2f} [{r['d_ci95'][0]:+6.2f},{r['d_ci95'][1]:+6.2f}] p={r['p']:.4f}  {sig}")
-json.dump(out, open('/home/plaxius/Escritorio/Buscando_la_geometría/tier0_agenda/results/e1d_pilares_42_43.json','w'), indent=1)
+json.dump(out, open(_out_path(), 'w'), indent=1)
 print("\n→ results/e1d_pilares_42_43.json")

@@ -13,7 +13,13 @@ Con estas, axis / axis_pec_only / axis_berg / axis_nowit / axis_bergwitness son
 TODAS fuera de muestra: los contrastes entre ellas son limpios.
 """
 import sys, json, itertools, numpy as np
-sys.path.insert(0, '/home/plaxius/Escritorio/Buscando_la_geometría/tier0_agenda')
+from pathlib import Path
+
+def _out_path():
+    d = Path(__file__).resolve().parent / 'results'
+    d.mkdir(parents=True, exist_ok=True)
+    return d / 'e1e_lofo_t0_nativa.json'
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # el módulo está al lado
 import e1_vhat_nativa_t0 as E
 
 gl = E.t0_raw('generic_long')
@@ -51,5 +57,5 @@ for vn, v in dirs.items():
         print(f"      {a:16s} vs {b:16s} d={r['d']:+6.2f} [{r['d_ci95'][0]:+6.2f},{r['d_ci95'][1]:+6.2f}] p={r['p']:.4f}  {'sig' if r['p']<=.05 else 'n.s.'}")
 out['cosines_vs_canon'] = {k: float(v@canon['v_canon']) for k, v in dirs.items()}
 out['cosines_vs_v_t0_axis'] = {k: float(v@canon['v_t0']) for k, v in dirs.items()}
-json.dump(out, open('/home/plaxius/Escritorio/Buscando_la_geometría/tier0_agenda/results/e1e_lofo_t0_nativa.json','w'), indent=1)
+json.dump(out, open(_out_path(), 'w'), indent=1)
 print("\n→ results/e1e_lofo_t0_nativa.json")
