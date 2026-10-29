@@ -152,3 +152,28 @@ panel.
 
 *Este archivo se committea **antes** de la extracción. Cualquier cambio posterior a la regla de
 decisión queda en el historial de git y se lee como lo que es.*
+
+---
+
+## Enmienda 1 — 2026-10-29, antes de la corrida
+
+**Qué cambia:** los dos controles, `axis_pec_only` y `automata_neutro`, se vuelven a extraer en
+**la misma corrida** que `axis_pec_task`, en vez de tomarse de las mediciones existentes.
+
+**Por qué:** el método de arriba decía «controles: `axis_pec_only` y `automata_neutro` ya
+medidos, mismo pipeline». Sus NPZ del panel vienen del pipeline v5, y `axis_pec_task` se
+extrae con `extract_egrav.py`. §3.4 del paper verifica que las dos convenciones coinciden al
+cuarto decimal en t=0, así que el contraste cruzado sería defendible — pero medir los tres en
+la misma pasada lo vuelve innecesario de defender. Son 40 generaciones más, ~8 minutos con el
+modelo ya cargado.
+
+**Beneficio adicional:** es un control de pipeline. `axis_pec_only` re-extraído tiene que caer
+cerca de **+0.117** y `automata_neutro` cerca de **+0.028**, que son los valores publicados. Si
+no lo hacen, el problema es la extracción y los números nuevos no valen.
+
+**Qué NO cambia:** ninguna regla de decisión, ningún corte, ninguna ventana, ninguna predicción.
+La comparación que cuenta sigue siendo una sola: `axis_pec_task` contra `axis_pec_only` en v̂,
+permutación a dos colas, n=10.000.
+
+**Estado al escribir esto:** `axis_pec_task` no ha sido medido en ningún modelo. La enmienda se
+envió al proceso de extracción antes de que llegara al paso de Gemma.
