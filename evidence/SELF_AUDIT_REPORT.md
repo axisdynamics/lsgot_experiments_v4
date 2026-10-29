@@ -44,7 +44,7 @@ exclusiones y verifica que no estén listadas.
 Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
 
 [PASS] CHECK 1 — Integridad del MANIFEST_SHA256
-         entradas en el MANIFEST: 76
+         entradas en el MANIFEST: 77
          hashes que no coinciden: 0
          archivos declarados y ausentes: 0
          archivos en el árbol y fuera del MANIFEST: 0

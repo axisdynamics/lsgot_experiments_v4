@@ -1152,7 +1152,7 @@ read-out that does not depend on which direction we use, and that the probe was 
 
 ## Data and code availability
 
-Evidence package `LSGOT_4_FINAL` (76-entry SHA-256 manifest, `MANIFEST_SHA256.sha256`, verified
+Evidence package `LSGOT_4_FINAL` (77-entry SHA-256 manifest, `MANIFEST_SHA256.sha256`, verified
 0 failures):
 
 | Path | Contents |
