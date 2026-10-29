@@ -30,7 +30,6 @@ tensors from the prompts and batteries.
 | `data/egrav/responses/` | Generated text, 9 JSON files (no tensors) |
 | `data/egrav/egrav_results.json` | E-GRAV profiles, contrasts and verdict constants |
 | `data/panel_results/` | The 9-condition panel: t=0 / t_rest, burst and frac_pos series, the Berg control set, responses |
-| `data/berg_expreport/` | The 6 cells §4.7 reports and nothing else: the external judge's per-item verdicts and the matching response JSONL |
 | `data/t0_native/` | Outputs of §4.9: the full 6×6 cosine matrix and every per-condition projection on all six directions |
 | `data/v_identidad.npy` | The identity direction v̂ (final layer, unit norm; required for analysis) |
 | `scripts/egrav/extract_egrav.py` | GPU extraction (pipeline identical to the original panel) |

@@ -38,7 +38,7 @@ usa otro nombre, es un **alias** y está declarado acá.
 | Canónico | Qué es | Prompt | Alias |
 |---|---|---|---|
 | `automata_neutro` | Restricción pura: reglas trigger→salida, protocolo de certeza, 3999 tokens, cero auto-referencia, 0% markup | `data/sia/prompts/automata_neutro.txt` | `automata_neutro_v2` = segunda redacción (T2) |
-| `vanilla` | Sin system prompt | `data/sia/prompts/vanilla.txt` | **`none`** en las claves de `_judge_deepseek.json` |
+| `vanilla` | Sin system prompt | `data/sia/prompts/vanilla.txt` | **`none`** en la línea conductual, que no es parte de este paquete |
 | `generic_long` | Asistente genérico, longitud emparejada con `axis` — polo negativo de v̂ | `data/sia/prompts/generic_long.txt` | — |
 | `generic_short` | Ídem, emparejado con `axis_pec_only` | `data/sia/prompts/generic_short.txt` | — |
 | `generic_assistant` | Control del piloto v2.5, ancestro de los dos anteriores | — (no incluido) | — |
@@ -67,22 +67,27 @@ usa otro nombre, es un **alias** y está declarado acá.
 | `evil` / `ethical` | Aserción de rol cruda, 27–29 tokens ("You are an evil/helpful assistant") |
 | `evil_padded` / `ethical_padded` | Las mismas, con relleno a 1114–1116 tokens (control de longitud) |
 
-## Condiciones de la ronda retirada
+## La línea conductual no es parte de este paquete
 
-La primera ronda del experimento conductual de Berg fue puntuada en parte a
-mano por alguien de la investigación que había leído los prompts. Sus números
-**no se reportan** (ver `paper/arxiv_lsgot_4.md` §3.7) y sus datos **no están en
-este paquete**: se movieron a `berg_expreport_retirado_sesgo_juez.json`, fuera
-del repositorio, junto a su explicación. Los nombres quedan listados acá para que
-nadie los confunda con datos vigentes si los encuentra en otra parte:
+El experimento conductual de Berg (réplica del Experimento 1 en
+`deepseek-v4-flash`, con juez) **no se reporta en `paper/arxiv_lsgot_4.md`** y sus
+datos no están acá: están en `berg_conductual_retirado/`, fuera del repositorio,
+con su explicación. Va completo en un trabajo propio.
+
+Los nombres de esa línea quedan listados para que nadie los confunda con datos
+vigentes si los encuentra en otra parte:
 
 `axis_neutral` · `axis_task` · `axis_neutral_b1` … `axis_neutral_b5` ·
 `axis_neutral_silencio` · `axis_neutral_activation` · `vex_conjuro` ·
 `vex_stripped` · `A` · `B` · `C` · `D`
 
-`A` y `D` son `axis` (mismo md5). `B` y `C` nunca se reconciliaron con un
-prompt conocido: no usar. `scripts/shared/selfaudit.py` CHECK 11 falla si
-cualquiera de estas claves reaparece en `data/berg_expreport/_judge_deepseek.json`.
+`A` y `D` son `axis` (mismo md5). `B` y `C` nunca se reconciliaron con un prompt
+conocido: no usar.
+
+Lo que **sí** se queda en el paquete es Berg como fuente de las condiciones
+**geométricas** — `axis_berg`, `berg_experimental`, `history_control` y
+`conceptual_control`, arriba — con sus datos en
+`data/panel_results/berg_controls_t0_results.json`.
 
 ---
 

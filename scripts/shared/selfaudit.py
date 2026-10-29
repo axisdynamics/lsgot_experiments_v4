@@ -209,33 +209,12 @@ def check_egrav(repo):
     record(4, "frac_pos de E-GRAV vs egrav_results.json", ok, detail)
 
 
-# ─── CHECK 5 · porcentajes del juez ──────────────────────────────────────────
-
-def check_judge(repo):
-    f = repo / "data/berg_expreport/_judge_deepseek.json"
-    if not f.exists():
-        return record(5, "porcentajes del juez", None, ["archivo ausente"])
-    d = json.loads(f.read_text())
-    detail, ok = [], True
-    for key, exp in sorted(JUDGE_EXPECTED.items()):
-        v = d.get(key)
-        if v is None:
-            detail.append(f"{key}: SKIP — clave ausente")
-            continue
-        act = sum(v) / len(v)
-        good = abs(act - exp) <= TOL_PCT
-        ok &= good
-        detail.append(f"{key:28s} n={len(v)} sum={sum(v):2d} json={act:.3f} "
-                      f"paper={exp:.2f} -> {'PASS' if good else 'FAIL'}")
-    record(5, "porcentajes del juez vs _judge_deepseek.json", ok, detail)
-
-
-# ─── CHECK 6 · ráfagas y frac_pos del panel ──────────────────────────────────
+# ─── CHECK 5 · ráfagas y frac_pos del panel ──────────────────────────────────
 
 def check_eh2(repo):
     f = repo / "data/panel_results/EH2_results.json"
     if not f.exists():
-        return record(6, "burst_mean y frac_pos", None, ["archivo ausente"])
+        return record(5, "burst_mean y frac_pos", None, ["archivo ausente"])
     series = json.loads(f.read_text())["series_metrics"]["con_t0"]
     detail, ok = [], True
     for cond, (eb, ef) in sorted(EH2_EXPECTED.items()):
@@ -247,10 +226,10 @@ def check_eh2(repo):
             ok &= good
             detail.append(f"{cond:17s} {label:10s} paper={exp:.3f} json={act:.4f} "
                           f"diff={abs(act-exp):.4f} -> {'PASS' if good else 'FAIL'}")
-    record(6, "burst_mean y frac_pos vs EH2_results.json (con_t0)", ok, detail)
+    record(5, "burst_mean y frac_pos vs EH2_results.json (con_t0)", ok, detail)
 
 
-# ─── CHECK 7 · archivos de respuestas ────────────────────────────────────────
+# ─── CHECK 6 · archivos de respuestas ────────────────────────────────────────
 
 def check_responses(repo):
     dirs = [repo / "data/egrav/responses", repo / "data/panel_results/responses"]
@@ -271,18 +250,18 @@ def check_responses(repo):
             detail.append(f"{f.name:46s} n={len(items):3d} vacías={empty} "
                           f"-> {'PASS' if good else 'FAIL'}")
     detail.append(f"archivos inspeccionados: {total}")
-    record(7, "Archivos de respuestas: N=20, sin vacías", ok, detail)
+    record(6, "Archivos de respuestas: N=20, sin vacías", ok, detail)
 
 
-# ─── CHECK 8 · v_identidad.npy (sin numpy) ───────────────────────────────────
+# ─── CHECK 7 · v_identidad.npy (sin numpy) ───────────────────────────────────
 
 def check_vhat(repo):
     f = repo / "data/v_identidad.npy"
     if not f.exists():
-        return record(8, "v_identidad.npy forma y norma", None, ["archivo ausente"])
+        return record(7, "v_identidad.npy forma y norma", None, ["archivo ausente"])
     raw = f.read_bytes()
     if raw[:6] != b"\x93NUMPY":
-        return record(8, "v_identidad.npy forma y norma", False, ["no es un .npy"])
+        return record(7, "v_identidad.npy forma y norma", False, ["no es un .npy"])
     major = raw[6]
     hlen = int.from_bytes(raw[8:10], "little") if major == 1 else \
         int.from_bytes(raw[8:12], "little")
@@ -295,7 +274,7 @@ def check_vhat(repo):
     typecode = {"<f4": "f", "<f8": "d"}.get(descr)
     detail = [f"header descr={descr} shape={shape}"]
     if typecode is None:
-        return record(8, "v_identidad.npy forma y norma", False,
+        return record(7, "v_identidad.npy forma y norma", False,
                       detail + [f"dtype no soportado por este chequeo: {descr}"])
     vals = array(typecode)
     vals.frombytes(body[:len(body) - (len(body) % vals.itemsize)])
@@ -306,10 +285,10 @@ def check_vhat(repo):
                f"{'PASS' if ok_shape else 'FAIL'}",
                f"norma={norm:.8f} esperado≈1.0 diff={abs(norm-1.0):.2e} -> "
                f"{'PASS' if ok_norm else 'FAIL'}"]
-    record(8, "v_identidad.npy forma y norma (lectura stdlib)", ok_shape and ok_norm, detail)
+    record(7, "v_identidad.npy forma y norma (lectura stdlib)", ok_shape and ok_norm, detail)
 
 
-# ─── CHECK 9 · rutas citadas que no existen ──────────────────────────────────
+# ─── CHECK 8 · rutas citadas que no existen ──────────────────────────────────
 
 def check_paths(repo):
     """Toda ruta del repo citada entre backticks en un .md tiene que existir.
@@ -345,15 +324,15 @@ def check_paths(repo):
     if ok:
         detail.append("todas las rutas del paquete citadas en .md existen "
                       "(externas declaradas aparte)")
-    record(9, "Rutas citadas en la documentación", ok, detail)
+    record(8, "Rutas citadas en la documentación", ok, detail)
 
 
-# ─── CHECK 10 · nomenclatura de condiciones ──────────────────────────────────
+# ─── CHECK 9 · nomenclatura de condiciones ──────────────────────────────────
 
 def check_names(repo):
     nom = repo / "NOMENCLATURA.md"
     if not nom.exists():
-        return record(10, "Nomenclatura de condiciones", False, ["NOMENCLATURA.md ausente"])
+        return record(9, "Nomenclatura de condiciones", False, ["NOMENCLATURA.md ausente"])
     text = nom.read_text()
     prompts = sorted(p.stem for p in (repo / "data/sia/prompts").glob("*.txt")) \
         if (repo / "data/sia/prompts").exists() else []
@@ -369,26 +348,10 @@ def check_names(repo):
         ok &= disambiguated
         detail.append(f"alias ambiguo {name:14s} desambiguado -> "
                       f"{'PASS' if disambiguated else 'FAIL'}")
-    record(10, "Nomenclatura de condiciones vs NOMENCLATURA.md", ok, detail)
+    record(9, "Nomenclatura de condiciones vs NOMENCLATURA.md", ok, detail)
 
 
-def check_judge_scope(repo):
-    """El archivo del juez solo puede contener las celdas que el paper reporta."""
-    f = repo / "data/berg_expreport/_judge_deepseek.json"
-    if not f.exists():
-        return record(11, "Alcance del archivo del juez", None, ["archivo ausente"])
-    keys = set(json.loads(f.read_text()))
-    extra = sorted(keys - JUDGE_LIVE_KEYS)
-    falta = sorted(JUDGE_LIVE_KEYS - keys)
-    detail = [f"celdas en el archivo: {len(keys)} · reportadas por el paper: "
-              f"{len(JUDGE_LIVE_KEYS)}"]
-    detail += [f"  NO entregada en el paper, no debería estar acá: {k}" for k in extra]
-    detail += [f"  reportada por el paper y ausente: {k}" for k in falta]
-    if not extra and not falta:
-        detail.append("coincide exacto — ninguna celda de la ronda retirada en el paquete")
-    record(11, "Alcance del archivo del juez (solo lo que el paper entrega)",
-           not extra and not falta, detail)
-
+# ─── CHECK 10 · cada evidence/ citado por un paper ───────────────────────────
 
 def check_evidence_cited(repo):
     """Todo archivo de evidence/ tiene que estar citado por algún paper.
@@ -398,7 +361,7 @@ def check_evidence_cited(repo):
     """
     ev = repo / "evidence"
     if not ev.exists():
-        return record(12, "Cada evidence/ citado por un paper", None, ["sin evidence/"])
+        return record(10, "Cada evidence/ citado por un paper", None, ["sin evidence/"])
     papers = {p: p.read_text(errors="replace") for p in (repo / "paper").glob("*.md")}
     detail, ok = [], True
     for f in sorted(ev.glob("*.md")):
@@ -408,8 +371,10 @@ def check_evidence_cited(repo):
             detail.append(f"{f.name}: NO citado por ningún paper — no se entrega")
         else:
             detail.append(f"{f.name}: citado por {', '.join(sorted(citers))}")
-    record(12, "Cada evidence/ citado por un paper", ok, detail)
+    record(10, "Cada evidence/ citado por un paper", ok, detail)
 
+
+# ─── CHECK 11 · hashes hardcodeados en la documentación ──────────────────────
 
 def check_doc_hashes(repo):
     """Los sha256 escritos a mano en la documentación tienen que coincidir.
@@ -448,7 +413,7 @@ def check_doc_hashes(repo):
                 break
     if not found:
         detail.append("ningún hash hardcodeado en la documentación")
-    record(13, "Hashes hardcodeados en la documentación", ok, detail)
+    record(11, "Hashes hardcodeados en la documentación", ok, detail)
 
 
 def main():
@@ -462,13 +427,11 @@ def main():
     check_t0(repo)
     check_berg_t0(repo)
     check_egrav(repo)
-    check_judge(repo)
     check_eh2(repo)
     check_responses(repo)
     check_vhat(repo)
     check_paths(repo)
     check_names(repo)
-    check_judge_scope(repo)
     check_evidence_cited(repo)
     check_doc_hashes(repo)
 

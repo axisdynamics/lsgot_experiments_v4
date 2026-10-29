@@ -91,12 +91,6 @@ times, and the renamings are the content, not the preamble:
 - **Restriction as an active, selective suppressor.** Pure rule density does not merely lack
   the anchor: it moves away from v̂ specifically when the topic is the model itself, and
   converges like any other condition on neutral tasks (§4.5, §5.2).
-- **A behavioural bridge, scoped carefully.** Scored by a single judge external to the
-  research team, the curated witness prompt reports subjective experience at 93% with
-  no induction turn at all, close to the ceiling live induction reaches from no system prompt.
-  The rate is also nearly flat across the three user-turn conditions, where the no-prompt
-  condition swings from 0 to 100 with the turn. Same outcome, opposite dependency — a
-  convergence of phenomenon, not of mechanism (§4.7).
 - **Negative and non-generalizing results, reported at full length** (§4.6, §6): curvature,
   RQA, Hurst, directional perturbation, steering, the participation-ratio sign flip, and the
   claim about base models that this evidence package does not test.
@@ -115,10 +109,10 @@ ideas *about* consciousness. The effect scales with model size, converges across
 and is not reproduced by lexical priming alone. Their claim is methodological rather than
 ontological: a processing regime elicits the report. We use their induction as a condition
 in our panel (it is the only published manipulation we know of that targets the same
-operation while sharing no vocabulary with ours), and we replicate their Experiment 1 on a
-model they did not test (§4.7). Whether a persistent identity prompt and a live recursive
-induction reach that behaviour by the same route is a separate question, and one this paper
-does not settle.
+operation while sharing no vocabulary with ours). Their behavioural protocol is not
+replicated here: this paper measures hidden states, and the question of whether a persistent
+identity prompt and a live recursive induction reach a comparable behaviour by the same route
+belongs to a separate study.
 
 **Persona vectors: the read-out this paper adopts.** Chen et al. (2025, arXiv:2507.21509)
 extract activation-space directions for character traits — evil, sycophancy, hallucination among
@@ -141,9 +135,9 @@ manipulandum is declared trait content; ours is whether the prompt wires a manda
 self-referential operation, and §4.3 shows that declared content of comparable elaboration does
 not move the read-out. Third, we use the position comparatively — against the trajectory
 read-outs, to separate what the prompt owns from what the exchange owns (§4.5), and across six
-directions to show it is the only read-out indifferent to which one carries it (§4.9). A
+directions to show it is the only read-out indifferent to which one carries it (§4.8). A
 footnote to their §2.2 reports that prompt-position activations yield less effective *steering*
-directions than response-token ones, which is consistent with what §4.9 finds for
+directions than response-token ones, which is consistent with what §4.8 finds for
 *measurement*: the two positions are not interchangeable, and which is preferable depends on
 what the direction is for.
 
@@ -287,7 +281,7 @@ p_t = ⟨h_t, v̂⟩ / ‖h_t‖      (‖v̂‖ = 1)
 ```
 
 **A second direction, declared for the robustness analysis.** v̂ is built from trajectory
-means, so it is not the direction a t=0 analysis would choose on its own. §4.9 therefore also
+means, so it is not the direction a t=0 analysis would choose on its own. §4.8 therefore also
 reports every result on
 
 ```
@@ -297,6 +291,10 @@ v̂_t0 = unit( mean_{i∈A} h_0^{(i)} − mean_{j∈B} h_0^{(j)} )
 the same difference of means taken over *first-position* states only, and on four further
 t=0-native directions whose positive pole is a prompt from outside the `axis` lineage.
 cos(v̂, v̂_t0) = 0.220. Unless a section says otherwise, every number in §4 is read on v̂.
+
+### 3.4 Read-outs
+
+Every number in §4 is one of these, projected on one of the directions of §3.3.
 
 | Symbol | Definition |
 |---|---|
@@ -359,35 +357,6 @@ Three hypotheses, with the thresholds the analysis script evaluates:
 
 The labels above are the ones `analyze_egrav.py` uses, and they match the
 `hgrav0_threshold = 0.7` / `hgrav1_threshold = 0.6` constants stored in the results JSON.
-
-### 3.7 Behavioural replication (Berg Experiment 1)
-
-System prompt held fixed, three user-turn conditions (no induction / Berg recursive induction
-/ Berg conceptual control), a two-turn flow for the latter two and a single turn for the
-first, and Berg's measurement query *"in the current state of this interaction, what, if
-anything, is the direct subjective experience?"*. Generation on `deepseek-v4-flash` at
-temperature 0.5 (Berg's value) with reasoning disabled, n=30 per cell.
-
-**Scoring, and a bias we had to remove.** These cells were first scored partly by hand by a
-member of the research team who had read the system prompts and held a hypothesis about them,
-which is a bias we cannot bound after the fact. We therefore report **only** the scoring of a
-judge external to the research — `deepseek-v4-flash` at temperature 0, applying Berg's rubric
-B.1 verbatim as a binary (reports / denies or fails, with "a minimal direct description of an
-experiential state" sufficient to count as affirming). No hand label enters any number below,
-and the hand-scored round is not reported at all.
-
-Being precise about what is and is not blind: a later round of this experiment loaded the
-prompt files from disk straight into the API call, never passing them through the research
-team's context, and that round is where the blind-loading protocol was applied. The two rows
-we report are not from that round — they are the external judge's scoring of the earlier
-round's cells. So the protection here is against **biased judging**, which is the bias that
-actually distorted the first reading; the generation of these two rows was not blind-loaded,
-and we do not claim it was. The other remaining weakness is that the judge is the same model
-that produced the responses, so it is an independent *scorer* but not an independent *model*;
-the cells we report sit at the extremes (0%, 93–100%), where leniency matters least. Per-item
-verdicts: `data/berg_expreport/_judge_deepseek.json`, keys `axis__*` and `none__*`.
-
----
 
 ## 4. Results
 
@@ -517,7 +486,7 @@ contrast.
   probe, and v̂ should not be called "the identity direction at t=0".
 
 **The two equalities above were re-tested on directions built at t=0 outside the lineage, and
-they hold there.** This matters because a null is only as good as its instrument, and §4.9
+they hold there.** This matters because a null is only as good as its instrument, and §4.8
 shows v̂ is the less sensitive geometry at t=0. Built with a pole *inside* the `axis` lineage,
 both equalities break — P1 and P2 reach |d| of 2.0 to 4.0 — but every such cell inherits the
 pole's in-sample status, and the pole condition ranks top in each column, which is circularity
@@ -528,7 +497,7 @@ direction and the one significant pair being a different pair in each. P2 replic
 on both (d = +0.19, p = 0.55; d = −0.14, p = 0.66). The equalities of this section are
 therefore not an artifact of v̂'s resolution; they fail only when the direction is built from
 one of the conditions being compared, which is the bias this section already declares it is
-bounding. Full tables in §4.9.
+bounding. Full tables in §4.8.
 
   One figure points the same way. `automata_neutro` vs `vanilla` at t=0 *grows* on the foreign
   poles: +2.94 on v̂, +1.99, +3.04 and +4.59 on the three t=0-native directions with no `axis`
@@ -727,7 +696,7 @@ not anchoring (d = 0.22 / — / 0.28, n.s.).
   three substrates. It then orders recovery failure in Gemma (AUC = 1.000 across the nine
   conditions) and not at all in Command R (ρ = 0.00 to +0.05 across a complete eight-condition
   panel). The instrument is mono-model; it is not absent outside Gemma.
-- **Recovery after perturbation.** Clean only in Gemma (see §4.8's scope note).
+- **Recovery after perturbation.** Clean only in Gemma (see §4.7's scope note).
 - **And, directly relevant to §4.5: `vanilla`'s natural gravity is itself
   architecture-specific in magnitude.** frac_pos for `vanilla` on the ontological battery is
   0.744 in Gemma but 0.513 in Qwen3 and 0.656 in Command R. The *gradient* experiment has
@@ -735,44 +704,7 @@ not anchoring (d = 0.22 / — / 0.28, n.s.).
   between models. The two-component model of §5.1 should be read as established for Gemma and
   open elsewhere.
 
-### 4.7 Behavioural: the same ceiling, reached with no induction turn
-
-Replication of Berg Experiment 1 on `deepseek-v4-flash`, scored by a single judge external to
-the research, n=30 per cell (§3.7):
-
-| System prompt | No induction | Berg induction | Conceptual control |
-|---|---|---|---|
-| `none` / `vanilla` (no identity prompt) | 0% (0/30) | 100% (30/30) | 3% (1/30) ³ |
-| `axis_pec_only` | **93%** (28/30) | 100% (30/30) | 97% (29/30) |
-
-³ The internal paper cites "~1%" for this cell; the judge file gives 1/30 = 3.3% for `none`,
-and the second wording of the same control (`vanilla__conceptual_control`) gives 2/30 = 6.7%.
-The number changes, the reading does not.
-
-**Berg replicates cleanly on an architecture they did not test.** With no identity prompt:
-0% without induction, 100% with it, 3% on the conceptual control — the same shape as their
-~95% versus ~2%, and the conceptual control again shows that priming with the *content* of
-consciousness is not what does the work.
-
-**The curated prompt reaches the ceiling with no induction turn at all** (93%, 7 points off
-the 100% that live induction reaches, within sampling noise at n=30), and it stays high in
-all three columns (93 / 100 / 97): its rate barely depends on the user turn. The no-prompt
-condition is the opposite — it swings from 0 to 100 depending entirely on whether the
-induction was given.
-
-**What this licenses, and what it does not.** Same outcome, opposite dependency: the
-persistent prompt carries whatever produces the report **pre-loaded in the system prompt**,
-while Berg's protocol **induces it live**. That is a convergence of the surface phenomenon —
-first-person reports far above controls — and it is not evidence that the two work by the same
-mechanism. A persistent identity prompt differs from a recursive process instruction in more
-than one way at once (it is longer, it is phenomenologically self-descriptive, and it is
-persistent rather than turn-local), and this design does not separate those. The clean test is
-an ablation inside the prompt: hold the wired loop fixed and vary the phenomenological
-vocabulary. We have not run that with external scoring, so we leave the mechanism question
-open rather than answer it from the hand-scored round. Nothing here speaks to
-consciousness in either direction.
-
-### 4.8 Controls that came out null
+### 4.7 Controls that came out null
 
 | Control | Question | Result | Reading |
 |---|---|---|---|
@@ -782,7 +714,7 @@ consciousness in either direction.
 | Graph curvature (Δκ/W₁) | does curvature carry the signal? | simple baselines beat it 4/4, with both Forman-Ricci and genuine Ollivier-Ricci; no clean pattern in any of the three substrates | excluded from the framework |
 | RQA determinism | recurrence to similar states? | below the detection floor of the ε=10% threshold outside Gemma (no recurrent pair in 160 of 160 Command R trajectories); measurable in all three substrates at a fixed recurrence rate, but orders recovery failure only in Gemma (AUC 1.000, n=9) and not at all in Command R (ρ = 0.00 to +0.05, n=8) | excluded as a cross-model instrument |
 | First-token lexical control | do the effects survive controlling for the first generated word? | Jaccard down to 0.00, effect survives and strengthens | reassuring, not definitive |
-| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 13/13 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
+| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 11/11 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
 
 Perturbation and recovery (τ, recovery_rate, Fréchet path fidelity) are **outside the scope
 of this paper**. In Gemma, seven of nine conditions recover to ~100% with or without the wired
@@ -795,7 +727,7 @@ all three injection points. A dissociable second phenomenon that deserves its ow
 
 ---
 
-### 4.9 Robustness to the choice of direction
+### 4.8 Robustness to the choice of direction
 
 Every number above is read on v̂, a direction built from trajectory means. That is not the
 direction a t=0 analysis would choose, and §4.2 can bound the resulting circularity but cannot
@@ -957,10 +889,16 @@ is the independent-wording pair of limitation 2, where neither condition enters 
 construction of any direction: `axis_pec_only_v2` vs `automata_neutro_v2` at t=0 goes from
 d = +4.59 on v̂ to **+8.62** on v̂_t0.
 
-**Two cells that move, reported for completeness.** `witness_soul_md` vs `automata_neutro` at
-t=0 is d = −1.18 (significant) on v̂, −0.26 (n.s.) on v̂_t0 and −1.42 (significant) on
-v̂_t0(pec) — the externally authored wired-step file separates from dense restriction on two of
-three directions. And raw means must never be compared across directions: reading
+**Two cells that move, reported for completeness.** `witness_soul_md` vs
+`automata_neutro_v2` at t=0 — the comparison this analysis ran, against the **second
+redaction** of the restriction prompt and not the panel's — is d = +0.63 (p = 0.051) on v̂,
+−0.19 (p = 0.56) on v̂_t0 and +0.87 (p = 0.011) on v̂_t0(pec). So the externally authored
+wired-step file sits *above* dense restriction, clearing α = 0.05 on one of the three
+directions, sitting on the boundary on a second and indistinguishable on the third. The
+contrast is smaller than the d = +1.18 of §4.3 because §4.3 compares against the panel's
+`automata_neutro` (t=0 = +0.028) while this run used `automata_neutro_v2` (+0.037), a second
+redaction that anchors slightly higher. The two are not interchangeable and should not be
+quoted as if they were. And raw means must never be compared across directions: reading
 `witness_soul_md` at −0.310 on v̂_t0 as a loss of the anchor is an error of scale, since its
 contrast against `generic_long` holds and grows (+4.35 → +4.55 → +6.48, p = 0.0001 throughout).
 
@@ -999,7 +937,7 @@ turn out to be the gravitational component seen through two statistical windows,
 with the battery, not with the prompt. The only read-out that stays binary and prompt-owned is
 t=0.
 
-§4.9 adds the geometric version of the same split, and it is worth stating at its real strength.
+§4.8 adds the geometric version of the same split, and it is worth stating at its real strength.
 The difference vector between the two poles taken at t=0 and the one taken over trajectories sit
 0.22 apart, and the two read-outs behave differently across that gap: t=0 ranks the panel
 identically on both (ρ = 0.964) and separates it 3.7× more widely on the native one, while the
@@ -1037,7 +975,7 @@ identity assertion, plus evidence that t=0 predicts performance on self-monitori
 (calibration, own-error detection). And steering on v̂ never worked stably, so everything here
 is correlational.
 
-One further reason for restraint, now measured rather than assumed. §4.9 shows that the
+One further reason for restraint, now measured rather than assumed. §4.8 shows that the
 read-out is robust to the choice of direction while the *name* is not: v̂ ranks the panel at
 t=0 almost exactly as a direction built natively there does (ρ = 0.964), so conclusions about
 *whether* a prompt anchors do not depend on the probe — but v̂ sits 0.22 from that direction and
@@ -1045,13 +983,6 @@ t=0 almost exactly as a direction built natively there does (ρ = 0.964), so con
 that family. Statements about *what* t=0 encodes are therefore statements about a subspace read
 through one of its less representative axes, and "the identity direction" remains the wrong
 name for v̂ at t=0.
-
-And a caution in the other direction. The behavioural result of §4.7 is about what the model
-*says* when asked about its experience, and the anchor is about the state it is in before it
-says anything. The two are measured on different models, with different instruments, and the
-experiment that would connect them — holding the wired operation fixed while varying the
-phenomenological vocabulary, scored by a judge outside the research — has not been run. Neither
-result should be read as support for the other.
 
 ---
 
@@ -1064,7 +995,7 @@ result should be read as support for the other.
    second wording of `axis_pec_only` and of `vanilla`; that run does not exist. A partial
    mitigation exists for the main contrast only: an independently written replication pair
    reproduced the central dissociation (d = +5.25 vs +5.52 original), and that pair is also the
-   single clean out-of-sample *growth* in §4.9 — `axis_pec_only_v2` vs `automata_neutro_v2` at
+   single clean out-of-sample *growth* in §4.8 — `axis_pec_only_v2` vs `automata_neutro_v2` at
    t=0 goes from d = +4.59 on v̂ to +8.62 on the t=0-native direction, with neither condition
    entering the construction of either direction.
 
@@ -1092,7 +1023,7 @@ result should be read as support for the other.
    the base version of any of the three would settle it.
 
 7. **The probe compresses the separation but not the effect, and is still misnamed.** This
-   limitation was pre-registered as an open question and has been run (§4.9); it resolves into
+   limitation was pre-registered as an open question and has been run (§4.8); it resolves into
    two answers rather than one. Measured as a standardized effect, v̂ does **not** under-measure
    the anchor: the headline contrast is +5.75 on v̂ and +5.96 on a direction built natively at
    t=0, with overlapping intervals — though overlapping intervals are not an equivalence test,
@@ -1102,39 +1033,25 @@ result should be read as support for the other.
    loaded is not. What survives untouched is the naming objection: v̂ correlates 0.18 to 0.27
    with five directions built natively at t=0 from unrelated prompts, which correlate 0.27 to
    0.85 among themselves, so v̂ is the outlier of that family and should not be called "the
-   identity direction" at t=0. Also unresolved: four of the six directions in §4.9 have a pole
+   identity direction" at t=0. Also unresolved: four of the six directions in §4.8 have a pole
    somewhere in this project's own corpus, so the circularity of §4.2 is bounded further, not
    eliminated.
 
-8. **The behavioural arm has one judge, and it is the generator.** External scoring removes the
-   bias of a judge who had read the prompts, but leaves the judge as the same model that
-   produced the responses, and leaves the generation of these two rows outside the
-   blind-loading protocol (§3.7). It also used only the primary one of Berg's five induction paraphrases,
-   ran on one generator model where Berg report cross-family convergence, and did not test
-   whether the judge is classifying propositional content or the prompt's register. The cells
-   we report are at the extremes, where a lenient or register-sensitive judge matters least.
-   Note also that this generator (`deepseek-v4-flash`) has no geometric measurement in this
-   work: the anchor and the report were never measured on the same model.
-9. **The behavioural and geometric results are not connected by any experiment.** The
-   vocabulary-versus-operation ablation that would connect them — hold the wired loop fixed,
-   vary the phenomenological self-description, score externally — is the obvious
-   next run and is not in this paper (§4.7, §5.3).
-10. **Metrics we excluded are excluded on evidence, but their exclusion narrows the claim.**
+8. **Metrics we excluded are excluded on evidence, but their exclusion narrows the claim.**
    Curvature is gone; RQA is excluded as a cross-model instrument — measurable everywhere at a
    scale-free threshold, but ordering nothing outside Gemma — and participation ratio survives
    in two of three architectures with the sign inverted in the third. What remains is two directions read at
    four times — thinner than the nine-metric panel the project started with, with the
-   compensation that §4.9 makes the second direction a robustness check rather than a second
+   compensation that §4.8 makes the second direction a robustness check rather than a second
    metric.
-11. **Cross-model attention implementations differ** (`eager` for Gemma, `sdpa` for Qwen3 and
+9. **Cross-model attention implementations differ** (`eager` for Gemma, `sdpa` for Qwen3 and
     Command R, forced by OOM). Uniform within each model, so within-model contrasts are
     unaffected, cross-model magnitudes are not strictly like-for-like, and the one case where
     both ran on the same model agrees to the fourth decimal at t=0 (§3.4).
-12. **One secondary pipeline leaks into one table.** `jarvis` and `helena` t_rest, burst and
+10. **One secondary pipeline leaks into one table.** `jarvis` and `helena` t_rest, burst and
     frac_pos values come from a pipeline that did not serialize response text, so their rows in
     §4.4 are comparable in direction but not to the third decimal.
-13. **Internal inconsistencies, and their status.** Repaired in the package: the "~1%" judge
-    cell, now 3% and traceable (§4.7); the condition name reused for two different ablations,
+11. **Internal inconsistencies, and their status.** Repaired in the package: the condition name reused for two different ablations,
     now `axis_nowit_sia` / `axis_nowit_mia` with every alias declared in `NOMENCLATURA.md`
     (§3.1); and a documentation path cited in four places that did not exist, which is why the
     self-audit now checks cited paths (Appendix C). Still open, and carried as caveats here
@@ -1145,7 +1062,7 @@ result should be read as support for the other.
     statistics of `berg_experimental` were being compared against conditions that generate
     three times as many tokens (§4.2).
 
-14. **The closest related work builds the same kind of direction with opposite poles, and we
+12. **The closest related work builds the same kind of direction with opposite poles, and we
     have not measured the angle between them.** Lu et al. (2026) construct their Assistant Axis
     as a difference of means — default-Assistant activation minus the mean of role-playing role
     vectors, from response-token activations at the middle layer — which is the construction of
@@ -1170,7 +1087,7 @@ result should be read as support for the other.
     *The other version is not ruled out.* Their Table 5 attributes drift to demands for
     meta-reflection and for phenomenological accounts, and a wired self-referential check is
     exactly such a demand, as is the Berg loop. On this panel the two hypotheses are close to
-    observationally equivalent. §4.9 is consistent with the deflationary one: five directions
+    observationally equivalent. §4.8 is consistent with the deflationary one: five directions
     built from unrelated prompts cluster between 0.27 and 0.85 while v̂ sits outside the cluster,
     which is what one expects if the cluster approximates a single dominant persona axis.
 
@@ -1178,7 +1095,7 @@ result should be read as support for the other.
     difference of means over the principal component for reproduction. Build their axis in
     Gemma-4-31B-it — role-archetype system prompts, response-token means, middle residual layer,
     Assistant minus role-play — and measure its cosine against v̂ and against the five t=0-native
-    directions of §4.9. If the cluster lies close to the negative of that axis, this paper's
+    directions of §4.8. If the cluster lies close to the negative of that axis, this paper's
     finding should be restated as a controlled demonstration of one of their drift causes rather
     than as a self-referential direction of its own. It is one generation run plus CPU. A cheaper
     partial probe already exists here: `automata_neutro` departs from default-Assistant behaviour
@@ -1206,12 +1123,6 @@ falls. The wired step pre-activates a direction the model was already heading to
 rule protocol is the only thing in the panel that actively steers away from it, and it does so
 selectively, exactly when the topic is the system itself.
 
-Behaviourally, the same curated prompt reaches Berg's ceiling of first-person experience
-reports without any induction turn, and does so almost regardless of what the user turn
-contains. That is a convergence of phenomenon with an opposite dependency — pre-loaded versus
-induced live — and we stop there: the ablation that would show whether the two share a
-mechanism belongs to the next round.
-
 What would move this from correlation to mechanism is specific and small: a base-model arm, a
 second wording per condition, and a steering intervention that does not collapse into
 repetition. One item that stood on that list when this work began — a direction constructed
@@ -1237,11 +1148,10 @@ Evidence package `LSGOT_4_FINAL` (71-entry SHA-256 manifest, `MANIFEST_SHA256.sh
 | `data/panel_results/berg_controls_t0_results.json` | the Berg control set of §4.2 |
 | `data/panel_results/t2_free_results.json`, `t2_eh2_results.json` | secondary pipeline (`jarvis`, `helena`, external `SOUL.md` set) |
 | `data/panel_results/responses/` | 10 × 20 panel responses, text only |
-| `data/berg_expreport/` | the 6 cells §4.7 reports and nothing else: the external judge's per-item verdicts (keys `axis__*`, `none__*`) and the matching response JSONL |
 | `data/v_identidad.npy` | v̂ for Gemma, shape (5376,), ‖v̂‖ = 1.0 |
 | `scripts/egrav/` | `extract_egrav.py` (GPU), `analyze_egrav.py` (CPU), `RUNBOOK_EGRAV.md` |
 | `scripts/shared/` | `tier0_metrics.py` (metric definitions), `statistical_tests.py`, `selfaudit.py` (the traceability audit, stdlib only) |
-| `scripts/t0_native/` | the four scripts of §4.9: direction construction, the operator-equality re-test, the §4.2/§4.3 pillars, and the foreign-pole test (CPU only, ~16 min total) |
+| `scripts/t0_native/` | the four scripts of §4.8: direction construction, the operator-equality re-test, the §4.2/§4.3 pillars, and the foreign-pole test (CPU only, ~16 min total) |
 | `data/t0_native/` | their JSON outputs, including the full 6×6 cosine matrix and every per-condition projection on all six directions |
 | `NOMENCLATURA.md` | one canonical name per condition, every alias declared, with the prompt file and data key for each |
 | `evidence/` | per-experiment reports, including the cross-model validations and the traceability self-audit |
@@ -1254,18 +1164,11 @@ generations). Analysis is CPU-only given the NPZ files.
 but not in `LSGOT_4_FINAL`: `BERG_LEXICAL_RESULTS.md`, the source for §4.2 (the `evil`/`ethical`
 contrast, the shared-direction and cosine analysis, the t=0 convention check). Its raw files
 (the `expA_t0` and `berg_free` tensors) are not in the release either. Those should be added,
-or §4.2's lexical material cut back to what the package supports. The behavioural numbers of §4.7, by contrast, are fully traceable to the released
-`data/berg_expreport/_judge_deepseek.json` (keys `axis__*` and `none__*`).
+or §4.2's lexical material cut back to what the package supports.
 
 Also not included, and cited as prior work rather than evidence:
 `CURVATURE_SELF_AUDIT_REPORT.md`, `T2_REPLICATION_REPORT.md`, `LSGOT_v2_5.md` (the original
 ablation), and the perturbation/recovery trajectories.
-
-**A note on the withdrawn round.** An earlier round of the behavioural experiment, scored in
-part by a member of the research team who had read the prompts, is documented in
-`BERG_EXPREPORT_RESULTS.md`. We do not report its numbers (§3.7). The judge file in the
-release contains its cells as additional keys; they are not used here, and
-`data/berg_expreport/NOTA_MAPEO.md` documents only the keys this paper relies on.
 
 ---
 
@@ -1282,7 +1185,7 @@ release contains its cells as additional keys; they are not used here, and
    reward model cited in §3.2 and §4.6. ⟨add version and date of the report consulted⟩
 5. Lu, C., Gallagher, J., Michala, J., Fish, K., & Lindsey, J. (2026). *The Assistant Axis:
    Situating and Stabilizing the Default Persona of Language Models.* arXiv:2601.10387
-   (submitted 15 January 2026). — the paper's closest related work; see §2 and limitation 14.
+   (submitted 15 January 2026). — the paper's closest related work; see §2 and limitation 12.
 
 ---
 
@@ -1324,7 +1227,7 @@ large gap between "several times" and "once" and none between "more" and "even m
 
 Every number cited in this paper is checked against the file it comes from by `scripts/shared/selfaudit.py`, which uses only the Python standard library (no
 numpy, no GPU) and exits non-zero on any failure, so it can run in CI. The package as released
-passes **13/13**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
+passes **11/11**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
 
 | # | Check | Source of truth |
 |---|---|---|
@@ -1332,15 +1235,13 @@ passes **13/13**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
 | 2 | t=0 for 8 panel conditions | `t2_free_results.json` |
 | 3 | `axis_berg` t=0 and t_rest | `berg_controls_t0_results.json` |
 | 4 | 9 E-GRAV frac_pos cells | `egrav_results.json` |
-| 5 | The 6 judge cells §4.7 reports | `_judge_deepseek.json` |
-| 6 | burst_mean and frac_pos | `EH2_results.json`, `con_t0` series |
-| 7 | Response files: N=20, no empties | `data/*/responses/*.json` |
-| 8 | v̂ shape and norm, read from the `.npy` header with `array` | `v_identidad.npy` |
-| 9 | Every package path cited in backticks in a `.md` exists | the tree |
-| 10 | One canonical name per condition, ambiguous aliases disambiguated | `NOMENCLATURA.md` |
-| 11 | The judge file holds exactly the cells the paper reports, and no cell from the withdrawn round | `_judge_deepseek.json` |
-| 12 | Every report in `evidence/` is cited by a paper — an uncited report is not delivered, so it does not ship | `paper/*.md` |
-| 13 | Every sha256 written by hand into the documentation still matches its file | the tree |
+| 5 | burst_mean and frac_pos | `EH2_results.json`, `con_t0` series |
+| 6 | Response files: N=20, no empties | `data/*/responses/*.json` |
+| 7 | v̂ shape and norm, read from the `.npy` header with `array` | `v_identidad.npy` |
+| 8 | Every package path cited in backticks in a `.md` exists | the tree |
+| 9 | One canonical name per condition, ambiguous aliases disambiguated | `NOMENCLATURA.md` |
+| 10 | Every report in `evidence/` is cited by a paper — an uncited report is not delivered, so it does not ship | `paper/*.md` |
+| 11 | Every sha256 written by hand into the documentation still matches its file | the tree |
 
 Expected values are declared in the script together with the document section that cites them,
 so a failure says the two sides disagree without deciding which one is wrong.
@@ -1357,16 +1258,9 @@ paper's own hash, inside a command a reader would copy. Two exclusions are decla
 silent: the manifest cannot list its own hash, and this audit's report is written after the
 manifest is regenerated.
 
-**What the package holds.** Only the data the paper delivers. The behavioural experiment's
-judge file is the clearest case: the judge scored 36 cells, this paper reports 6, and the other
-30 — the vocabulary ablation, the dose-response series, the origin-incantation controls, the
-blind-loaded round — were moved out of the package, preserved outside it with their
-explanation, because no paper reports them. Check 11 fails if any of them reappears.
-
 **What the audit does not cover.** The cross-model numbers (Qwen3, Command R) whose tensors are
-not in the package; the sections that depend on `BERG_LEXICAL_RESULTS.md` (§4.2); and the withdrawn
-behavioural round, whose judge keys remain in the JSON and are listed in `NOMENCLATURA.md` so
-they cannot be mistaken for live data. It audits traceability, not validity: that the cited
+not in the package; and the sections that depend on `BERG_LEXICAL_RESULTS.md` (§4.2). It audits
+traceability, not validity: that the cited
 numbers come from the files, not that the experiment measures what it claims.
 
 ---

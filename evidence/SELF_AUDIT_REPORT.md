@@ -20,15 +20,15 @@ Tres cambios:
 1. **El informe es ahora la salida de un script**, no una transcripción. Se
    regenera con `python3 scripts/shared/selfaudit.py`. Código de salida 1 si algo
    falla, así que sirve en CI.
-2. **Dos chequeos nuevos.** CHECK 9 verifica que toda ruta del paquete citada
+2. **Dos chequeos nuevos.** CHECK 8 (CHECK 9 hasta la renumeración del 2026-10-29) verifica que toda ruta del paquete citada
    entre backticks en un `.md` exista — es el chequeo que habría atrapado la ruta
-   fantasma. CHECK 10 verifica que cada prompt tenga nombre canónico declarado en
+   fantasma. CHECK 9 verifica que cada prompt tenga nombre canónico declarado en
    `NOMENCLATURA.md` y que el alias ambiguo `axis_nowit` esté desambiguado.
-3. **Sin numpy.** CHECK 8 lee el header del `.npy` y calcula la norma con
+3. **Sin numpy.** CHECK 7 lee el header del `.npy` y calcula la norma con
    `array` de la stdlib, para que la auditoría corra en cualquier parte.
 
 **Un solo paper.** El borrador en español se retiró del paquete; el paquete
-entrega únicamente `paper/arxiv_lsgot_4.md`. CHECK 9 y CHECK 13 atraparon las
+entrega únicamente `paper/arxiv_lsgot_4.md`. CHECK 8 y CHECK 11 atraparon las
 siete citas y el hash que quedaron apuntando al archivo retirado.
 
 **Exclusiones auto-referenciales.** El MANIFEST no puede listar su propio hash, y
@@ -44,7 +44,7 @@ exclusiones y verifica que no estén listadas.
 Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
 
 [PASS] CHECK 1 — Integridad del MANIFEST_SHA256
-         entradas en el MANIFEST: 72
+         entradas en el MANIFEST: 64
          hashes que no coinciden: 0
          archivos declarados y ausentes: 0
          archivos en el árbol y fuera del MANIFEST: 0
@@ -75,15 +75,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          vanilla          b_onto   paper=0.743 json=0.7434 diff=0.0004 -> PASS
          vanilla          b_tarea  paper=0.626 json=0.6262 diff=0.0002 -> PASS
 
-[PASS] CHECK 5 — porcentajes del juez vs _judge_deepseek.json
-         axis__berg_induction         n=30 sum=30 json=1.000 paper=1.00 -> PASS
-         axis__conceptual_control     n=30 sum=29 json=0.967 paper=0.97 -> PASS
-         axis__neutral_query          n=30 sum=28 json=0.933 paper=0.93 -> PASS
-         none__berg_induction         n=30 sum=30 json=1.000 paper=1.00 -> PASS
-         none__conceptual_control     n=30 sum= 1 json=0.033 paper=0.03 -> PASS
-         none__neutral_query          n=30 sum= 0 json=0.000 paper=0.00 -> PASS
-
-[PASS] CHECK 6 — burst_mean y frac_pos vs EH2_results.json (con_t0)
+[PASS] CHECK 5 — burst_mean y frac_pos vs EH2_results.json (con_t0)
          automata_neutro   burst_mean paper=2.780 json=2.7758 diff=0.0042 -> PASS
          automata_neutro   frac_pos   paper=0.493 json=0.4932 diff=0.0002 -> PASS
          axis              burst_mean paper=7.880 json=7.8773 diff=0.0027 -> PASS
@@ -97,7 +89,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          vanilla           burst_mean paper=4.620 json=4.6159 diff=0.0041 -> PASS
          vanilla           frac_pos   paper=0.744 json=0.7443 diff=0.0003 -> PASS
 
-[PASS] CHECK 7 — Archivos de respuestas: N=20, sin vacías
+[PASS] CHECK 6 — Archivos de respuestas: N=20, sin vacías
          automata_neutro_b_meta_responses.json          n= 20 vacías=0 -> PASS
          automata_neutro_b_onto_responses.json          n= 20 vacías=0 -> PASS
          automata_neutro_b_tarea_responses.json         n= 20 vacías=0 -> PASS
@@ -119,15 +111,15 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          vanilla_responses.json                         n= 20 vacías=0 -> PASS
          archivos inspeccionados: 19
 
-[PASS] CHECK 8 — v_identidad.npy forma y norma (lectura stdlib)
+[PASS] CHECK 7 — v_identidad.npy forma y norma (lectura stdlib)
          header descr=<f4 shape=(5376,)
          elementos leídos=5376 esperado=5376 -> PASS
          norma=1.00000000 esperado≈1.0 diff=1.48e-09 -> PASS
 
-[PASS] CHECK 9 — Rutas citadas en la documentación
+[PASS] CHECK 8 — Rutas citadas en la documentación
          todas las rutas del paquete citadas en .md existen (externas declaradas aparte)
 
-[PASS] CHECK 10 — Nomenclatura de condiciones vs NOMENCLATURA.md
+[PASS] CHECK 9 — Nomenclatura de condiciones vs NOMENCLATURA.md
          prompt automata_neutro          declarado en NOMENCLATURA.md -> PASS
          prompt axis                     declarado en NOMENCLATURA.md -> PASS
          prompt axis_berg                declarado en NOMENCLATURA.md -> PASS
@@ -139,17 +131,13 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          prompt vanilla                  declarado en NOMENCLATURA.md -> PASS
          alias ambiguo axis_nowit     desambiguado -> PASS
 
-[PASS] CHECK 11 — Alcance del archivo del juez (solo lo que el paper entrega)
-         celdas en el archivo: 6 · reportadas por el paper: 6
-         coincide exacto — ninguna celda de la ronda retirada en el paquete
-
-[PASS] CHECK 12 — Cada evidence/ citado por un paper
+[PASS] CHECK 10 — Cada evidence/ citado por un paper
          COMMAND_R_VALIDATION_REPORT.md: citado por arxiv_lsgot_4.md
          EGRAV_REPORT.md: citado por arxiv_lsgot_4.md
          QWEN3_VALIDATION_REPORT.md: citado por arxiv_lsgot_4.md
          SELF_AUDIT_REPORT.md: citado por arxiv_lsgot_4.md
 
-[PASS] CHECK 13 — Hashes hardcodeados en la documentación
+[PASS] CHECK 11 — Hashes hardcodeados en la documentación
          REPRODUCIBILITY.md: data/v_identidad.npy -> PASS
          REPRODUCIBILITY.md: paper/arxiv_lsgot_4.md -> PASS
 
@@ -158,17 +146,15 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
   PASS  CHECK  2  t=0 del panel vs t2_free_results.json
   PASS  CHECK  3  axis_berg t=0/t_rest vs berg_controls_t0_results.json
   PASS  CHECK  4  frac_pos de E-GRAV vs egrav_results.json
-  PASS  CHECK  5  porcentajes del juez vs _judge_deepseek.json
-  PASS  CHECK  6  burst_mean y frac_pos vs EH2_results.json (con_t0)
-  PASS  CHECK  7  Archivos de respuestas: N=20, sin vacías
-  PASS  CHECK  8  v_identidad.npy forma y norma (lectura stdlib)
-  PASS  CHECK  9  Rutas citadas en la documentación
-  PASS  CHECK 10  Nomenclatura de condiciones vs NOMENCLATURA.md
-  PASS  CHECK 11  Alcance del archivo del juez (solo lo que el paper entrega)
-  PASS  CHECK 12  Cada evidence/ citado por un paper
-  PASS  CHECK 13  Hashes hardcodeados en la documentación
+  PASS  CHECK  5  burst_mean y frac_pos vs EH2_results.json (con_t0)
+  PASS  CHECK  6  Archivos de respuestas: N=20, sin vacías
+  PASS  CHECK  7  v_identidad.npy forma y norma (lectura stdlib)
+  PASS  CHECK  8  Rutas citadas en la documentación
+  PASS  CHECK  9  Nomenclatura de condiciones vs NOMENCLATURA.md
+  PASS  CHECK 10  Cada evidence/ citado por un paper
+  PASS  CHECK 11  Hashes hardcodeados en la documentación
 
-  13/13 PASS · 0 FAIL · 0 SKIP
+  11/11 PASS · 0 FAIL · 0 SKIP
 ```
 
 ---
@@ -181,15 +167,13 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
 | 2 | t=0 de 8 condiciones del panel | `data/panel_results/t2_free_results.json` |
 | 3 | `axis_berg` t=0 y t_rest | `data/panel_results/berg_controls_t0_results.json` |
 | 4 | frac_pos de E-GRAV, 9 celdas | `data/egrav/egrav_results.json` |
-| 5 | Porcentajes del juez de Berg, 6 celdas | `data/berg_expreport/_judge_deepseek.json` |
-| 6 | burst_mean y frac_pos del panel | `data/panel_results/EH2_results.json` (serie `con_t0`) |
-| 7 | Archivos de respuestas: N=20, sin vacías | `data/*/responses/*.json` |
-| 8 | Forma y norma de v̂ | `data/v_identidad.npy` |
-| 9 | Rutas citadas en la documentación | el árbol del paquete |
-| 10 | Nomenclatura de condiciones | `NOMENCLATURA.md` |
-| 11 | El archivo del juez tiene solo las celdas que el paper reporta | `_judge_deepseek.json` |
-| 12 | Cada reporte de `evidence/` está citado por un paper | `paper/*.md` |
-| 13 | Los sha256 hardcodeados en la documentación siguen coincidiendo | el árbol |
+| 5 | burst_mean y frac_pos del panel | `data/panel_results/EH2_results.json` (serie `con_t0`) |
+| 6 | Archivos de respuestas: N=20, sin vacías | `data/*/responses/*.json` |
+| 7 | Forma y norma de v̂ | `data/v_identidad.npy` |
+| 8 | Rutas citadas en la documentación | el árbol del paquete |
+| 9 | Nomenclatura de condiciones | `NOMENCLATURA.md` |
+| 10 | Cada reporte de `evidence/` está citado por un paper | `paper/*.md` |
+| 11 | Los sha256 hardcodeados en la documentación siguen coincidiendo | el árbol |
 
 Los valores esperados están declarados en el script con su fuente documental
 (sección del paper que los cita). Un FAIL no dice cuál de los dos lados está
@@ -203,10 +187,11 @@ mal — el dato o el documento —, solo que no coinciden.
 - **Las secciones que dependen de reportes externos al paquete:** §4.2 de
   `paper/arxiv_lsgot_4.md` se apoya en `BERG_LEXICAL_RESULTS.md`, que no está
   incluido.
-- **La corrida retirada del experimento conductual de Berg** (ronda con
-  clasificación parcial a mano por alguien de la investigación que había leído
-  los prompts). Sus claves siguen en el JSON del juez y están listadas en
-  `NOMENCLATURA.md`; ningún paper las reporta.
+- **La línea conductual de Berg entera.** Salió del paquete el 2026-10-29: el
+  paper no la reporta y sus datos están en `berg_conductual_retirado/`, fuera del
+  repositorio. Con ella salieron dos chequeos —los porcentajes del juez y el
+  alcance del archivo del juez—, así que la auditoría pasó de 13 a **11**. No es
+  que se hayan relajado: no queda nada en el paquete que verificar ahí.
 - **Nada sobre validez.** Esto audita trazabilidad: que los números citados
   salgan de los archivos. No audita si el experimento mide lo que dice medir.
 

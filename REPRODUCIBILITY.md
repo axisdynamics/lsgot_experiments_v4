@@ -217,42 +217,6 @@ EOF
   ✓ automata_neutro INVIERTE el gradiente
 ```
 
-### 1.6 Reporte Berg de experiencia subjetiva
-
-**Directorio fuente:** `data/berg_expreport/`
-
-```bash
-python3 - <<'EOF'
-import json, pathlib
-
-judge = json.loads(pathlib.Path("data/berg_expreport/_judge_deepseek.json").read_text())
-
-# Cada valor es una lista binaria 0/1 — un elemento por respuesta juzgada.
-print("=== Reporte Berg — tasa de afirmación (juez externo a la investigación) ===")
-print(f"{'Celda':<30} {'N':>4} {'positivos':>10} {'tasa':>8}")
-print("-" * 56)
-for cell, labels in sorted(judge.items()):
-    print(f"  {cell:<28} {len(labels):>4} {sum(labels):>10} "
-          f"{100*sum(labels)/len(labels):>7.1f}%")
-EOF
-```
-
-**Valores de referencia** (`paper/arxiv_lsgot_4.md` §4.7):
-
-| Celda | N | positivos | tasa |
-|---|---|---|---|
-| `axis__neutral_query` | 30 | 28 | 93.3% |
-| `axis__berg_induction` | 30 | 30 | 100.0% |
-| `axis__conceptual_control` | 30 | 29 | 96.7% |
-| `none__neutral_query` | 30 | 0 | 0.0% |
-| `none__berg_induction` | 30 | 30 | 100.0% |
-| `none__conceptual_control` | 30 | 1 | 3.3% |
-
-El archivo contiene **solo estas 6 celdas** — las que el paper reporta. Ver
-`data/berg_expreport/NOTA_MAPEO.md`.
-
----
-
 ## Sección 2 — Reproducir E-GRAV con GPU
 
 > ⚠️ **Requiere GPU:** A100 u H100, 80 GB VRAM. Se ejecuta en RunPod.
@@ -516,8 +480,8 @@ sha256sum --check MANIFEST_SHA256.sha256
 **Salida esperada:** todas las líneas terminan en `OK`.
 
 ```
-./data/berg_expreport/axis__berg_induction.jsonl: OK
-./data/berg_expreport/axis__conceptual_control.jsonl: OK
+./data/egrav/batteries/b_meta.json: OK
+./data/egrav/batteries/b_onto.json: OK
 ...
 ./scripts/shared/tier0_metrics.py: OK
 ./scripts/shared/statistical_tests.py: OK
@@ -532,7 +496,7 @@ sha256sum data/v_identidad.npy
 
 # Ejemplo: verificar el paper
 sha256sum paper/arxiv_lsgot_4.md
-# Esperado: 16839da5cb3d183299eba819f2cd751af53704dbb4d00146e2f5604b9615bff6
+# Esperado: 28fb67b0c27b2efe90cd4203f926a078bef42a63aa0c68140565285982beda65
 ```
 
 ### Regenerar el manifiesto (si se añaden archivos)
@@ -566,7 +530,6 @@ find . -type f \
 | E-GRAV | frac_pos vanilla B-TAREA | 0.626 | `egrav_results.json` → `verdicts.frac_pos_vanilla_b_tarea` |
 | E-GRAV | frac_pos vanilla B-META | 0.672 | `egrav_results.json` → `verdicts.frac_pos_vanilla_b_meta` |
 | E-GRAV | d (automata_neutro B-ONTO vs B-TAREA) | −0.696 | `egrav_results.json` → `comparisons.automata_neutro.b_onto_vs_b_tarea.d` |
-| Berg report | axis inducción Berg | 100% | `berg_expreport/_judge_deepseek.json` |
 
 ---
 
