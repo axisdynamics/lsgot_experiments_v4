@@ -84,3 +84,46 @@ tamaño que los otros.
       **2026-10-29**
 - [ ] **Jorge Castillo Sepúlveda** — contrafirma pendiente
 - [x] **Claude (Opus 5)** — 2026-10-29, antes de que `axis_pec_task` exista como estado medido
+
+---
+
+## Enmienda 1 al desempate — 2026-11-01, antes de medir
+
+**Qué cambia:** las ocho condiciones de Qwen3 se re-extraen **en la misma corrida** que
+`axis_pec_task` y `axis_pec_none`, y la ventana se recalcula con los extremos de esa corrida.
+
+**Qué NO cambia:** la regla. Sigue siendo «la proyección de `axis_pec_task` sobre el eje de Lu
+cae dentro del **20% de la distancia** entre `axis_pec_only` y `automata_neutro`», con los
+mismos cuatro renglones de decisión. Lo único que cambia es de dónde salen esos dos extremos.
+
+**Por qué.** La ventana `[−0.145, −0.135]` del texto original se calculó con la extracción del
+2026-10-29 (−0.145 y −0.093 en L31). Medir hoy los brazos nuevos y compararlos contra esa
+ventana mezclaría dos extracciones, y **ya está medido cuánto vale esa diferencia**: entre la
+corrida con generación y la prefill-only hubo Δ ≈ 0.002 en las proyecciones, con coseno
+estado-a-estado de 0.996 (E30). Es chico, pero del mismo orden que el ancho de la ventana, que
+es 0.010. Una quinta parte del criterio quedaría a merced de qué versión de `transformers`
+corrió cada mitad.
+
+Re-extraer las ocho juntas cuesta ~2 minutos de prefill con el modelo ya cargado y vuelve el
+criterio **interno a la corrida**. Es la misma lógica que la Enmienda 1 del punto 3.
+
+**Procedimiento, fijado antes de ver ningún número nuevo:**
+
+1. Extraer las 8 condiciones —las 6 del panel que están en el paquete, más `axis_pec_task` y
+   `axis_pec_none`— con `e27_prefill_t0.py`, índices 31, 32, 63 y 64.
+2. **Control obligatorio**, idéntico al de E30: la re-extracción tiene que reproducir el t=0
+   publicado de Qwen3 sobre la v̂ canónica construida con las trayectorias de la corrida
+   original — `axis_pec_only` ≈ **+0.185**, `automata_neutro` ≈ **+0.008**. Si no, no hay
+   veredicto.
+3. Recalcular la ventana: `w = [p(axis_pec_only), p(axis_pec_only) + 0.20 · (p(automata_neutro)
+   − p(axis_pec_only))]`, con las proyecciones **de esta corrida**, sobre el eje de Lu
+   normalizado en la capa que mande por §B del pre-registro de robustez — **la 32**, que ya
+   pasó su control de sanidad en E30.
+4. Aplicar los cuatro renglones sin tocarlos.
+
+**Estado al escribir esto:** ni `axis_pec_task` ni `axis_pec_none` han sido medidos en Qwen3.
+La corrida de Gemma está en curso y sus proyecciones todavía no se miraron.
+
+- [x] **Claude (Opus 5)** — 2026-11-01, antes de la extracción en Qwen3
+- [ ] **Marco Torres Yévenes**
+- [ ] **Jorge Castillo Sepúlveda**
