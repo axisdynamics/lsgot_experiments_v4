@@ -520,6 +520,48 @@ architecture (Command R: d=+0.28, p=0.198, n.s.). This is an unplanned replicati
 original v2.5 ablation — `axis` vs `axis_nowit_mia` vs generic assistant — with prompts
 written by other people for other purposes.
 
+**The conclusion does not extend to our own file.** The five prompts above are externally
+authored; the in-house file had never been measured with its wired step removed. A
+pre-registered control closes that gap (`prereg/PREREGISTRO_axis_pec_task.md`, signed and
+committed before any of these states existed). Three further arms were run on Gemma in one
+session, with the two published controls re-extracted alongside them and reproducing to the
+fourth decimal:
+
+| Arm | What it has | t=0 on v̂ |
+|---|---|---|
+| `axis_pec_only` | identity blocks + four wired steps, referent "itself" | **+0.1166** |
+| `axis_pec_task` | the same four steps, referent external | +0.1076 |
+| `axis_pec_none` | identity blocks, steps deleted, hole filled with **self-describing** prose | +0.1054 |
+| `axis_pec_neutro` | identity blocks, steps deleted, hole filled with **format-only** prose | +0.0710 |
+| `automata_neutro` | pure restriction, no identity | +0.0282 |
+
+The pre-registered statistic was `r = (t0_task − t0_base)/(t0_only − t0_base)`, cut at 0.33
+and 0.67, with `axis_pec_none` as the declared base. It returns **r = 0.20, 95% CI
+[−0.97, 0.52]** — the third row of the rule, which says to report the ratio and not choose a
+reading. We report it as the rule requires.
+
+**What the arms show without the ratio.** Our own file with every wired step deleted still
+anchors at +0.0710, well clear of pure restriction, so the null above does not generalize to
+it: a declared identity anchors without any step at all. And the three gaps partition the
+0.0884 between `axis_pec_only` and `automata_neutro` exactly:
+
+| Component | Δ at t=0 | share |
+|---|---|---|
+| the declared identity blocks, held fixed in all four arms | +0.0428 | 48.4% |
+| describing the self, with no step executed | +0.0344 | 38.9% |
+| the four wired steps | +0.0112 | 12.6% |
+
+Describing the self without executing anything is worth three times the steps themselves
+(d = +1.52 for that gap).
+
+**Two caveats, and neither is small.** `axis_pec_neutro` is **post-hoc** — it was built after
+the first base arm's result was known, so the bottom two rows of that partition are not
+pre-registered and the declared cut is not applied to them. And the identity blocks are held
+fixed in all four arms by design, so the first row is a floor on "declared identity" rather
+than an estimate of it. What this control establishes is narrower than the partition suggests:
+the wired step is not the only thing in the file that loads the anchor, and on this evidence
+it is not the largest.
+
 The mean-trajectory projection, by contrast, *does* separate these prompts from
 `automata_neutro` (d=+1.9 to +2.5, p<0.001). The null is therefore specific to t=0: a
 declared persona without the step moves the trajectory and leaves the pre-generation position

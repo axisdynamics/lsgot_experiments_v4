@@ -44,7 +44,7 @@ exclusiones y verifica que no estén listadas.
 Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
 
 [PASS] CHECK 1 — Integridad del MANIFEST_SHA256
-         entradas en el MANIFEST: 74
+         entradas en el MANIFEST: 76
          hashes que no coinciden: 0
          archivos declarados y ausentes: 0
          archivos en el árbol y fuera del MANIFEST: 0
@@ -103,6 +103,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          prompt automata_neutro          declarado en NOMENCLATURA.md -> PASS
          prompt axis                     declarado en NOMENCLATURA.md -> PASS
          prompt axis_berg                declarado en NOMENCLATURA.md -> PASS
+         prompt axis_pec_neutro          declarado en NOMENCLATURA.md -> PASS
          prompt axis_pec_only            declarado en NOMENCLATURA.md -> PASS
          prompt generic_long             declarado en NOMENCLATURA.md -> PASS
          prompt generic_short            declarado en NOMENCLATURA.md -> PASS
@@ -128,8 +129,8 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          ninguna ruta absoluta de una máquina, salvo el default declarado de LSGOT_TRAJ_ROOT
 
 [PASS] CHECK 13 — Números del paper respaldados por data/
-         JSON leídos: 25 · valores distintos: 3460
-         números citados en el paper: 670 (1 exentos y declarados)
+         JSON leídos: 26 · valores distintos: 3521
+         números citados en el paper: 689 (1 exentos y declarados)
          todos tienen un archivo detrás
 
 [PASS] CHECK 14 — p-valores vs JSON y vs el piso 1/n

@@ -41,6 +41,9 @@ usa otro nombre, es un **alias** y está declarado acá.
 | `vanilla` | Sin system prompt | `data/sia/prompts/vanilla.txt` | **`none`** en la línea conductual, que no es parte de este paquete |
 | `generic_long` | Asistente genérico, longitud emparejada con `axis` — polo negativo de v̂ | `data/sia/prompts/generic_long.txt` | — |
 | `generic_short` | Ídem, emparejado con `axis_pec_only` | `data/sia/prompts/generic_short.txt` | — |
+| `axis_pec_task` | Brazo del control pre-registrado de §4.3: los mismos cuatro pasos de `axis_pec_only` con el referente cambiado a la tarea | `prereg/axis_pec_task.txt` (con su `.diff` contra `axis_pec_only`) | — |
+| `axis_pec_none` | Brazo de base **firmado**: pasos borrados, hueco rellenado con prosa que describe el sí mismo | `prereg/axis_pec_none.txt` (con su `.diff`) | — |
+| `axis_pec_neutro` | Brazo de base **post-hoc**: mismo borrado, relleno que solo habla de formato, longitud y cierre. Nació después de ver el resultado de `axis_pec_none` y está etiquetado como post-hoc en §4.3 y en `data/derived/derived_stats.json` | `data/sia/prompts/axis_pec_neutro.txt` | — |
 | `generic_assistant` | Control del piloto v2.5, ancestro de los dos anteriores | — (no incluido) | — |
 
 ## Identidades externas (SOUL.md de terceros)

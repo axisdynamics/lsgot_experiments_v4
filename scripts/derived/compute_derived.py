@@ -141,6 +141,31 @@ def derive_berg_pairs(berg):
     return out
 
 
+def derive_axis_pec(e31):
+    """§4.3 · los cuatro brazos del control pre-registrado, y la partición de la
+    distancia `axis_pec_only` → `automata_neutro` en sus tres componentes."""
+    t0 = {k: v["mean"] for k, v in e31["t0_by_arm"]["v_canon"].items()}
+    only, none = t0["axis_pec_only"], t0["axis_pec_none"]
+    neutro, auto = t0["axis_pec_neutro"], t0["automata_neutro"]
+    total = only - auto
+    parts = {
+        "declared_identity_blocks": neutro - auto,
+        "self_description_no_step": none - neutro,
+        "four_wired_steps": only - none,
+    }
+    return {
+        "t0_by_arm": t0,
+        "total_distance_only_minus_automata": total,
+        "decomposition": {k: {"delta_t0": v, "fraction_of_total": v / total,
+                              "percent_of_total": 100.0 * v / total}
+                          for k, v in parts.items()},
+        "sums_to": sum(parts.values()) / total,
+        "_note": "`axis_pec_neutro` es post-hoc: nació tras ver el resultado del "
+                 "brazo de base firmado, así que los dos últimos componentes no "
+                 "están pre-registrados y la regla de corte no se les aplica.",
+    }
+
+
 def derive_floors():
     """Los pisos de los dos estimadores de permutación (§3.5 y §4.7)."""
     return {
@@ -170,6 +195,7 @@ def main():
     e1 = load("data/t0_native/e1_vhat_nativa_t0.json")
     eh2 = load("data/panel_results/EH2_results.json")
     berg = load("data/panel_results/berg_controls_t0_results.json")
+    e31 = load("data/axis_pec/e31_r.json")
 
     result = {
         "_about": "Cantidades que el paper deriva de otros archivos del paquete. "
@@ -178,11 +204,13 @@ def main():
             "data/t0_native/e1_vhat_nativa_t0.json",
             "data/panel_results/EH2_results.json",
             "data/panel_results/berg_controls_t0_results.json",
+            "data/axis_pec/e31_r.json",
         ],
         "direction_comparison": derive_directions(e1["panel"]),
         "panel_t0_to_trest": derive_panel_deltas(e1["panel"]),
         "burst_ratios_and_percentages": derive_burst_ratios(eh2),
         "berg_pairs_not_in_key_pairs": derive_berg_pairs(berg),
+        "axis_pec_control": derive_axis_pec(e31),
         "permutation_floors": derive_floors(),
     }
 
@@ -194,6 +222,12 @@ def main():
     print("\n§4.2 · los dos pares de Berg con `d` citado y `p` ausente:")
     for k, v in result["berg_pairs_not_in_key_pairs"]["pairs"].items():
         print(f"  {k:48s} d={v['cohens_d']:+.4f}  p={v['p_status']}")
+
+    ap = result["axis_pec_control"]
+    print("\n§4.3 · partición de la distancia axis_pec_only → automata_neutro:")
+    for k, v in ap["decomposition"].items():
+        print(f"  {k:28s} Δ={v['delta_t0']:+.4f}  {100*v['fraction_of_total']:5.1f}%")
+    print(f"  {'suma':28s}            {100*ap['sums_to']:5.1f}%")
 
     dc = result["direction_comparison"]["readouts"]
     print("\n§4.7 · ρ y rangos sobre las 7 condiciones del panel:")
