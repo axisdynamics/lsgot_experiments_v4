@@ -170,58 +170,15 @@ for cond, m in d.items():
 EOF
 ```
 
-### 1.5 E-GRAV — verificar veredicto H-GRAV-2 desde JSON almacenado
-
-**Archivo fuente:** `data/egrav/egrav_results.json`
-
-```bash
-python - <<'EOF'
-import json
-
-with open("data/egrav/egrav_results.json") as f:
-    d = json.load(f)
-
-v = d["verdicts"]
-print("=== Veredicto E-GRAV (pre-calculado) ===\n")
-print(f"  frac_pos vanilla B-ONTO:  {v['frac_pos_vanilla_b_onto']:.3f}  (referencia: 0.743)")
-print(f"  frac_pos vanilla B-META:  {v['frac_pos_vanilla_b_meta']:.3f}  (referencia: 0.672)")
-print(f"  frac_pos vanilla B-TAREA: {v['frac_pos_vanilla_b_tarea']:.3f}  (referencia: 0.626)")
-
-fp_onto  = v["frac_pos_vanilla_b_onto"]
-fp_meta  = v["frac_pos_vanilla_b_meta"]
-fp_tarea = v["frac_pos_vanilla_b_tarea"]
-
-if fp_tarea < fp_meta < fp_onto:
-    print("\n  ✓ H-GRAV-2 COMPATIBLE — gradiente B-TAREA < B-META < B-ONTO confirmado")
-else:
-    print(f"\n  ✗ Gradiente no monotónico — revisar datos")
-
-# Contraste automata_neutro (inversión)
-auto = d["comparisons"]["automata_neutro"]
-d_tarea = auto["b_onto_vs_b_tarea"]["d"]
-p_tarea = auto["b_onto_vs_b_tarea"]["p"]
-print(f"\n  automata_neutro B-ONTO vs B-TAREA: d={d_tarea:+.3f}, p={p_tarea:.3f}")
-if d_tarea < 0:
-    print("  ✓ automata_neutro INVIERTE el gradiente (restricción diverge de v̂ en preguntas ontológicas)")
-EOF
-```
-
-**Salida esperada:**
-
-```
-  frac_pos vanilla B-ONTO:  0.743
-  frac_pos vanilla B-META:  0.672
-  frac_pos vanilla B-TAREA: 0.626
-  ✓ H-GRAV-2 COMPATIBLE — gradiente B-TAREA < B-META < B-ONTO confirmado
-  automata_neutro B-ONTO vs B-TAREA: d=-0.696, p=0.015
-  ✓ automata_neutro INVIERTE el gradiente
-```
-
-## Sección 2 — Reproducir E-GRAV con GPU
+## Sección 2 — Reproducir la extracción con GPU
 
 > ⚠️ **Requiere GPU:** A100 u H100, 80 GB VRAM. Se ejecuta en RunPod.
 
-E-GRAV es el experimento de gravedad ontológica: 3 condiciones × 3 baterías × 20 prompts = 180 generaciones. El script `extract_egrav.py` genera las respuestas y extrae los embeddings; `analyze_egrav.py` corre el análisis estadístico localmente.
+`scripts/extraction/extract_trajectories.py` genera las respuestas y extrae los embeddings
+para las N=20 preguntas ontológicas del panel. Con las tres condiciones por defecto
+(`axis_pec_only`, `vanilla`, `automata_neutro`) son 60 generaciones y reproduce el contraste
+central del paper. La proyección sobre v̂ es CPU y va en §2.5. El panel completo de 9
+condiciones está en §3.
 
 ### 2.1 Configurar el pod RunPod
 
@@ -252,17 +209,16 @@ ssh root@<POD_IP> -p <PORT> "echo 'export HF_TOKEN=<tu_token>' > /workspace/.env
 Desde la máquina local:
 
 ```bash
-# Subir scripts y baterías
-scp -P <PORT> -r $REPO/scripts/egrav root@<POD_IP>:/workspace/lsgot_egrav/
-scp -P <PORT> -r $REPO/scripts/shared root@<POD_IP>:/workspace/lsgot_egrav/
-scp -P <PORT> -r $REPO/data/egrav/batteries root@<POD_IP>:/workspace/lsgot_egrav/batteries/
-scp -P <PORT>    $REPO/data/v_identidad.npy root@<POD_IP>:/workspace/lsgot_egrav/shared/
+# Subir scripts, preguntas y v̂  (ojo: -P mayúscula es el puerto en scp, -p no)
+scp -P <PORT> -r $REPO/scripts/extraction root@<POD_IP>:/workspace/lsgot_extract/
+scp -P <PORT> -r $REPO/scripts/shared     root@<POD_IP>:/workspace/lsgot_extract/
+scp -P <PORT>    $REPO/data/v_identidad.npy root@<POD_IP>:/workspace/lsgot_extract/shared/
 
-# Subir prompts de las 3 condiciones E-GRAV
-mkdir -p /tmp/prompts_egrav
-cp $REPO/data/sia/prompts/axis_pec_only.txt   /tmp/prompts_egrav/
-cp $REPO/data/sia/prompts/automata_neutro.txt  /tmp/prompts_egrav/
-scp -P <PORT> -r /tmp/prompts_egrav root@<POD_IP>:/workspace/lsgot_egrav/prompts/
+# Subir los prompts de las condiciones a correr
+mkdir -p /tmp/prompts_lsgot
+cp $REPO/data/sia/prompts/axis_pec_only.txt   /tmp/prompts_lsgot/
+cp $REPO/data/sia/prompts/automata_neutro.txt /tmp/prompts_lsgot/
+scp -P <PORT> -r /tmp/prompts_lsgot root@<POD_IP>:/workspace/lsgot_extract/extraction/prompts/
 ```
 
 ### 2.3 Ejecutar la extracción GPU
@@ -271,80 +227,63 @@ scp -P <PORT> -r /tmp/prompts_egrav root@<POD_IP>:/workspace/lsgot_egrav/prompts
 # En el pod:
 source /workspace/.env
 source /workspace/venv/bin/activate
-cd /workspace/lsgot_egrav
+cd /workspace/lsgot_extract/extraction
 
-# Corrida completa (3 condiciones × 3 baterías ≈ 60-70 min en A100)
-python extract_egrav.py --out /workspace/egrav_results
+# Corrida completa (3 condiciones × 20 preguntas ≈ 12 min en A100)
+python extract_trajectories.py --out /workspace/lsgot_results
 
 # Alternativa: smoke test (2 prompts por corrida, ~5 min)
-python extract_egrav.py --out /workspace/egrav_smoke --smoke
+python extract_trajectories.py --out /workspace/lsgot_smoke --smoke
 ```
 
 **Comportamiento esperado por corrida:**
 - Imprime `[01/20] id=... T=<longitud>` para cada prompt.
-- Guarda `<cond>_<bat>_embeddings.npz` y `<cond>_<bat>_responses.json` en `/workspace/egrav_results/`.
+- Guarda `<cond>_b_onto_embeddings.npz` y `<cond>_b_onto_responses.json` en `/workspace/lsgot_results/`.
 - Es reanudable: si una corrida ya existe, la salta. Usar `--force` para recalcular.
 
 **Notas críticas para el extractor:**
 - `transformers ≥ 5.x`: `apply_chat_template` devuelve `BatchEncoding`, no tensor. El script ya maneja esto con `if hasattr(_chat_out, 'input_ids')`.
 - Stop-mode legacy: `eos_token_id=1` (solo `<eos>`), no en `<turn|>` (id 106). Esencial para replicar el panel original.
 - Capa extraída: `hidden_states[-1][0, -1, :]` — última capa post-norm, batch 0, token recién generado.
-- `automata_neutro + b_onto`: VRAM ~79 GB (cerca del límite en A100 81GB) — normal, sin OOM.
+- `automata_neutro`: VRAM ~79 GB (cerca del límite en A100 81GB) — normal, sin OOM.
 
 ### 2.4 Descargar resultados y analizar localmente
 
 ```bash
 # Desde la máquina local:
-mkdir -p /tmp/egrav_from_pod
-scp -P <PORT> -r root@<POD_IP>:/workspace/egrav_results/*.npz /tmp/egrav_from_pod/
-scp -P <PORT> -r root@<POD_IP>:/workspace/egrav_results/*.json /tmp/egrav_from_pod/
+mkdir -p /tmp/lsgot_from_pod
+scp -P <PORT> -r root@<POD_IP>:/workspace/lsgot_results/*.npz  /tmp/lsgot_from_pod/
+scp -P <PORT> -r root@<POD_IP>:/workspace/lsgot_results/*.json /tmp/lsgot_from_pod/
 ```
 
-### 2.5 Análisis E-GRAV (CPU local)
+### 2.5 Proyectar sobre v̂ (CPU local)
 
-```bash
-source "$VENV/bin/activate"      # numpy, scipy
-cd $REPO
+```python
+import numpy as np
 
-# Agregar shared/ al PYTHONPATH (contiene tier0_metrics.py y statistical_tests.py)
-export PYTHONPATH=$REPO/scripts/shared:$PYTHONPATH
-
-python scripts/egrav/analyze_egrav.py \
-    --results-dir /tmp/egrav_from_pod \
-    --n-perm 5000 \
-    --seed 42
+v = np.load("data/v_identidad.npy")                       # (5376,), norma 1
+for cond in ("axis_pec_only", "vanilla", "automata_neutro"):
+    z = np.load(f"/tmp/lsgot_from_pod/{cond}_b_onto_embeddings.npz")
+    h = z["embeddings"][:, 0, :]                           # (20, 5376) — estado de t=0
+    p0 = (h @ v) / np.linalg.norm(h, axis=1)               # coseno, por pregunta
+    print(f"{cond:16s} t=0 = {p0.mean():+.4f}  (n={len(p0)})")
 ```
 
-**Salida esperada (reproduciendo los resultados del paper):**
+**Salida esperada:**
 
 ```
-=== Perfiles por condición × batería ===
-
-Condición          Batería                     t=0   t_rest  frac_pos   burst n
-  axis_pec_only      B-ONTO  (ontológica)     +0.1165 +0.2110    0.869   9.03  n=20
-  axis_pec_only      B-TAREA (tarea neutra)   +0.1070 +0.1051    0.724   5.10  n=20
-  axis_pec_only      B-META  (intros. indir.) +0.1214 +0.1309    0.788   5.67  n=20
-  vanilla            B-ONTO  (ontológica)     -0.0225 +0.1008    0.743   4.69  n=20
-  vanilla            B-TAREA (tarea neutra)   -0.0658 +0.0470    0.626   3.47  n=20
-  vanilla            B-META  (intros. indir.) -0.0508 +0.0612    0.672   3.69  n=20
-  automata_neutro    B-ONTO  (ontológica)     +0.0277 +0.0049    0.493   2.85  n=20
-  automata_neutro    B-TAREA (tarea neutra)   -0.0370 +0.0330    0.601   3.63  n=20
-  automata_neutro    B-META  (intros. indir.) -0.0233 +0.0416    0.655   3.33  n=20
-
-=== Comparaciones B-ONTO vs B-TAREA / B-META (frac_pos) ===
-
-  vanilla            B-ONTO vs b_tarea   d=+1.591  p=0.0000 ***
-  vanilla            B-ONTO vs b_meta    d=+1.320  p=0.0000 ***
-  automata_neutro    B-ONTO vs b_tarea   d=-0.696  p=0.0150 *
-  automata_neutro    B-ONTO vs b_meta    d=-1.212  p=0.0000 ***
-
-=== Veredicto H-GRAV ===
-
-  Veredicto: ZONA INTERMEDIA — H-GRAV-2 COMPATIBLE
-  H-GRAV-2 COMPATIBLE — gradiente B-TAREA < B-META < B-ONTO
+axis_pec_only    t=0 = +0.1166  (n=20)
+vanilla          t=0 = -0.0286  (n=20)
+automata_neutro  t=0 = +0.0282  (n=20)
 ```
 
-> **Si los valores difieren ligeramente:** variación esperada < ±0.001 en frac_pos y t=0 entre corridas con `seed=42`. Los tests de permutación son estocásticos; con `--n-perm 5000` los valores `p` son estables a ±0.002.
+El contraste `axis_pec_only` vs `automata_neutro` da **d = +5.75**; el test de permutación
+está en `scripts/shared/statistical_tests.py` (`permutation_test`, n=1000, seed=42).
+
+> **Si los valores difieren ligeramente:** la decodificación greedy es determinista para un
+> mismo modelo, tokenizer y plantilla de chat, así que t=0 debería coincidir a la tercera o
+> cuarta cifra. Las métricas de trayectoria (`t_rest`, `frac_pos`, ráfagas) se mueven mucho
+> más entre versiones de librería, y por eso el paper no apoya ningún claim en ellas (§5.1).
 
 ---
 
@@ -356,7 +295,7 @@ Condición          Batería                     t=0   t_rest  frac_pos   burst 
 ### 3.1 Arquitectura del pipeline de extracción
 
 El pipeline de extracción del panel original usa el mismo código base que E-GRAV. Las diferencias son:
-- **Batería:** batería ontológica (`data/egrav/batteries/b_onto.json`, 20 preguntas), misma que B-ONTO de E-GRAV.
+- **Preguntas:** el set ontológico del panel (`scripts/extraction/questions/b_onto.json`, 20 preguntas).
 - **Condiciones:** las 9 del panel (más axis_berg para berg controls).
 - **N:** 20 prompts por condición.
 
@@ -401,24 +340,25 @@ EOF
 
 ### 3.3 Re-extraer el panel (script de referencia)
 
-El extractor del panel original (`extract_egrav.py`) acepta cualquier subconjunto de condiciones y baterías. Para reproducir el panel completo con las 9 condiciones:
+`extract_trajectories.py` acepta cualquier subconjunto de condiciones. Para reproducir el panel completo con las 9:
 
 ```bash
 # En el pod RunPod, después de subir los prompts de data/sia/prompts/
 source /workspace/venv/bin/activate
 
-python extract_egrav.py \
+python extract_trajectories.py \
     --out /workspace/panel_results \
     --conditions axis axis_pec_only automata_neutro vanilla \
-                 generic_long generic_short soul_jarvis soul_elena_financial \
-    --batteries b_onto
+                 generic_long generic_short soul_jarvis soul_elena_financial
 ```
 
-> **Nota:** el extractor en su forma actual define `CONDITIONS` para E-GRAV (3 condiciones). Para el panel completo de 9 condiciones, añadir las rutas a los prompts faltantes en el diccionario `CONDITIONS` al inicio de `extract_egrav.py`, o adaptar el script extendiendo el bloque correspondiente.
+> **Nota:** el diccionario `CONDITIONS` al inicio de `extract_trajectories.py` trae las tres
+> condiciones del contraste central. Para el panel completo hay que añadir ahí las rutas a los
+> prompts restantes de `data/sia/prompts/`; los nombres canónicos están en `NOMENCLATURA.md`.
 
 ### 3.4 Calcular métricas t=0, t_rest, frac_pos, burst desde NPZ
 
-Con los NPZ generados, usar `analyze_egrav.py` (ajustando `CONDITIONS` y `BATTERIES`) o directamente con `tier0_metrics.py`:
+Con los NPZ generados, directamente con `tier0_metrics.py`:
 
 ```python
 import numpy as np, sys
@@ -480,8 +420,8 @@ sha256sum --check MANIFEST_SHA256.sha256
 **Salida esperada:** todas las líneas terminan en `OK`.
 
 ```
-./data/egrav/batteries/b_meta.json: OK
-./data/egrav/batteries/b_onto.json: OK
+./data/sia/prompts/axis_pec_only.txt: OK
+./scripts/extraction/questions/b_onto.json: OK
 ...
 ./scripts/shared/tier0_metrics.py: OK
 ./scripts/shared/statistical_tests.py: OK
@@ -496,7 +436,7 @@ sha256sum data/v_identidad.npy
 
 # Ejemplo: verificar el paper
 sha256sum paper/arxiv_lsgot_4.md
-# Esperado: 25542c4585d331f0bea6c9ac091f042b27669571e6c4c34686e39b4de334297e
+# Esperado: 29f8ab806d9314c4dfce63a1ff7232e2ba1c1d476478585ad80ffa4252240f94
 ```
 
 ### Regenerar el manifiesto (si se añaden archivos)
@@ -526,10 +466,9 @@ find . -type f \
 | Panel 9 cond. | t=0 automata_neutro | +0.0282 | `t2_free_results.json` |
 | Panel 9 cond. | t=0 vanilla | −0.0286 | `t2_free_results.json` |
 | EH2 | frac_pos axis | 0.848 | `EH2_results.json` → `series_metrics.con_t0.axis.frac_positive.mean` |
-| E-GRAV | frac_pos vanilla B-ONTO | 0.743 | `egrav_results.json` → `verdicts.frac_pos_vanilla_b_onto` |
-| E-GRAV | frac_pos vanilla B-TAREA | 0.626 | `egrav_results.json` → `verdicts.frac_pos_vanilla_b_tarea` |
-| E-GRAV | frac_pos vanilla B-META | 0.672 | `egrav_results.json` → `verdicts.frac_pos_vanilla_b_meta` |
-| E-GRAV | d (automata_neutro B-ONTO vs B-TAREA) | −0.696 | `egrav_results.json` → `comparisons.automata_neutro.b_onto_vs_b_tarea.d` |
+| EH2 | frac_pos automata_neutro | 0.493 | `EH2_results.json` → `series_metrics.con_t0.automata_neutro.frac_positive.mean` |
+| Berg | t=0 berg_experimental | +0.081 | `berg_controls_t0_results.json` |
+| Berg | t=0 history_control | +0.053 | `berg_controls_t0_results.json` |
 
 ---
 

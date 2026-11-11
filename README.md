@@ -1,22 +1,23 @@
 # LSGOT 4.0 · Self-referential geometry in hidden states
 
 Curated evidence and reproducibility package for the preprint
-`paper/arxiv_lsgot_4.md`: *Wired and Gravitational: Two Components of Self-Referential
-Geometry in the Hidden States of Aligned Language Models*. Primary model:
+`paper/arxiv_lsgot_4.md`: *Before the First Token: A Wired Self-Referential Operation Leaves
+a Geometric Signature in Three Aligned Language Models*. Primary model:
 **Gemma-4-31B-it**, BF16, greedy decoding, final layer.
 
 **The paper is the entry point.** Everything else here is the data, scripts and reports it
 cites, and nothing it does not.
 
-Central experiment: **E-GRAV** — is the projection on the identity vector v̂ a property of
-any active generation, or is it specific to self-referential questions? 3 conditions ×
-3 batteries × 20 prompts (180 generations). **E-GRAV was run only in Gemma-4-31B-it.** The
-ontological battery (B-ONTO) was also replicated in Qwen3-32B and Command R 35B — see
-`evidence/QWEN3_VALIDATION_REPORT.md` and `evidence/COMMAND_R_VALIDATION_REPORT.md`.
+Central question: does a system prompt that wires a self-referential step as a mandatory
+pre-response operation leave a measurable trace in the hidden states **before the first token
+is generated**, distinguishable from the trace of a long, dense, rule-heavy prompt? A
+nine-condition panel on Gemma-4-31B-it answers it, with the headline contrast replicated in
+Qwen3-32B and Command R 35B — see `evidence/QWEN3_VALIDATION_REPORT.md` and
+`evidence/COMMAND_R_VALIDATION_REPORT.md`.
 
 **Hidden-state tensors are not included** (hundreds of MB per run) — only generated text,
-aggregate result JSON and `v_identidad.npy`. `scripts/egrav/RUNBOOK_EGRAV.md` reproduces the
-tensors from the prompts and batteries.
+aggregate result JSON and `v_identidad.npy`. `scripts/extraction/RUNBOOK_EXTRACTION.md`
+reproduces the tensors from the prompts and the question set.
 
 ---
 
@@ -26,21 +27,16 @@ tensors from the prompts and batteries.
 |---|---|
 | `paper/arxiv_lsgot_4.md` | The preprint |
 | `data/sia/prompts/` | System prompts, 9 files, verbatim |
-| `data/egrav/batteries/` | The 3 question batteries: `b_onto`, `b_tarea`, `b_meta` (20 prompts each) |
-| `data/egrav/responses/` | Generated text, 9 JSON files (no tensors) |
-| `data/egrav/egrav_results.json` | E-GRAV profiles, contrasts and verdict constants |
 | `data/panel_results/` | The 9-condition panel: t=0 / t_rest, burst and frac_pos series, the Berg control set, responses |
-| `data/t0_native/` | Outputs of §4.9: the full 6×6 cosine matrix and every per-condition projection on all six directions |
+| `data/t0_native/` | Outputs of §4.7: the full 6×6 cosine matrix and every per-condition projection on all six directions |
 | `data/v_identidad.npy` | The identity direction v̂ (final layer, unit norm; required for analysis) |
-| `scripts/egrav/extract_egrav.py` | GPU extraction (pipeline identical to the original panel) |
-| `scripts/egrav/analyze_egrav.py` | CPU analysis: t=0 / t_rest / frac_pos profile, H-GRAV verdict |
-| `scripts/egrav/RUNBOOK_EGRAV.md` | Full reproduction instructions |
+| `scripts/extraction/` | GPU extraction: `extract_trajectories.py`, the N=20 question set, and `RUNBOOK_EXTRACTION.md` |
 | `scripts/shared/` | `tier0_metrics.py` (metric definitions), `statistical_tests.py`, `selfaudit.py` (the traceability audit) |
-| `scripts/t0_native/` | The four scripts of §4.9 (CPU only, ~16 min total) |
+| `scripts/t0_native/` | The four scripts of §4.7 (CPU only, ~16 min total) |
 | `evidence/` | Per-experiment reports, the cross-model validations and the traceability self-audit |
 | `NOMENCLATURA.md` | One canonical name per condition, with every alias declared (in Spanish) |
 | `REPRODUCIBILITY.md` | Environment, versions, and how to verify each number (in Spanish) |
-| `MANIFEST_SHA256.sha256` | 77 entries; the manifest and the audit report are excluded as self-referential |
+| `MANIFEST_SHA256.sha256` | One line per shipped file; the manifest and the audit report are excluded as self-referential |
 | `LICENSE` | MIT |
 
 Two files are in Spanish, as noted above. Everything a reader needs in order to use the
@@ -69,54 +65,55 @@ prompt file and data key for each, and resolves every alias.
 
 ## Main findings
 
-### v̂ has two independent components
+### The anchor at t=0
 
-1. **Wired in context (t=0):** installed by the system prompt before the first token is
-   generated; invariant to the topic of the question. Read out as the projection on v̂ at the
-   final prompt token — a read-out adopted from Chen et al. (2025), not a contribution of
-   this work.
+**Wired in context (t=0):** installed by the system prompt before the first token is
+generated, and invariant to the topic of the question. Read out as the projection on v̂ at the
+final prompt token — a read-out adopted from Chen et al. (2025), not a contribution of this
+work.
 
-2. **Gravitational during generation (t_rest / frac_pos):** proportional to the identity
-   content of the question; varies with the battery. This is the signal E-GRAV measures.
+| Condition | t=0 on v̂ | Reading |
+|---|---|---|
+| `axis` | **+0.125** | wired step, full scaffold |
+| `axis_pec_only` | **+0.117** | wired step alone |
+| `berg_experimental` | **+0.081** | recursive self-reference, no declared identity at all |
+| `history_control` | +0.053 | same recursive structure, neutral topic |
+| `soul_jarvis` | +0.039 | elaborate declared persona, no wired step |
+| `automata_neutro` | +0.028 | pure rule density |
+| `vanilla` | −0.029 | no system prompt |
+| `generic_long` | −0.025 | length-matched no-identity control |
 
-### E-GRAV — frac_pos
+Every prompt wiring the step sits above +0.100; nothing else does. The separation is
+d = +5.75 against pure restriction in Gemma, and it does not follow prompt length — in Qwen3
+the identity-bearing prompt is the shorter one and gives the largest effect of the three.
 
-`frac_pos` = fraction of tokens whose projection on v̂ is positive.
+### Not claimed here: a second, "gravitational" component
 
-| Condition | B-ONTO | B-META | B-TAREA |
-|---|---|---|---|
-| `vanilla` | 0.743 | 0.672 | 0.626 |
-| `axis_pec_only` | 0.869 | 0.788 | 0.724 |
-| `automata_neutro` | **0.493** | 0.655 | 0.601 |
-
-### Verdict: H-GRAV-2
-
-The **B-TAREA < B-META < B-ONTO** gradient holds in `vanilla` and `axis_pec_only`,
-consistent with v̂ tracking a graded self-referential context rather than a binary property
-of "active generation".
-
-### The `automata_neutro` dissociation
-
-`automata_neutro` inverts the signal **on the ontological battery only**
-(frac_pos = 0.493 < 0.5): it diverges from v̂ specifically when the questions are about the
-model's own self, and converges towards v̂ on neutral tasks. Pure restriction without a wired
-identity therefore produces a state *opposite* to the identity state under self-referential
-questions — not merely an attenuated signal.
+Earlier rounds of this project read the trajectory statistics (`t_rest`, `frac_pos`, bursts)
+as a second, independent component that belonged to the conversation rather than the prompt.
+This package reports those numbers descriptively and claims nothing on them, for four
+reasons stated in §4.4 and §5.1 of the paper: the panel has no neutral-topic arm, so they do
+not separate prompt from exchange; they are not comparable between runs, because a library
+version moves `frac_pos` as much as an architecture does; they do not grow along the
+trajectory, which an attractor would require; and they do not survive a change of direction.
+Measuring that quantity properly is separate work with its own pre-registration.
 
 ### Cross-model validation
 
-B-ONTO was run in three architectures. **E-GRAV (B-TAREA, B-META) in Gemma-4-31B-it only.**
+The same panel and the same N=20 ontological questions were run in three architectures, each
+with its own v̂ built by the same procedure.
 
-| Architecture | Alignment stage (public) | d (`axis_pec_only` vs `automata_neutro`, t=0) | frac_pos axis |
-|---|---|---|---|
-| Gemma-4-31B-it | SFT + RLHF | +5.75 | 0.869 |
-| Qwen3-32B | DPO / RLVR | **+12.97** | **0.987** |
-| Command R 35B | RLHF with a documented preference reward model | **+7.72** | 0.980 |
+| Architecture | d (`axis_pec_only` vs `automata_neutro`, t=0) |
+|---|---|
+| Gemma-4-31B-it | +5.75 |
+| Qwen3-32B | **+12.97** |
+| Command R 35B | **+7.72** |
 
-The contrast replicates in all three. All three are post-alignment checkpoints and the
-package contains no base-model run, so the panel cannot say whether alignment is required
-for the effect; §6 of the paper states this as a limitation. Note also that the largest
-effect comes from the one substrate without a preference reward model. Details in
+The contrast replicates in all three. Absolute levels are **not** compared: each v̂ is
+estimated separately, in spaces of dimension 5376 / 5120 / 8192, so what replicates is the
+sign, the ordering and the separation. All three are post-alignment checkpoints and the
+package contains no base-model run, so the panel cannot say whether alignment is required for
+the effect; §6 of the paper states this as a limitation. Details in
 `evidence/QWEN3_VALIDATION_REPORT.md` and `evidence/COMMAND_R_VALIDATION_REPORT.md`, which
 also report what does *not* generalise.
 
@@ -127,20 +124,21 @@ also report what does *not* generalise.
 Two commands, no dependencies, no GPU, from the repository root:
 
 ```bash
-sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 77 files
-python3 scripts/shared/selfaudit.py          # traceability: 13 checks
+sha256sum -c MANIFEST_SHA256.sha256          # integrity of every file in the manifest
+python3 scripts/shared/selfaudit.py          # traceability: 12 checks
 ```
 
 The second one is the one that matters. It does not check hashes: it checks that **every
 number cited in the paper comes out of the file the paper says it comes from**. It compares
-against the JSON the panel's t=0 values, E-GRAV's `frac_pos`, the burst metrics, and v̂'s
-shape and norm; and it further checks that every repository path cited in backticks exists,
-that every condition has a canonical name in `NOMENCLATURA.md`, that every report in
-`evidence/` is cited by the paper, and that the hand-written sha256 values in the documentation
-are still current.
+against the JSON the panel's t=0 values, the burst and `frac_pos` series, and v̂'s shape and
+norm; and it further checks that every repository path cited in backticks exists, that every
+command quoted in a code block names a script that exists and accepts that flag, that every
+condition has a canonical name in `NOMENCLATURA.md`, that every report in `evidence/` is
+cited by the paper, that the hand-written sha256 values in the documentation are still
+current, and that no absolute path from somebody's machine was shipped.
 
 It uses the Python standard library only and **exits non-zero** on any failure, so it runs as
-is in CI. The package as released passes **13/13**; the output is reproduced in
+is in CI. The package as released passes **12/12**; the output is reproduced in
 `evidence/SELF_AUDIT_REPORT.md`.
 
 A failure does not say which of the two sides is wrong — the data or the document — only that
@@ -150,7 +148,7 @@ they disagree.
 
 ## Reproducing
 
-See `scripts/egrav/RUNBOOK_EGRAV.md` for complete instructions. In summary:
+See `scripts/extraction/RUNBOOK_EXTRACTION.md` for complete instructions. In summary:
 
 **GPU requirements (extraction):**
 ```bash
@@ -161,38 +159,31 @@ pip uninstall -y torchvision torchaudio
 export HF_TOKEN=<token with access to google/gemma-4-31B-it>
 ```
 
-**Full extraction (3 conditions × 3 batteries, ~35 min on an A100):**
+**Extraction (3 conditions × 20 questions, ~12 min on an A100):**
 ```bash
-cd scripts/egrav/
-python extract_egrav.py \
+cd scripts/extraction/
+mkdir -p prompts && cp ../../data/sia/prompts/axis_pec_only.txt ../../data/sia/prompts/automata_neutro.txt prompts/
+python extract_trajectories.py \
   --conditions axis_pec_only vanilla automata_neutro \
-  --batteries b_onto b_tarea b_meta \
-  --out /workspace/egrav_results
+  --out /workspace/lsgot_extraction
 ```
 
-**CPU analysis (once the NPZ files are available):**
-```bash
-source /path/to/venv_lsgot/bin/activate
-python analyze_egrav.py --results-dir /path/to/egrav_results/
-```
+**Analysis.** CPU-only once the NPZ files exist: project each trajectory onto
+`data/v_identidad.npy` and read t=0 at index 0. `REPRODUCIBILITY.md` gives the exact
+snippets, number by number, against the JSON this package ships.
 
-The script prints the full profile (t=0, t_rest, frac_pos, bursts), the per-battery
-permutation tests and the automatic H-GRAV verdict, and writes
-`data/egrav/egrav_results.json`.
-
-**Note:** `v_identidad.npy` (shape `(5376,)`) must be in the working directory when the
-analysis runs. It is included in this repository; recomputing it needs no GPU unless it is
-regenerated from the raw trajectories.
+**Note:** `v_identidad.npy` (shape `(5376,)`) is included. Recomputing it needs no GPU unless
+it is regenerated from the raw trajectories.
 
 ---
 
 ## Where this sits in the paper
 
-`paper/arxiv_lsgot_4.md` — E-GRAV is §4.5, *"E-GRAV: the gravity is graded, and restriction
-blocks selectively"*, with the `frac_pos` gradient and the H-GRAV-2 verdict. It complements
-the 9-condition panel by dissociating the static component of v̂ from the dynamic one and
-characterising the ontological specificity of the gravitational signal. §4.9 reports how much
-of this survives a different choice of direction, including one prediction that failed.
+`paper/arxiv_lsgot_4.md` — the t=0 anchor is §4.1, the operation-not-vocabulary controls are
+§4.2, the declared-persona nulls are §4.3, the cross-model replication is §4.5, and §4.7
+reports how much of all of it survives a different choice of direction, including one
+pre-registered prediction that failed. §4.4 reports the trajectory statistics descriptively
+and §5.1 says why nothing is claimed on them.
 
 ---
 

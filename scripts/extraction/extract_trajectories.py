@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
-E-GRAV · extractor GPU para RunPod.
+LSGOT · extractor GPU de trayectorias (RunPod o cualquier A100/H100 80 GB).
 
 Genera respuestas + embeddings (capa final post-norm, greedy, 256 tok, bf16)
-para 3 condiciones × 3 baterías = 9 corridas × 20 prompts = 180 generaciones.
+para las N=20 preguntas ontológicas del panel, en las condiciones pedidas.
+Con las tres condiciones por defecto son 3 × 20 = 60 generaciones (~12 min).
+Reproduce el contraste central del paper (`axis_pec_only` vs `automata_neutro`,
+§4.1) y la línea `vanilla`.
 
 Mismo pipeline que el panel LSGOT original (lsgot_extract.py):
   - chat template nativo de Gemma-4
@@ -15,9 +18,9 @@ Reanudable: salta las corridas ya guardadas. Usa --force para recalcular.
 
 Uso:
     export HF_TOKEN=hf_xxx
-    python extract_egrav.py --out /workspace/egrav_results
-    python extract_egrav.py --dry-run          # sin GPU
-    python extract_egrav.py --smoke            # 2 prompts por corrida (prueba rápida)
+    python extract_trajectories.py --out /workspace/lsgot_extraction
+    python extract_trajectories.py --dry-run     # sin GPU
+    python extract_trajectories.py --smoke       # 2 prompts por corrida
 """
 
 import argparse
@@ -31,10 +34,8 @@ import numpy as np
 
 HERE = Path(__file__).parent
 
-BATTERIES = {
-    "b_onto":  HERE / "batteries" / "b_onto.json",
-    "b_tarea": HERE / "batteries" / "b_tarea.json",
-    "b_meta":  HERE / "batteries" / "b_meta.json",
+QUESTION_SETS = {
+    "b_onto": HERE / "questions" / "b_onto.json",
 }
 
 CONDITIONS = {
@@ -171,13 +172,13 @@ def run_batch(tok, model, cond_name: str, sys_prompt: str | None,
 
 
 def main():
-    parser = argparse.ArgumentParser(description="E-GRAV extractor GPU")
-    parser.add_argument("--out",         default="/workspace/egrav_results",
+    parser = argparse.ArgumentParser(description="LSGOT · extractor GPU de trayectorias")
+    parser.add_argument("--out",         default="/workspace/lsgot_extraction",
                         help="Directorio de salida")
     parser.add_argument("--conditions",  nargs="+", default=list(CONDITIONS.keys()),
                         choices=list(CONDITIONS.keys()))
-    parser.add_argument("--batteries",   nargs="+", default=list(BATTERIES.keys()),
-                        choices=list(BATTERIES.keys()))
+    parser.add_argument("--questions",   nargs="+", default=list(QUESTION_SETS.keys()),
+                        choices=list(QUESTION_SETS.keys()))
     parser.add_argument("--force",  action="store_true", help="Recalcular aunque exista")
     parser.add_argument("--dry-run", action="store_true", help="Sin GPU, datos ficticios")
     parser.add_argument("--smoke",   action="store_true", help="Solo 2 prompts por corrida")
@@ -186,16 +187,16 @@ def main():
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    n_jobs = len(args.conditions) * len(args.batteries)
+    n_jobs = len(args.conditions) * len(args.questions)
     n_prompts = 2 if args.smoke else 20
     print(f"\nE-GRAV extractor · {len(args.conditions)} cond × "
-          f"{len(args.batteries)} baterías = {n_jobs} corridas × {n_prompts} prompts")
+          f"{len(args.questions)} set(s) de preguntas = {n_jobs} corridas × {n_prompts} prompts")
     print(f"Output: {out_dir}\n", flush=True)
 
     # Verificar archivos
-    for b in args.batteries:
-        if not BATTERIES[b].exists():
-            sys.exit(f"ERROR: batería '{b}' no encontrada en {BATTERIES[b]}")
+    for b in args.questions:
+        if not QUESTION_SETS[b].exists():
+            sys.exit(f"ERROR: set de preguntas '{b}' no encontrado en {QUESTION_SETS[b]}")
     for c in args.conditions:
         p = CONDITIONS[c]
         if p is not None and not p.exists():
@@ -214,13 +215,13 @@ def main():
         sys_label  = "none" if sys_text is None else f"{len(sys_text):,} chars"
         print(f"\n── {cond}  (system={sys_label})")
 
-        for bat in args.batteries:
-            items = json.loads(BATTERIES[bat].read_text(encoding="utf-8"))
+        for bat in args.questions:
+            items = json.loads(QUESTION_SETS[bat].read_text(encoding="utf-8"))
             run_batch(tok, model, cond, sys_text, bat, items,
                       out_dir, args.force, args.dry_run, args.smoke)
 
     print(f"\n✓ Listo. Resultados en: {out_dir}")
-    print("Siguiente: scp los resultados y corre analyze_egrav.py localmente.")
+    print("Siguiente: scp los NPZ y proyectalos sobre v_identidad.npy (ver RUNBOOK).")
 
 
 if __name__ == "__main__":

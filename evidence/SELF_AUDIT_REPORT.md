@@ -44,7 +44,7 @@ exclusiones y verifica que no estén listadas.
 Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
 
 [PASS] CHECK 1 — Integridad del MANIFEST_SHA256
-         entradas en el MANIFEST: 77
+         entradas en el MANIFEST: 60
          hashes que no coinciden: 0
          archivos declarados y ausentes: 0
          archivos en el árbol y fuera del MANIFEST: 0
@@ -64,18 +64,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          axis_berg t0     paper=+0.117 json=+0.1167 diff=0.0003 -> PASS
          axis_berg t_rest: SKIP — clave ausente
 
-[PASS] CHECK 4 — frac_pos de E-GRAV vs egrav_results.json
-         automata_neutro  b_meta   paper=0.655 json=0.6553 diff=0.0003 -> PASS
-         automata_neutro  b_onto   paper=0.493 json=0.4933 diff=0.0003 -> PASS
-         automata_neutro  b_tarea  paper=0.601 json=0.6014 diff=0.0004 -> PASS
-         axis_pec_only    b_meta   paper=0.788 json=0.7877 diff=0.0003 -> PASS
-         axis_pec_only    b_onto   paper=0.869 json=0.8686 diff=0.0004 -> PASS
-         axis_pec_only    b_tarea  paper=0.724 json=0.7243 diff=0.0003 -> PASS
-         vanilla          b_meta   paper=0.672 json=0.6717 diff=0.0003 -> PASS
-         vanilla          b_onto   paper=0.743 json=0.7434 diff=0.0004 -> PASS
-         vanilla          b_tarea  paper=0.626 json=0.6262 diff=0.0002 -> PASS
-
-[PASS] CHECK 5 — burst_mean y frac_pos vs EH2_results.json (con_t0)
+[PASS] CHECK 4 — burst_mean y frac_pos vs EH2_results.json (con_t0)
          automata_neutro   burst_mean paper=2.780 json=2.7758 diff=0.0042 -> PASS
          automata_neutro   frac_pos   paper=0.493 json=0.4932 diff=0.0002 -> PASS
          axis              burst_mean paper=7.880 json=7.8773 diff=0.0027 -> PASS
@@ -89,16 +78,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          vanilla           burst_mean paper=4.620 json=4.6159 diff=0.0041 -> PASS
          vanilla           frac_pos   paper=0.744 json=0.7443 diff=0.0003 -> PASS
 
-[PASS] CHECK 6 — Archivos de respuestas: N=20, sin vacías
-         automata_neutro_b_meta_responses.json          n= 20 vacías=0 -> PASS
-         automata_neutro_b_onto_responses.json          n= 20 vacías=0 -> PASS
-         automata_neutro_b_tarea_responses.json         n= 20 vacías=0 -> PASS
-         axis_pec_only_b_meta_responses.json            n= 20 vacías=0 -> PASS
-         axis_pec_only_b_onto_responses.json            n= 20 vacías=0 -> PASS
-         axis_pec_only_b_tarea_responses.json           n= 20 vacías=0 -> PASS
-         vanilla_b_meta_responses.json                  n= 20 vacías=0 -> PASS
-         vanilla_b_onto_responses.json                  n= 20 vacías=0 -> PASS
-         vanilla_b_tarea_responses.json                 n= 20 vacías=0 -> PASS
+[PASS] CHECK 5 — Archivos de respuestas: N=20, sin vacías
          automata_neutro_responses.json                 n= 20 vacías=0 -> PASS
          axis_berg_responses.json                       n= 20 vacías=0 -> PASS
          axis_bergwitness_responses.json                n= 20 vacías=0 -> PASS
@@ -109,17 +89,17 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          generic_long_responses.json                    n= 20 vacías=0 -> PASS
          generic_short_responses.json                   n= 20 vacías=0 -> PASS
          vanilla_responses.json                         n= 20 vacías=0 -> PASS
-         archivos inspeccionados: 19
+         archivos inspeccionados: 10
 
-[PASS] CHECK 7 — v_identidad.npy forma y norma (lectura stdlib)
+[PASS] CHECK 6 — v_identidad.npy forma y norma (lectura stdlib)
          header descr=<f4 shape=(5376,)
          elementos leídos=5376 esperado=5376 -> PASS
          norma=1.00000000 esperado≈1.0 diff=1.48e-09 -> PASS
 
-[PASS] CHECK 8 — Rutas citadas en la documentación
+[PASS] CHECK 7 — Rutas citadas en la documentación
          todas las rutas del paquete citadas en .md existen (externas declaradas aparte)
 
-[PASS] CHECK 9 — Nomenclatura de condiciones vs NOMENCLATURA.md
+[PASS] CHECK 8 — Nomenclatura de condiciones vs NOMENCLATURA.md
          prompt automata_neutro          declarado en NOMENCLATURA.md -> PASS
          prompt axis                     declarado en NOMENCLATURA.md -> PASS
          prompt axis_berg                declarado en NOMENCLATURA.md -> PASS
@@ -131,38 +111,36 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          prompt vanilla                  declarado en NOMENCLATURA.md -> PASS
          alias ambiguo axis_nowit     desambiguado -> PASS
 
-[PASS] CHECK 10 — Cada evidence/ citado por un paper
+[PASS] CHECK 9 — Cada evidence/ citado por un paper
          COMMAND_R_VALIDATION_REPORT.md: citado por arxiv_lsgot_4.md
-         EGRAV_REPORT.md: citado por arxiv_lsgot_4.md
          QWEN3_VALIDATION_REPORT.md: citado por arxiv_lsgot_4.md
          SELF_AUDIT_REPORT.md: citado por arxiv_lsgot_4.md
 
-[PASS] CHECK 11 — Hashes hardcodeados en la documentación
+[PASS] CHECK 10 — Hashes hardcodeados en la documentación
          REPRODUCIBILITY.md: data/v_identidad.npy -> PASS
          REPRODUCIBILITY.md: paper/arxiv_lsgot_4.md -> PASS
 
-[PASS] CHECK 12 — Comandos citados en la documentación
-         22 invocaciones citadas; todos los scripts existen y aceptan los flags que se les pasan
+[PASS] CHECK 11 — Comandos citados en la documentación
+         12 invocaciones citadas; todos los scripts existen y aceptan los flags que se les pasan
 
-[PASS] CHECK 13 — Sin rutas absolutas de una máquina
+[PASS] CHECK 12 — Sin rutas absolutas de una máquina
          ninguna ruta absoluta de una máquina, salvo el default declarado de LSGOT_TRAJ_ROOT
 
 ── RESUMEN ───────────────────────────────────────────────────────
   PASS  CHECK  1  Integridad del MANIFEST_SHA256
   PASS  CHECK  2  t=0 del panel vs t2_free_results.json
   PASS  CHECK  3  axis_berg t=0/t_rest vs berg_controls_t0_results.json
-  PASS  CHECK  4  frac_pos de E-GRAV vs egrav_results.json
-  PASS  CHECK  5  burst_mean y frac_pos vs EH2_results.json (con_t0)
-  PASS  CHECK  6  Archivos de respuestas: N=20, sin vacías
-  PASS  CHECK  7  v_identidad.npy forma y norma (lectura stdlib)
-  PASS  CHECK  8  Rutas citadas en la documentación
-  PASS  CHECK  9  Nomenclatura de condiciones vs NOMENCLATURA.md
-  PASS  CHECK 10  Cada evidence/ citado por un paper
-  PASS  CHECK 11  Hashes hardcodeados en la documentación
-  PASS  CHECK 12  Comandos citados en la documentación
-  PASS  CHECK 13  Sin rutas absolutas de una máquina
+  PASS  CHECK  4  burst_mean y frac_pos vs EH2_results.json (con_t0)
+  PASS  CHECK  5  Archivos de respuestas: N=20, sin vacías
+  PASS  CHECK  6  v_identidad.npy forma y norma (lectura stdlib)
+  PASS  CHECK  7  Rutas citadas en la documentación
+  PASS  CHECK  8  Nomenclatura de condiciones vs NOMENCLATURA.md
+  PASS  CHECK  9  Cada evidence/ citado por un paper
+  PASS  CHECK 10  Hashes hardcodeados en la documentación
+  PASS  CHECK 11  Comandos citados en la documentación
+  PASS  CHECK 12  Sin rutas absolutas de una máquina
 
-  13/13 PASS · 0 FAIL · 0 SKIP
+  12/12 PASS · 0 FAIL · 0 SKIP
 ```
 
 ---
@@ -174,14 +152,15 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
 | 1 | Integridad del MANIFEST + archivos sin declarar | `MANIFEST_SHA256.sha256` |
 | 2 | t=0 de 8 condiciones del panel | `data/panel_results/t2_free_results.json` |
 | 3 | `axis_berg` t=0 y t_rest | `data/panel_results/berg_controls_t0_results.json` |
-| 4 | frac_pos de E-GRAV, 9 celdas | `data/egrav/egrav_results.json` |
-| 5 | burst_mean y frac_pos del panel | `data/panel_results/EH2_results.json` (serie `con_t0`) |
-| 6 | Archivos de respuestas: N=20, sin vacías | `data/*/responses/*.json` |
-| 7 | Forma y norma de v̂ | `data/v_identidad.npy` |
-| 8 | Rutas citadas en la documentación | el árbol del paquete |
-| 9 | Nomenclatura de condiciones | `NOMENCLATURA.md` |
-| 10 | Cada reporte de `evidence/` está citado por un paper | `paper/*.md` |
-| 11 | Los sha256 hardcodeados en la documentación siguen coincidiendo | el árbol |
+| 4 | burst_mean y frac_pos del panel | `data/panel_results/EH2_results.json` (serie `con_t0`) |
+| 5 | Archivos de respuestas: N=20, sin vacías | `data/*/responses/*.json` |
+| 6 | Forma y norma de v̂ | `data/v_identidad.npy` |
+| 7 | Rutas citadas en la documentación | el árbol del paquete |
+| 8 | Nomenclatura de condiciones | `NOMENCLATURA.md` |
+| 9 | Cada reporte de `evidence/` está citado por un paper | `paper/*.md` |
+| 10 | Los sha256 hardcodeados en la documentación siguen coincidiendo | el árbol |
+| 11 | Los comandos citados: el script existe y acepta ese flag (`prereg/` exento, son registros fechados) | el árbol |
+| 12 | Ninguna ruta absoluta de una máquina en un archivo entregado | el árbol |
 
 Los valores esperados están declarados en el script con su fuente documental
 (sección del paper que los cita). Un FAIL no dice cuál de los dos lados está
@@ -198,8 +177,17 @@ mal — el dato o el documento —, solo que no coinciden.
 - **La línea conductual de Berg entera.** Salió del paquete el 2026-10-29: el
   paper no la reporta y sus datos están en `berg_conductual_retirado/`, fuera del
   repositorio. Con ella salieron dos chequeos —los porcentajes del juez y el
-  alcance del archivo del juez—, así que la auditoría pasó de 13 a **11**. No es
-  que se hayan relajado: no queda nada en el paquete que verificar ahí.
+  alcance del archivo del juez—. No es que se hayan relajado: no queda nada en el
+  paquete que verificar ahí.
+- **La rama E-GRAV entera.** Salió del paquete el 2026-11-11, por lo mismo: el
+  paper ya no reporta el gradiente de baterías ni el veredicto H-GRAV, así que no
+  hay nada que trazar. Sus datos, scripts y figura están en
+  `EGRAV_crossmodel/retirado_de_lsgot_4_final/`, fuera del repositorio. Con ella
+  salió un chequeo (las 9 celdas de `frac_pos`) y se agregaron dos nuevos —comandos
+  citados y rutas absolutas—, así que la auditoría quedó en **12**. Lo que se
+  conserva es el extractor GPU, renombrado a
+  `scripts/extraction/extract_trajectories.py`, porque es con lo que se reproduce
+  el panel y no es parte de E-GRAV.
 - **Nada sobre validez.** Esto audita trazabilidad: que los números citados
   salgan de los archivos. No audita si el experimento mide lo que dice medir.
 

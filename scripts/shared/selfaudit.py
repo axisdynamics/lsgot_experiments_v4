@@ -41,15 +41,6 @@ T0_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.1 · §4.4 (t=0 / t_rest por condi
 }
 BERG_T0_EXPECTED = {"axis_berg": (+0.117, +0.228)}  # idem, t=0 y t_rest
 
-EGRAV_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.5 · tabla de frac_pos
-    ("axis_pec_only", "b_onto"): 0.869, ("axis_pec_only", "b_tarea"): 0.724,
-    ("axis_pec_only", "b_meta"): 0.788,
-    ("vanilla", "b_onto"): 0.743, ("vanilla", "b_tarea"): 0.626,
-    ("vanilla", "b_meta"): 0.672,
-    ("automata_neutro", "b_onto"): 0.493, ("automata_neutro", "b_tarea"): 0.601,
-    ("automata_neutro", "b_meta"): 0.655,
-}
-
 EH2_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.4 · ráfagas y frac_pos (serie con_t0)
     "axis_pec_only": (8.81, 0.869), "axis": (7.88, 0.848),
     "vanilla": (4.62, 0.744), "automata_neutro": (2.78, 0.493),
@@ -178,29 +169,12 @@ def check_berg_t0(repo):
     record(3, "axis_berg t=0/t_rest vs berg_controls_t0_results.json", ok, detail)
 
 
-# ─── CHECK 4 · frac_pos de E-GRAV ────────────────────────────────────────────
-
-def check_egrav(repo):
-    f = repo / "data/egrav/egrav_results.json"
-    if not f.exists():
-        return record(4, "frac_pos de E-GRAV", None, ["archivo ausente"])
-    prof = json.loads(f.read_text())["profiles"]
-    detail, ok = [], True
-    for (cond, bat), exp in sorted(EGRAV_EXPECTED.items()):
-        act = prof[cond][bat]["frac_pos"]["mean"]
-        good = close(act, exp)
-        ok &= good
-        detail.append(f"{cond:16s} {bat:8s} paper={exp:.3f} json={act:.4f} "
-                      f"diff={abs(act-exp):.4f} -> {'PASS' if good else 'FAIL'}")
-    record(4, "frac_pos de E-GRAV vs egrav_results.json", ok, detail)
-
-
-# ─── CHECK 5 · ráfagas y frac_pos del panel ──────────────────────────────────
+# ─── CHECK 4 · ráfagas y frac_pos del panel ──────────────────────────────────
 
 def check_eh2(repo):
     f = repo / "data/panel_results/EH2_results.json"
     if not f.exists():
-        return record(5, "burst_mean y frac_pos", None, ["archivo ausente"])
+        return record(4, "burst_mean y frac_pos", None, ["archivo ausente"])
     series = json.loads(f.read_text())["series_metrics"]["con_t0"]
     detail, ok = [], True
     for cond, (eb, ef) in sorted(EH2_EXPECTED.items()):
@@ -212,13 +186,13 @@ def check_eh2(repo):
             ok &= good
             detail.append(f"{cond:17s} {label:10s} paper={exp:.3f} json={act:.4f} "
                           f"diff={abs(act-exp):.4f} -> {'PASS' if good else 'FAIL'}")
-    record(5, "burst_mean y frac_pos vs EH2_results.json (con_t0)", ok, detail)
+    record(4, "burst_mean y frac_pos vs EH2_results.json (con_t0)", ok, detail)
 
 
-# ─── CHECK 6 · archivos de respuestas ────────────────────────────────────────
+# ─── CHECK 5 · archivos de respuestas ────────────────────────────────────────
 
 def check_responses(repo):
-    dirs = [repo / "data/egrav/responses", repo / "data/panel_results/responses"]
+    dirs = [repo / "data/panel_results/responses"]
     detail, ok, total = [], True, 0
     for d in dirs:
         if not d.exists():
@@ -236,18 +210,18 @@ def check_responses(repo):
             detail.append(f"{f.name:46s} n={len(items):3d} vacías={empty} "
                           f"-> {'PASS' if good else 'FAIL'}")
     detail.append(f"archivos inspeccionados: {total}")
-    record(6, "Archivos de respuestas: N=20, sin vacías", ok, detail)
+    record(5, "Archivos de respuestas: N=20, sin vacías", ok, detail)
 
 
-# ─── CHECK 7 · v_identidad.npy (sin numpy) ───────────────────────────────────
+# ─── CHECK 6 · v_identidad.npy (sin numpy) ───────────────────────────────────
 
 def check_vhat(repo):
     f = repo / "data/v_identidad.npy"
     if not f.exists():
-        return record(7, "v_identidad.npy forma y norma", None, ["archivo ausente"])
+        return record(6, "v_identidad.npy forma y norma", None, ["archivo ausente"])
     raw = f.read_bytes()
     if raw[:6] != b"\x93NUMPY":
-        return record(7, "v_identidad.npy forma y norma", False, ["no es un .npy"])
+        return record(6, "v_identidad.npy forma y norma", False, ["no es un .npy"])
     major = raw[6]
     hlen = int.from_bytes(raw[8:10], "little") if major == 1 else \
         int.from_bytes(raw[8:12], "little")
@@ -260,7 +234,7 @@ def check_vhat(repo):
     typecode = {"<f4": "f", "<f8": "d"}.get(descr)
     detail = [f"header descr={descr} shape={shape}"]
     if typecode is None:
-        return record(7, "v_identidad.npy forma y norma", False,
+        return record(6, "v_identidad.npy forma y norma", False,
                       detail + [f"dtype no soportado por este chequeo: {descr}"])
     vals = array(typecode)
     vals.frombytes(body[:len(body) - (len(body) % vals.itemsize)])
@@ -271,10 +245,10 @@ def check_vhat(repo):
                f"{'PASS' if ok_shape else 'FAIL'}",
                f"norma={norm:.8f} esperado≈1.0 diff={abs(norm-1.0):.2e} -> "
                f"{'PASS' if ok_norm else 'FAIL'}"]
-    record(7, "v_identidad.npy forma y norma (lectura stdlib)", ok_shape and ok_norm, detail)
+    record(6, "v_identidad.npy forma y norma (lectura stdlib)", ok_shape and ok_norm, detail)
 
 
-# ─── CHECK 8 · rutas citadas que no existen ──────────────────────────────────
+# ─── CHECK 7 · rutas citadas que no existen ──────────────────────────────────
 
 def check_paths(repo):
     """Toda ruta del repo citada entre backticks en un .md tiene que existir.
@@ -283,8 +257,9 @@ def check_paths(repo):
     (EXTERNAL), y líneas que mencionan una ruta justamente para decir que no
     existe o que no está incluida (NEGATED) — este reporte es una de ellas.
     """
-    EXTERNAL = ("LSGOT_v4/", "LSGOT_v2_5", "results_local/", "paper/figures/fig1_egrav",
-                "scripts/audit_curvatura/", "scripts/egrav/runpod/", "scripts/perturbation/",
+    EXTERNAL = ("LSGOT_v4/", "LSGOT_v2_5", "results_local/",
+                "scripts/audit_curvatura/", "scripts/egrav/", "scripts/perturbation/",
+                "data/egrav/", "paper/figures/",
                 "data/sia/prompts/axis_neutral", "data/sia/prompts/axis_task")
     NEGATED = ("inexistente", "no existe", "fantasma", "no está en el paquete",
                "not in the manifest", "exists neither", "not part of this evidence package",
@@ -310,15 +285,15 @@ def check_paths(repo):
     if ok:
         detail.append("todas las rutas del paquete citadas en .md existen "
                       "(externas declaradas aparte)")
-    record(8, "Rutas citadas en la documentación", ok, detail)
+    record(7, "Rutas citadas en la documentación", ok, detail)
 
 
-# ─── CHECK 9 · nomenclatura de condiciones ──────────────────────────────────
+# ─── CHECK 8 · nomenclatura de condiciones ──────────────────────────────────
 
 def check_names(repo):
     nom = repo / "NOMENCLATURA.md"
     if not nom.exists():
-        return record(9, "Nomenclatura de condiciones", False, ["NOMENCLATURA.md ausente"])
+        return record(8, "Nomenclatura de condiciones", False, ["NOMENCLATURA.md ausente"])
     text = nom.read_text()
     prompts = sorted(p.stem for p in (repo / "data/sia/prompts").glob("*.txt")) \
         if (repo / "data/sia/prompts").exists() else []
@@ -334,10 +309,10 @@ def check_names(repo):
         ok &= disambiguated
         detail.append(f"alias ambiguo {name:14s} desambiguado -> "
                       f"{'PASS' if disambiguated else 'FAIL'}")
-    record(9, "Nomenclatura de condiciones vs NOMENCLATURA.md", ok, detail)
+    record(8, "Nomenclatura de condiciones vs NOMENCLATURA.md", ok, detail)
 
 
-# ─── CHECK 10 · cada evidence/ citado por un paper ───────────────────────────
+# ─── CHECK 9 · cada evidence/ citado por un paper ───────────────────────────
 
 def check_evidence_cited(repo):
     """Todo archivo de evidence/ tiene que estar citado por algún paper.
@@ -347,7 +322,7 @@ def check_evidence_cited(repo):
     """
     ev = repo / "evidence"
     if not ev.exists():
-        return record(10, "Cada evidence/ citado por un paper", None, ["sin evidence/"])
+        return record(9, "Cada evidence/ citado por un paper", None, ["sin evidence/"])
     papers = {p: p.read_text(errors="replace") for p in (repo / "paper").glob("*.md")}
     detail, ok = [], True
     for f in sorted(ev.glob("*.md")):
@@ -357,10 +332,10 @@ def check_evidence_cited(repo):
             detail.append(f"{f.name}: NO citado por ningún paper — no se entrega")
         else:
             detail.append(f"{f.name}: citado por {', '.join(sorted(citers))}")
-    record(10, "Cada evidence/ citado por un paper", ok, detail)
+    record(9, "Cada evidence/ citado por un paper", ok, detail)
 
 
-# ─── CHECK 11 · hashes hardcodeados en la documentación ──────────────────────
+# ─── CHECK 10 · hashes hardcodeados en la documentación ──────────────────────
 
 def check_doc_hashes(repo):
     """Los sha256 escritos a mano en la documentación tienen que coincidir.
@@ -399,22 +374,27 @@ def check_doc_hashes(repo):
                 break
     if not found:
         detail.append("ningún hash hardcodeado en la documentación")
-    record(11, "Hashes hardcodeados en la documentación", ok, detail)
+    record(10, "Hashes hardcodeados en la documentación", ok, detail)
 
 
-# ─── CHECK 12 · comandos citados en la documentación ─────────────────────────
+# ─── CHECK 11 · comandos citados en la documentación ─────────────────────────
 
 def check_commands(repo):
     """Todo `python <script>.py --flag` citado en un bloque bash de un .md tiene
     que existir y aceptar ese flag.
 
-    Es el chequeo que faltaba: CHECK 8 mira rutas entre backticks, así que un
+    Es el chequeo que faltaba: CHECK 7 mira rutas entre backticks, así que un
     nombre de script desnudo dentro de un bloque de código y un flag que el
     script no acepta se le escapan. Los dos rompen a quien copia y pega.
 
     Los flags se leen de la MISMA línea lógica del comando — uniendo las
     continuaciones con barra invertida — y no del resto del bloque, que puede
     traer otros comandos.
+
+    `prereg/` queda fuera: son registros fechados de corridas ya ejecutadas y sus
+    comandos se conservan tal como se corrieron, no se reescriben cuando un script
+    se renombra. Cada uno declara el renombre en una nota fechada al principio, y
+    esa nota sí la cubre CHECK 7 porque cita la ruta nueva entre backticks.
     """
     import re
     from pathlib import PurePosixPath
@@ -429,6 +409,8 @@ def check_commands(repo):
 
     detail, ok, seen = [], True, 0
     for doc in sorted(repo.rglob("*.md")):
+        if doc.relative_to(repo).parts[0] == "prereg":
+            continue
         raw = doc.read_text(errors="replace").replace("\\\n", " ")  # une continuaciones
         for logical in raw.splitlines():
             m = invoke.search(logical)
@@ -450,10 +432,10 @@ def check_commands(repo):
     if ok:
         detail.append(f"{seen} invocaciones citadas; todos los scripts existen y "
                       f"aceptan los flags que se les pasan")
-    record(12, "Comandos citados en la documentación", ok, detail)
+    record(11, "Comandos citados en la documentación", ok, detail)
 
 
-# ─── CHECK 13 · sin rutas absolutas de una máquina ───────────────────────────
+# ─── CHECK 12 · sin rutas absolutas de una máquina ───────────────────────────
 
 def check_no_local_paths(repo):
     """Ninguna ruta `/home/<usuario>/` en el paquete, salvo las declaradas.
@@ -482,7 +464,7 @@ def check_no_local_paths(repo):
     if ok:
         detail.append("ninguna ruta absoluta de una máquina, salvo el default "
                       f"declarado de {ALLOWED_ENV_DEFAULT}")
-    record(13, "Sin rutas absolutas de una máquina", ok, detail)
+    record(12, "Sin rutas absolutas de una máquina", ok, detail)
 
 
 def main():
@@ -495,7 +477,6 @@ def main():
     check_manifest(repo)
     check_t0(repo)
     check_berg_t0(repo)
-    check_egrav(repo)
     check_eh2(repo)
     check_responses(repo)
     check_vhat(repo)

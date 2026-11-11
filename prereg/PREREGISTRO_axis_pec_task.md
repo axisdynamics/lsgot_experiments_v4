@@ -1,5 +1,12 @@
 # Pre-registro — `axis_pec_task` · paso obligatorio sin autorreferencia
 
+> **Nota del 11 de noviembre de 2026.** Este documento se conserva tal como se corrió. El
+> extractor que citan sus comandos como `scripts/egrav/extract_egrav.py` hoy es
+> `scripts/extraction/extract_trajectories.py`, con `--batteries` renombrado a `--questions`
+> y un solo set de preguntas (`b_onto`); el resto del paquete E-GRAV salió del repositorio
+> junto con la rama (`EGRAV_crossmodel/retirado_de_lsgot_4_final/`). Los comandos de abajo
+> **no** se reescribieron: son el registro de lo que se ejecutó.
+
 **Fecha:** 2026-10-29 · **Estado:** **antes de extraer.** Ningún estado de esta condición ha
 sido medido.
 **Pedido por:** Jorge Castillo (punto 3 de `PETICIONES_MARCO_lsgot4.md`, 28-10-2026)
