@@ -340,9 +340,7 @@ The only p-values below that floor in this paper are in §4.7, which re-ran its 
 a different estimator and states its own convention there. Effect sizes are Cohen's d
 with the RMS pooled standard deviation `√((s_A² + s_B²)/2)`. Wasserstein-1 distances and
 bootstrap 95% CIs (n=1000) accompany the key pairs. Where a family of tests is reported
-together we state the Bonferroni threshold and which results survive it. `p<0.0001`
-and `p=0.0` in the raw JSON both mean "no permutation of the null reached the observed
-statistic" at the stated n.
+together we state the Bonferroni threshold and which results survive it.
 
 ## 4. Results
 
