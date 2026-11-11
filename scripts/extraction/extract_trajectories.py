@@ -189,7 +189,7 @@ def main():
 
     n_jobs = len(args.conditions) * len(args.questions)
     n_prompts = 2 if args.smoke else 20
-    print(f"\nE-GRAV extractor · {len(args.conditions)} cond × "
+    print(f"\nLSGOT · extractor de trayectorias · {len(args.conditions)} cond × "
           f"{len(args.questions)} set(s) de preguntas = {n_jobs} corridas × {n_prompts} prompts")
     print(f"Output: {out_dir}\n", flush=True)
 

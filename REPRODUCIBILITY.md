@@ -294,7 +294,7 @@ está en `scripts/shared/statistical_tests.py` (`permutation_test`, n=1000, seed
 
 ### 3.1 Arquitectura del pipeline de extracción
 
-El pipeline de extracción del panel original usa el mismo código base que E-GRAV. Las diferencias son:
+El panel completo se extrae con el mismo script de §2 (`extract_trajectories.py`). Las diferencias con la corrida de tres condiciones de §2 son:
 - **Preguntas:** el set ontológico del panel (`scripts/extraction/questions/b_onto.json`, 20 preguntas).
 - **Condiciones:** las 9 del panel (más axis_berg para berg controls).
 - **N:** 20 prompts por condición.
@@ -480,11 +480,11 @@ find . -type f \
 ├─ Solo verificar los números del paper
 │   └─ Sección 1 (CPU, ~10 min)
 │
-├─ Re-correr el análisis estadístico E-GRAV
-│   └─ Sección 2.5 con NPZs ya descargados (CPU, ~5 min)
+├─ Re-proyectar sobre v̂ con los NPZ ya descargados
+│   └─ Sección 2.5 (CPU, ~5 min)
 │
-├─ Re-extraer E-GRAV desde cero
-│   └─ Sección 2 completa (GPU, ~70 min en A100)
+├─ Re-extraer el contraste central desde cero
+│   └─ Sección 2 completa (GPU, ~12 min en A100 para 3 cond × 20 preguntas)
 │
 └─ Re-extraer el panel completo desde cero
     └─ Sección 3 (GPU, ~3-4 h en A100 para 9 cond × 20 prompts)
