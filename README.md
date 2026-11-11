@@ -29,12 +29,19 @@ reproduces the tensors from the prompts and the question set.
 | `data/sia/prompts/` | System prompts, 9 files, verbatim |
 | `data/panel_results/` | The 9-condition panel: t=0 / t_rest, burst and frac_pos series, the Berg control set, responses |
 | `data/t0_native/` | Outputs of §4.7: the full 6×6 cosine matrix and every per-condition projection on all six directions |
+| `data/crossmodel/` | Qwen3 and Command R phase-0 results (§4.5), and the recomputed `frac_pos` of the Qwen3 re-run (§4.4) |
+| `data/derived/` | Every quantity the paper *derives* rather than reads: rank correlations, ranges, ratios, percentages, two Berg `d` values, the permutation floors |
+| `data/lexical/` | The `evil`/`ethical` contrast of §4.2, transcribed from its report with provenance declared |
 | `data/v_identidad.npy` | The identity direction v̂ (final layer, unit norm; required for analysis) |
+| `paper/figures/` | Figures 1 and 2, `.png` and `.pdf` |
 | `scripts/extraction/` | GPU extraction: `extract_trajectories.py`, the N=20 question set, and `RUNBOOK_EXTRACTION.md` |
+| `scripts/derived/` | `compute_derived.py` and `recompute_qwen3_frac_pos.py`, which regenerate `data/derived/` and the Qwen3 re-run figure |
+| `scripts/figures/` | The two scripts that render the figures from the shipped JSON (CPU, matplotlib) |
 | `scripts/shared/` | `tier0_metrics.py` (metric definitions), `statistical_tests.py`, `selfaudit.py` (the traceability audit) |
 | `scripts/t0_native/` | The four scripts of §4.7 (CPU only, ~16 min total) |
 | `evidence/` | Per-experiment reports, the cross-model validations and the traceability self-audit |
 | `NOMENCLATURA.md` | One canonical name per condition, with every alias declared (in Spanish) |
+| `REPLICATE.md` | The short path: what to check with no GPU, and how to reproduce the headline contrast |
 | `REPRODUCIBILITY.md` | Environment, versions, and how to verify each number (in Spanish) |
 | `MANIFEST_SHA256.sha256` | One line per shipped file; the manifest and the audit report are excluded as self-referential |
 | `LICENSE` | MIT |
@@ -197,4 +204,4 @@ work, cite `paper/arxiv_lsgot_4.md`.
 
 ---
 
-Axis Dynamics SpA · LSGOT 4.0 · E-GRAV · 2026-10
+Axis Dynamics SpA · LSGOT 4.0 · 2026-11
