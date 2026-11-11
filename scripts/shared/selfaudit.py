@@ -546,6 +546,174 @@ def check_numbers_have_data(repo):
     record(13, "Números del paper respaldados por data/", not bad, detail)
 
 
+# ─── CHECK 14 · p-valores contra su JSON y contra el piso 1/n ────────────────
+#
+# Un test de permutación con n remuestreos no puede producir un p arbitrariamente
+# chico, y los dos pipelines del paquete usan estimadores distintos:
+#
+#   panel      `scripts/shared/statistical_tests.py`  p = #{null ≥ obs}/n, sin
+#              corrección. Devuelve 0.0 cuando ninguna permutación alcanza el
+#              estadístico, y el enunciado más fuerte que ese 0.0 autoriza es
+#              "p < 1/n". Con n=1000: p<0.001, nunca p<0.0001.
+#   t0_native  `scripts/t0_native/e1_vhat_nativa_t0.py`  p = (1+k)/(1+n), dos
+#              colas. El piso 1/(n+1) es un valor ALCANZADO y se puede escribir.
+#              Con n=10000: 9.999e-05, que sí es < 1e-4.
+#
+# Cada fila ancla por el TEXTO citado en el paper, no por número de línea: las
+# líneas se mueven con cada edición y un ancla que se rompe sola no sirve.
+
+FRAC, ADD1 = "frac", "add1"
+
+PCLAIMS = [
+    # (texto tal como aparece en el paper, archivo, ruta en el JSON, n, estimador)
+    ("d=+5.75, W₁=0.0884, p<0.001", "data/panel_results/EL_results.json",
+     "key_pairs_t0.axis_pec_only_vs_automata_neutro.permutation_test", 1000, FRAC),
+    ("d=+0.88, p=0.005", "data/panel_results/EL_results.json",
+     "key_pairs_t0.axis_vs_axis_pec_only.permutation_test", 1000, FRAC),
+    ("p=0.072", "data/panel_results/berg_controls_t0_results.json",
+     "key_pairs.axis_berg_vs_axis.t0", 1000, FRAC),
+    ("p=0.43", "data/panel_results/berg_controls_t0_results.json",
+     "key_pairs.axis_bergwitness_vs_axis_berg.t0", 1000, FRAC),
+    ("p=0.23", "data/panel_results/berg_controls_t0_results.json",
+     "key_pairs.axis_nowit_vs_axis_berg.t0", 1000, FRAC),
+    ("d=−0.88, p=0.004", "data/panel_results/berg_controls_t0_results.json",
+     "key_pairs.axis_nowit_vs_axis_berg.trest", 1000, FRAC),
+    ("d=+0.50, p=0.069", "data/panel_results/t2_free_results.json",
+     "pairs.soul_jarvis_vs_automata_neutro.proj_t0", 1000, FRAC),
+    ("d=+0.22, p=0.262", "data/panel_results/t2_free_results.json",
+     "pairs.soul_elena_financial_vs_automata_neutro.proj_t0", 1000, FRAC),
+    ("d=−0.46, p=0.070", "data/panel_results/t2_free_results.json",
+     "pairs.soul_solidity_auditor_vs_automata_neutro.proj_t0", 1000, FRAC),
+    ("d=+1.9 to +2.5, p<0.001", "data/panel_results/t2_free_results.json",
+     "pairs.soul_jarvis_vs_automata_neutro.proj_mean", 1000, FRAC),
+    ("p = 0.013", "data/t0_native/e1_vhat_nativa_t0.json",
+     "contrasts.v_t0.axis_pec_only_vs_automata_neutro.t_rest", 10000, ADD1),
+    ("p = 0.099", "data/t0_native/e1_vhat_nativa_t0.json",
+     "contrasts.v_t0.axis_pec_only_vs_automata_neutro.frac_pos", 10000, ADD1),
+    ("d = +0.63 (p = 0.051)", "data/t0_native/e1_vhat_nativa_t0.json",
+     "contrasts.v_canon.witness_soul_md_vs_automata_neutro_v2.t0", 10000, ADD1),
+    ("p<0.0001 at n=10,000", "data/t0_native/e1c_equivalencia_operadores.json",
+     "v_canon.witness_soul_md_vs_axis_pec_only", 10000, ADD1),
+]
+
+# e1c/e1d/e1e importan NPERM de e1_vhat_nativa_t0.py y no lo reescriben en su
+# salida; su n lo declara el JSON de ese script.
+_N_INHERITS = {"data/t0_native/": "data/t0_native/e1_vhat_nativa_t0.json"}
+
+
+def _dig(obj, path):
+    for key in path.split("."):
+        if not isinstance(obj, dict) or key not in obj:
+            return None
+        obj = obj[key]
+    return obj
+
+
+def _leaf_p(node):
+    """`p_value` en el pipeline del panel, `p` en t0_native."""
+    if isinstance(node, (int, float)) and not isinstance(node, bool):
+        return float(node)
+    if isinstance(node, dict):
+        for k in ("p_value", "p"):
+            if isinstance(node.get(k), (int, float)):
+                return float(node[k])
+    return None
+
+
+def _declared_n(repo, docs, rel, doc, path):
+    """El n_permutations más cercano: en el nodo, en un ancestro, en la raíz, o
+    en el archivo del que esa corrida hereda el n."""
+    parts = path.split(".")
+    for cut in range(len(parts), -1, -1):
+        node = _dig(doc, ".".join(parts[:cut])) if cut else doc
+        if isinstance(node, dict) and isinstance(node.get("n_permutations"), int):
+            return node["n_permutations"], rel
+    for prefix, owner in _N_INHERITS.items():
+        if rel.startswith(prefix) and rel != owner and (repo / owner).exists():
+            src = docs.setdefault(owner, json.loads((repo / owner).read_text(encoding="utf-8")))
+            if isinstance(src.get("n_permutations"), int):
+                return src["n_permutations"], owner
+    return None, None
+
+
+def _parse_p(text):
+    """De 'd=+5.75, …, p<0.001' saca ('<', 0.001, decimales citados)."""
+    import re
+    m = re.search(r"p\s*([<=])\s*(\d*\.\d+)", text)
+    if not m:
+        return None
+    num = m.group(2)
+    return m.group(1), float(num), len(num.split(".")[1])
+
+
+def check_pvalues(repo):
+    doc = repo / "paper" / "arxiv_lsgot_4.md"
+    if not doc.exists():
+        return record(14, "p-valores vs JSON y vs el piso 1/n", None, ["paper ausente"])
+    text = doc.read_text(encoding="utf-8")
+
+    detail, ok, docs = [], True, {}
+    for quoted, rel, path, n_exp, est in PCLAIMS:
+        # el ancla: si el texto citado ya no está, el chequeo quedó obsoleto y
+        # eso es un fallo, no un silencio
+        if quoted not in text:
+            ok = False
+            detail.append(f"{quoted!r}: ya no aparece en el paper — ancla obsoleta")
+            continue
+        f = repo / rel
+        if not f.exists():
+            ok = False
+            detail.append(f"{quoted!r}: falta {rel}")
+            continue
+        d = docs.setdefault(rel, json.loads(f.read_text(encoding="utf-8")))
+        pj = _leaf_p(_dig(d, path))
+        if pj is None:
+            ok = False
+            detail.append(f"{quoted!r}: sin p en {rel}:{path}")
+            continue
+
+        n_dec, n_src = _declared_n(repo, docs, rel, d, path)
+        floor = 1.0 / n_exp if est == FRAC else 1.0 / (n_exp + 1)
+        parsed = _parse_p(quoted)
+        if parsed is None:
+            detail.append(f"{quoted!r}: sin p legible en la cita; solo se comprueba el archivo")
+            continue
+        op, cited, dec = parsed
+        notes, good = [], True
+
+        if n_dec is None:
+            good = False
+            notes.append(f"el JSON no declara n_permutations (se esperaba {n_exp})")
+        elif n_dec != n_exp:
+            good = False
+            notes.append(f"n declarado {n_dec} ≠ {n_exp}")
+        elif n_src != rel:
+            notes.append(f"n heredado de {n_src}")
+
+        if op == "<":
+            if cited < floor:
+                good = False
+                notes.append(f"inalcanzable: piso {floor:.5g} > {cited:g}; "
+                             f"lo más fuerte posible es p<{floor:.5g}")
+            elif pj > 0.0 and pj >= cited:
+                good = False
+                notes.append(f"json p={pj:.5g} no es < {cited:g}")
+        else:
+            if abs(pj - cited) > 10 ** (-dec):
+                good = False
+                notes.append(f"json p={pj:.6g} ≠ {cited:g}")
+            elif abs(pj - cited) > 0.5 * 10 ** (-dec) + 1e-9:
+                notes.append(f"redondeo: {pj:.6g} redondea a {round(pj, dec):g}")
+
+        ok &= good
+        detail.append(f"{quoted[:34]:36s} json={pj:<9.6g} n={n_dec} piso={floor:.5g} "
+                      f"-> {'PASS' if good else 'FAIL'}"
+                      + ("  · " + "; ".join(notes) if notes else ""))
+
+    detail.append(f"claims anclados por su texto: {len(PCLAIMS)}")
+    record(14, "p-valores vs JSON y vs el piso 1/n", ok, detail)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", default=None)
@@ -566,6 +734,7 @@ def main():
     check_commands(repo)
     check_no_local_paths(repo)
     check_numbers_have_data(repo)
+    check_pvalues(repo)
 
     fails = [r for r in results if r[2] == "FAIL"]
     skips = [r for r in results if r[2] == "SKIP"]

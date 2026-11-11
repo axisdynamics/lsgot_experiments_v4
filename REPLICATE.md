@@ -12,12 +12,12 @@ This file is the short path for someone who wants to **reproduce the result**.
 
 ```bash
 sha256sum -c MANIFEST_SHA256.sha256          # integrity of every file in the manifest
-python3 scripts/shared/selfaudit.py          # traceability: 13 checks, exits non-zero on failure
+python3 scripts/shared/selfaudit.py          # traceability: 14 checks, exits non-zero on failure
 ```
 
 The second one checks that **every number cited in the paper comes out of the file the paper
 says it comes from**. It needs the Python standard library and nothing else. The package as
-released passes 13/13.
+released passes 14/14.
 
 ## 1 · Environment
 
@@ -109,7 +109,7 @@ number on the figure.
 ## 7 · If something does not match
 
 The audit of step 0 tells you whether the discrepancy is in your run or in the package. If it
-passes 13/13 and your numbers still differ, it is your run — start with the tokenizer version
+passes 14/14 and your numbers still differ, it is your run — start with the tokenizer version
 and the attention implementation, which are the two things §3.2 and limitation 9 flag.
 
 ---

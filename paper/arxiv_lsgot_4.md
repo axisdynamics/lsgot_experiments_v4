@@ -661,7 +661,7 @@ difference at all (§4.1).
 | Graph curvature (Δκ/W₁) | does curvature carry the signal? | simple baselines beat it 4/4, with both Forman-Ricci and genuine Ollivier-Ricci; no clean pattern in any of the three substrates | excluded from the framework |
 | RQA determinism | recurrence to similar states? | below the detection floor of the ε=10% threshold outside Gemma (no recurrent pair in 160 of 160 Command R trajectories); measurable in all three substrates at a fixed recurrence rate, but orders recovery failure only in Gemma (AUC 1.000, n=9) and not at all in Command R (ρ = 0.00 to +0.05, n=8) | excluded as a cross-model instrument |
 | First-token lexical control | do the effects survive controlling for the first generated word? | Jaccard down to 0.00, effect survives and strengthens | reassuring, not definitive |
-| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 13/13 checks pass on the package as released, all diffs < 0.005; the last of them holds every decimal in the text against the JSON in `data/` | the numbers are the files' numbers |
+| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 14/14 checks pass on the package as released, all diffs < 0.005; the last of them holds every decimal in the text against the JSON in `data/` | the numbers are the files' numbers |
 
 Perturbation and recovery (τ, recovery_rate, Fréchet path fidelity) are **outside the scope
 of this paper**. In Gemma, seven of nine conditions recover to ~100% with or without the wired
@@ -1217,7 +1217,7 @@ d=−1.87, p<0.001 at n=1,000).
 
 Every number cited in this paper is checked against the file it comes from by `scripts/shared/selfaudit.py`, which uses only the Python standard library (no
 numpy, no GPU) and exits non-zero on any failure, so it can run in CI. The package as released
-passes **13/13**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
+passes **14/14**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
 
 | # | Check | Source of truth |
 |---|---|---|
@@ -1234,15 +1234,16 @@ passes **13/13**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
 | 11 | Every `python <script> --flag` quoted in a bash block of a `.md` exists and accepts that flag | the tree |
 | 12 | No absolute local path appears in any shipped file | the tree |
 | 13 | Every decimal number cited in the paper exists in some JSON under `data/` | `data/**/*.json` |
+| 14 | Every p-value cited matches its JSON and clears the `1/n` floor of the estimator that produced it | the result files and their `n_permutations` |
 
 Expected values are declared in the script together with the document section that cites them,
 so a failure says the two sides disagree without deciding which one is wrong.
 
-**Why checks 7 to 13 exist.** An earlier version of this audit was a hand-written transcript
+**Why checks 7 to 14 exist.** An earlier version of this audit was a hand-written transcript
 of terminal commands. It reported 56 manifest entries when the manifest held 61, and the output
 it quoted as evidence named a documentation path absent from the whole package — a path four
 documents cited, one of them inside a command a reader would copy and run. Both are now checks
-rather than prose, so the same class of drift fails the build. Checks 9 to 13 extend the same
+rather than prose, so the same class of drift fails the build. Checks 9 to 14 extend the same
 principle from the documentation to the contents: an evidence report no paper cites does not
 ship, and a checksum written by hand into a reproduction command has to still match — that last
 one had already gone stale for the paper's own hash, inside a command a reader would copy. Two exclusions are declared rather than

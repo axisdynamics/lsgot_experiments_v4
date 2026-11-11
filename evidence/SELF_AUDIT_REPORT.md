@@ -132,6 +132,23 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          números citados en el paper: 670 (1 exentos y declarados)
          todos tienen un archivo detrás
 
+[PASS] CHECK 14 — p-valores vs JSON y vs el piso 1/n
+         d=+5.75, W₁=0.0884, p<0.001          json=0         n=1000 piso=0.001 -> PASS
+         d=+0.88, p=0.005                     json=0.005     n=1000 piso=0.001 -> PASS
+         p=0.072                              json=0.072     n=1000 piso=0.001 -> PASS
+         p=0.43                               json=0.425     n=1000 piso=0.001 -> PASS
+         p=0.23                               json=0.23      n=1000 piso=0.001 -> PASS
+         d=−0.88, p=0.004                     json=0.004     n=1000 piso=0.001 -> PASS
+         d=+0.50, p=0.069                     json=0.069     n=1000 piso=0.001 -> PASS
+         d=+0.22, p=0.262                     json=0.262     n=1000 piso=0.001 -> PASS
+         d=−0.46, p=0.070                     json=0.07      n=1000 piso=0.001 -> PASS
+         d=+1.9 to +2.5, p<0.001              json=0         n=1000 piso=0.001 -> PASS
+         p = 0.013                            json=0.0129987 n=10000 piso=9.999e-05 -> PASS
+         p = 0.099                            json=0.0992901 n=10000 piso=9.999e-05 -> PASS
+         d = +0.63 (p = 0.051)                json=0.0507949 n=10000 piso=9.999e-05 -> PASS
+         p<0.0001 at n=10,000                 json=9.999e-05 n=10000 piso=9.999e-05 -> PASS  · n heredado de data/t0_native/e1_vhat_nativa_t0.json
+         claims anclados por su texto: 14
+
 ── RESUMEN ───────────────────────────────────────────────────────
   PASS  CHECK  1  Integridad del MANIFEST_SHA256
   PASS  CHECK  2  t=0 del panel vs t2_free_results.json
@@ -146,8 +163,9 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
   PASS  CHECK 11  Comandos citados en la documentación
   PASS  CHECK 12  Sin rutas absolutas de una máquina
   PASS  CHECK 13  Números del paper respaldados por data/
+  PASS  CHECK 14  p-valores vs JSON y vs el piso 1/n
 
-  13/13 PASS · 0 FAIL · 0 SKIP
+  14/14 PASS · 0 FAIL · 0 SKIP
 ```
 
 ---
@@ -169,6 +187,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
 | 11 | Los comandos citados: el script existe y acepta ese flag (`prereg/` exento, son registros fechados) | el árbol |
 | 12 | Ninguna ruta absoluta de una máquina en un archivo entregado | el árbol |
 | 13 | Todo número decimal citado en el paper existe en algún JSON de `data/` | `data/**/*.json` |
+| 14 | Todo p citado coincide con su JSON y respeta el piso `1/n` del estimador que lo produjo | los archivos de resultados y su `n_permutations` |
 
 Los valores esperados están declarados en el script con su fuente documental
 (sección del paper que los cita). Un FAIL no dice cuál de los dos lados está
