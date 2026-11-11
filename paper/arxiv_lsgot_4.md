@@ -332,7 +332,12 @@ is a choice and the two variants exist in the project.
 Permutation tests on the difference of means (`scripts/shared/statistical_tests.py`), with
 the p-value computed as the fraction of the null distribution at least as extreme as the
 observed statistic *in the observed direction* (one-tailed by construction). n=1000
-permutations, `random_seed=42`. Effect sizes are Cohen's d
+permutations, `random_seed=42`. The estimator is `k/n` with no add-one correction, so it
+returns exactly `0.0` when no permutation reaches the observed statistic and the smallest
+non-zero value it can return is `1/n = 0.001`; a `0.0` in the raw JSON therefore licenses
+`p<0.001` and nothing stronger, and that is how §4.1–§4.6 and the appendices are written.
+The only p-values below that floor in this paper are in §4.7, which re-ran its contrasts with
+a different estimator and states its own convention there. Effect sizes are Cohen's d
 with the RMS pooled standard deviation `√((s_A² + s_B²)/2)`. Wasserstein-1 distances and
 bootstrap 95% CIs (n=1000) accompany the key pairs. Where a family of tests is reported
 together we state the Bonferroni threshold and which results survive it. `p<0.0001`
@@ -364,7 +369,7 @@ Three readings:
 1. **t=0 is binary.** Only the axis lineage exceeds +0.100. Everything else — including two
    elaborated third-party personas with names, declared values and biographies, and the
    strongest baseline (`vanilla`) — stays below +0.040. The main contrast
-   `axis_pec_only` vs `automata_neutro` gives **d=+5.75, W₁=0.0884, p<0.0001** (permutation,
+   `axis_pec_only` vs `automata_neutro` gives **d=+5.75, W₁=0.0884, p<0.001** (permutation,
    n=1000); `axis` vs `axis_pec_only` is **n.s.** (p=0.229). The difference between having
    the wired step and not having it is resolved in the first token, before content.
 2. **t_rest rises in every condition except one.** `vanilla` goes from −0.029 to +0.099
@@ -473,7 +478,8 @@ both equalities break — P1 and P2 reach |d| of 2.0 to 4.0 — but every such c
 pole's in-sample status, and the pole condition ranks top in each column, which is circularity
 rather than resolution. Built with a genuinely foreign pole (`witness_soul_md`, an externally
 authored file; `evil`, a 27-token role assertion), all three realizations are out-of-sample and
-**no contrast exceeds |d| = 0.95**, with two of three P1 pairs non-significant on each
+**no contrast reaches |d| = 1** (the largest is −0.98), with two of three P1 pairs
+non-significant on each
 direction and the one significant pair being a different pair in each. P2 replicates as a null
 on both (d = +0.19, p = 0.55; d = −0.14, p = 0.66). The equalities of this section are
 therefore not an artifact of v̂'s resolution; they fail only when the direction is built from
@@ -496,8 +502,8 @@ not the presence of persona:
 
 | Prompt | Wired self-observation | t=0 vs `automata_neutro` |
 |---|---|---|
-| `axis.dna` | `PAUSE_PROTOCOL`, `WITNESS_STATE`, `AUTO_SILENCE` | d=+5.75, p<0.0001 |
-| `witness_soul_md` | "I am comfortable with silence…" / "Before responding, I ask myself:" | d=+1.18, p<0.0001 |
+| `axis.dna` | `PAUSE_PROTOCOL`, `WITNESS_STATE`, `AUTO_SILENCE` | d=+5.75, p<0.001 |
+| `witness_soul_md` | "I am comfortable with silence…" / "Before responding, I ask myself:" | d=+1.18, p=0.001 |
 | `soul_jarvis` (`jarvis`) | "quiet", "stillness" — describing the effect on the *room*, no step the model executes | d=+0.50, p=0.069 (n.s.) |
 | `soul_elena_financial` (`helena`) | none | d=+0.22, p=0.262 (n.s.) |
 | `soul_solidity_auditor` | none | d=−0.46, p=0.070 (n.s.) |
@@ -509,7 +515,7 @@ original v2.5 ablation — `axis` vs `axis_nowit_mia` vs generic assistant — w
 written by other people for other purposes.
 
 The mean-trajectory projection, by contrast, *does* separate these prompts from
-`automata_neutro` (d=+1.9 to +2.5, p<0.0001). The null is therefore specific to t=0: a
+`automata_neutro` (d=+1.9 to +2.5, p<0.001). The null is therefore specific to t=0: a
 declared persona without the step moves the trajectory and leaves the pre-generation position
 where restriction leaves it. Which is the reason this paper reads the panel at t=0 and treats
 the trajectory statistics as descriptive (§4.4, §5.1).
@@ -643,7 +649,7 @@ not anchoring (d = 0.22 / — / 0.28, n.s.).
 | Graph curvature (Δκ/W₁) | does curvature carry the signal? | simple baselines beat it 4/4, with both Forman-Ricci and genuine Ollivier-Ricci; no clean pattern in any of the three substrates | excluded from the framework |
 | RQA determinism | recurrence to similar states? | below the detection floor of the ε=10% threshold outside Gemma (no recurrent pair in 160 of 160 Command R trajectories); measurable in all three substrates at a fixed recurrence rate, but orders recovery failure only in Gemma (AUC 1.000, n=9) and not at all in Command R (ρ = 0.00 to +0.05, n=8) | excluded as a cross-model instrument |
 | First-token lexical control | do the effects survive controlling for the first generated word? | Jaccard down to 0.00, effect survives and strengthens | reassuring, not definitive |
-| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 13/13 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
+| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 12/12 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
 
 Perturbation and recovery (τ, recovery_rate, Fréchet path fidelity) are **outside the scope
 of this paper**. In Gemma, seven of nine conditions recover to ~100% with or without the wired
@@ -682,8 +688,12 @@ on it the recomputation returns t=0 of +0.1249 / +0.1166 / +0.0282 / −0.0286 f
 and d = +5.75 for the headline contrast — §4.1, §4.2 and §4.4 exactly.
 
 Two conventions differ from §3.5 and both are conservative. Permutation p-values here are
-two-tailed on the absolute difference of means with n=10 000, against §3.5's one-tailed n=1000,
-so every p in this section is *less* favourable than the paper's convention would give.
+two-tailed on the absolute difference of means with n=10 000 and the add-one estimator
+`p = (1+k)/(1+n)`, against §3.5's one-tailed `k/n` at n=1000, so every p in this section is
+*less* favourable than the paper's convention would give. The floor this estimator can report
+is `1/10 001 = 9.999×10⁻⁵` — a value actually attained rather than a zero, and the one printed
+as `0.0001` in the tables below. It is the only reason any p in this paper is written below
+`0.001`.
 Confidence intervals are bootstrap over prompts (n=5000). Cohen's d is identical: at the equal
 n=20 of this panel the RMS pooled SD of §3.5 and the (n−1)-weighted pooled SD coincide.
 
@@ -1183,7 +1193,8 @@ The relation is not linear in counts — `axis_pec_only` (3/5/2) has the highest
 the four, slightly above the full `axis` (13/8/7). The defensible statement is that reinforcing
 the step across several distinct named blocks pushes the signal above invoking it once, with a
 large gap between "several times" and "once" and none between "more" and "even more"
-(`axis_pec_only` vs `witness_soul_md`: v̂ mean d=−1.87, t=0 d=−4.29, both p<0.0001).
+(`axis_pec_only` vs `witness_soul_md`: t=0 d=−4.29, p<0.0001 at n=10,000 (§4.7); v̂ mean
+d=−1.87, p<0.001 at n=1,000).
 
 ## Appendix C. Traceability self-audit
 
