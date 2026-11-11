@@ -13,5 +13,5 @@ soul_jarvis (jarvis), soul_elena_financial (helena)
   - data/panel_results/t2_free_results.json (clave: "soul_jarvis", "soul_elena_financial")
   - data/panel_results/t2_eh2_results.json (burst_mean, frac_pos)
 → Las respuestas de texto nunca fueron serializadas a JSON en el pipeline T2.
-   Para reproducir, correr scripts/egrav/extract_egrav.py con los prompts de
+   Para reproducir, correr scripts/extraction/extract_trajectories.py con los prompts de
    soul_jarvis.txt y soul_elena_financial.txt como condiciones adicionales.

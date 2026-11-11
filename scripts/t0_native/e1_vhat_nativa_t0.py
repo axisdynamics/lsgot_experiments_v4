@@ -25,7 +25,7 @@ if not RB.exists():
     raise SystemExit(
         f'No encuentro las trayectorias en {RB}.\n'
         'Son ~23 GB y no se redistribuyen: reproducílas con '
-        'scripts/egrav/RUNBOOK_EGRAV.md y después\n'
+        'scripts/extraction/RUNBOOK_EXTRACTION.md y después\n'
         '  export LSGOT_TRAJ_ROOT=/ruta/a/las/trayectorias')
 HERE = Path(__file__).parent
 RES = HERE / 'results'

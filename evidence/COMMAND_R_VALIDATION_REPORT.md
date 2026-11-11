@@ -67,7 +67,7 @@ perturbación/recuperación (T2/H4_rev), sobre los mismos 8 grupos.
 | Hallazgo (Gemma) | ¿Replica en Command R? | Detalle |
 |---|---|---|
 | Doble disociación en t=0 (E-L) | ✅ **Sí, más fuerte** | d=+7.72 (axis_pec_only vs automata_neutro), vs d=+5.75 en Gemma (Qwen3: +12.97) |
-| axis ≈ axis_pec_only (indistinguibles) | ✅ Sí | d=−0.10, p=0.364 (n.s.) — igual que en Gemma (p=0.229) y Qwen3 (p=0.062) |
+| axis ≈ axis_pec_only (indistinguibles) | ✅ Sí | d=−0.10, p=0.364 (n.s.) — igual que en Qwen3 (p=0.062). **Corrección del 2026-11-11:** este renglón citaba «igual que en Gemma (p=0.229)»; ese 0.229 es la proyección promediada en la trayectoria, no t=0. En t=0 Gemma da d=+0.88, p=0.005, así que el renglón replica 2/3 y no 3/3. Ver §4.1 y §4.5 del paper. |
 | Dinámica temporal — ráfagas sostenidas vs oscilantes (E-H2) | ✅ Sí | ráfaga media axis_pec_only=58.7 vs automata_neutro=4.3 tok. (d=+2.30); mismo patrón cualitativo, magnitud absoluta distinta a Gemma (7.9-8.8 vs 2.8 tok.) y a Qwen3 (89.6 vs 2.83) — cada arquitectura tiene su propia escala, la dirección es constante |
 | Identidad/restricción separa el mayor ángulo de subespacio del panel (E-J) | ✅ **Sí, 3/3** | 38.3° (id↔restr.) vs 27.6° (generic↔restr.) — Gemma y Qwen3 coinciden en esto también |
 | Restricción es la condición más distinta del panel (clustering k=2) | ❌ **No — coincide con la inversión de Qwen3, no con Gemma** | `{axis, axis_pec_only}` se separa primero del resto (incluido `automata_neutro`); en Gemma es `automata_neutro` el que se separa solo. 2/3 arquitecturas (Qwen3, Command R) invierten este punto específico frente a Gemma — el ángulo replica, la identidad del outlier no |

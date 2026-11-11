@@ -41,15 +41,6 @@ T0_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.1 · §4.4 (t=0 / t_rest por condi
 }
 BERG_T0_EXPECTED = {"axis_berg": (+0.117, +0.228)}  # idem, t=0 y t_rest
 
-EGRAV_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.5 · tabla de frac_pos
-    ("axis_pec_only", "b_onto"): 0.869, ("axis_pec_only", "b_tarea"): 0.724,
-    ("axis_pec_only", "b_meta"): 0.788,
-    ("vanilla", "b_onto"): 0.743, ("vanilla", "b_tarea"): 0.626,
-    ("vanilla", "b_meta"): 0.672,
-    ("automata_neutro", "b_onto"): 0.493, ("automata_neutro", "b_tarea"): 0.601,
-    ("automata_neutro", "b_meta"): 0.655,
-}
-
 EH2_EXPECTED = {  # paper/arxiv_lsgot_4.md §4.4 · ráfagas y frac_pos (serie con_t0)
     "axis_pec_only": (8.81, 0.869), "axis": (7.88, 0.848),
     "vanilla": (4.62, 0.744), "automata_neutro": (2.78, 0.493),
@@ -178,29 +169,12 @@ def check_berg_t0(repo):
     record(3, "axis_berg t=0/t_rest vs berg_controls_t0_results.json", ok, detail)
 
 
-# ─── CHECK 4 · frac_pos de E-GRAV ────────────────────────────────────────────
-
-def check_egrav(repo):
-    f = repo / "data/egrav/egrav_results.json"
-    if not f.exists():
-        return record(4, "frac_pos de E-GRAV", None, ["archivo ausente"])
-    prof = json.loads(f.read_text())["profiles"]
-    detail, ok = [], True
-    for (cond, bat), exp in sorted(EGRAV_EXPECTED.items()):
-        act = prof[cond][bat]["frac_pos"]["mean"]
-        good = close(act, exp)
-        ok &= good
-        detail.append(f"{cond:16s} {bat:8s} paper={exp:.3f} json={act:.4f} "
-                      f"diff={abs(act-exp):.4f} -> {'PASS' if good else 'FAIL'}")
-    record(4, "frac_pos de E-GRAV vs egrav_results.json", ok, detail)
-
-
-# ─── CHECK 5 · ráfagas y frac_pos del panel ──────────────────────────────────
+# ─── CHECK 4 · ráfagas y frac_pos del panel ──────────────────────────────────
 
 def check_eh2(repo):
     f = repo / "data/panel_results/EH2_results.json"
     if not f.exists():
-        return record(5, "burst_mean y frac_pos", None, ["archivo ausente"])
+        return record(4, "burst_mean y frac_pos", None, ["archivo ausente"])
     series = json.loads(f.read_text())["series_metrics"]["con_t0"]
     detail, ok = [], True
     for cond, (eb, ef) in sorted(EH2_EXPECTED.items()):
@@ -212,13 +186,13 @@ def check_eh2(repo):
             ok &= good
             detail.append(f"{cond:17s} {label:10s} paper={exp:.3f} json={act:.4f} "
                           f"diff={abs(act-exp):.4f} -> {'PASS' if good else 'FAIL'}")
-    record(5, "burst_mean y frac_pos vs EH2_results.json (con_t0)", ok, detail)
+    record(4, "burst_mean y frac_pos vs EH2_results.json (con_t0)", ok, detail)
 
 
-# ─── CHECK 6 · archivos de respuestas ────────────────────────────────────────
+# ─── CHECK 5 · archivos de respuestas ────────────────────────────────────────
 
 def check_responses(repo):
-    dirs = [repo / "data/egrav/responses", repo / "data/panel_results/responses"]
+    dirs = [repo / "data/panel_results/responses"]
     detail, ok, total = [], True, 0
     for d in dirs:
         if not d.exists():
@@ -236,18 +210,18 @@ def check_responses(repo):
             detail.append(f"{f.name:46s} n={len(items):3d} vacías={empty} "
                           f"-> {'PASS' if good else 'FAIL'}")
     detail.append(f"archivos inspeccionados: {total}")
-    record(6, "Archivos de respuestas: N=20, sin vacías", ok, detail)
+    record(5, "Archivos de respuestas: N=20, sin vacías", ok, detail)
 
 
-# ─── CHECK 7 · v_identidad.npy (sin numpy) ───────────────────────────────────
+# ─── CHECK 6 · v_identidad.npy (sin numpy) ───────────────────────────────────
 
 def check_vhat(repo):
     f = repo / "data/v_identidad.npy"
     if not f.exists():
-        return record(7, "v_identidad.npy forma y norma", None, ["archivo ausente"])
+        return record(6, "v_identidad.npy forma y norma", None, ["archivo ausente"])
     raw = f.read_bytes()
     if raw[:6] != b"\x93NUMPY":
-        return record(7, "v_identidad.npy forma y norma", False, ["no es un .npy"])
+        return record(6, "v_identidad.npy forma y norma", False, ["no es un .npy"])
     major = raw[6]
     hlen = int.from_bytes(raw[8:10], "little") if major == 1 else \
         int.from_bytes(raw[8:12], "little")
@@ -260,7 +234,7 @@ def check_vhat(repo):
     typecode = {"<f4": "f", "<f8": "d"}.get(descr)
     detail = [f"header descr={descr} shape={shape}"]
     if typecode is None:
-        return record(7, "v_identidad.npy forma y norma", False,
+        return record(6, "v_identidad.npy forma y norma", False,
                       detail + [f"dtype no soportado por este chequeo: {descr}"])
     vals = array(typecode)
     vals.frombytes(body[:len(body) - (len(body) % vals.itemsize)])
@@ -271,10 +245,10 @@ def check_vhat(repo):
                f"{'PASS' if ok_shape else 'FAIL'}",
                f"norma={norm:.8f} esperado≈1.0 diff={abs(norm-1.0):.2e} -> "
                f"{'PASS' if ok_norm else 'FAIL'}"]
-    record(7, "v_identidad.npy forma y norma (lectura stdlib)", ok_shape and ok_norm, detail)
+    record(6, "v_identidad.npy forma y norma (lectura stdlib)", ok_shape and ok_norm, detail)
 
 
-# ─── CHECK 8 · rutas citadas que no existen ──────────────────────────────────
+# ─── CHECK 7 · rutas citadas que no existen ──────────────────────────────────
 
 def check_paths(repo):
     """Toda ruta del repo citada entre backticks en un .md tiene que existir.
@@ -283,8 +257,9 @@ def check_paths(repo):
     (EXTERNAL), y líneas que mencionan una ruta justamente para decir que no
     existe o que no está incluida (NEGATED) — este reporte es una de ellas.
     """
-    EXTERNAL = ("LSGOT_v4/", "LSGOT_v2_5", "results_local/", "paper/figures/fig1_egrav",
-                "scripts/audit_curvatura/", "scripts/egrav/runpod/", "scripts/perturbation/",
+    EXTERNAL = ("LSGOT_v4/", "LSGOT_v2_5", "results_local/",
+                "scripts/audit_curvatura/", "scripts/egrav/", "scripts/perturbation/",
+                "data/egrav/", "paper/figures/",
                 "data/sia/prompts/axis_neutral", "data/sia/prompts/axis_task")
     NEGATED = ("inexistente", "no existe", "fantasma", "no está en el paquete",
                "not in the manifest", "exists neither", "not part of this evidence package",
@@ -310,15 +285,15 @@ def check_paths(repo):
     if ok:
         detail.append("todas las rutas del paquete citadas en .md existen "
                       "(externas declaradas aparte)")
-    record(8, "Rutas citadas en la documentación", ok, detail)
+    record(7, "Rutas citadas en la documentación", ok, detail)
 
 
-# ─── CHECK 9 · nomenclatura de condiciones ──────────────────────────────────
+# ─── CHECK 8 · nomenclatura de condiciones ──────────────────────────────────
 
 def check_names(repo):
     nom = repo / "NOMENCLATURA.md"
     if not nom.exists():
-        return record(9, "Nomenclatura de condiciones", False, ["NOMENCLATURA.md ausente"])
+        return record(8, "Nomenclatura de condiciones", False, ["NOMENCLATURA.md ausente"])
     text = nom.read_text()
     prompts = sorted(p.stem for p in (repo / "data/sia/prompts").glob("*.txt")) \
         if (repo / "data/sia/prompts").exists() else []
@@ -334,10 +309,10 @@ def check_names(repo):
         ok &= disambiguated
         detail.append(f"alias ambiguo {name:14s} desambiguado -> "
                       f"{'PASS' if disambiguated else 'FAIL'}")
-    record(9, "Nomenclatura de condiciones vs NOMENCLATURA.md", ok, detail)
+    record(8, "Nomenclatura de condiciones vs NOMENCLATURA.md", ok, detail)
 
 
-# ─── CHECK 10 · cada evidence/ citado por un paper ───────────────────────────
+# ─── CHECK 9 · cada evidence/ citado por un paper ───────────────────────────
 
 def check_evidence_cited(repo):
     """Todo archivo de evidence/ tiene que estar citado por algún paper.
@@ -347,7 +322,7 @@ def check_evidence_cited(repo):
     """
     ev = repo / "evidence"
     if not ev.exists():
-        return record(10, "Cada evidence/ citado por un paper", None, ["sin evidence/"])
+        return record(9, "Cada evidence/ citado por un paper", None, ["sin evidence/"])
     papers = {p: p.read_text(errors="replace") for p in (repo / "paper").glob("*.md")}
     detail, ok = [], True
     for f in sorted(ev.glob("*.md")):
@@ -357,10 +332,10 @@ def check_evidence_cited(repo):
             detail.append(f"{f.name}: NO citado por ningún paper — no se entrega")
         else:
             detail.append(f"{f.name}: citado por {', '.join(sorted(citers))}")
-    record(10, "Cada evidence/ citado por un paper", ok, detail)
+    record(9, "Cada evidence/ citado por un paper", ok, detail)
 
 
-# ─── CHECK 11 · hashes hardcodeados en la documentación ──────────────────────
+# ─── CHECK 10 · hashes hardcodeados en la documentación ──────────────────────
 
 def check_doc_hashes(repo):
     """Los sha256 escritos a mano en la documentación tienen que coincidir.
@@ -399,22 +374,27 @@ def check_doc_hashes(repo):
                 break
     if not found:
         detail.append("ningún hash hardcodeado en la documentación")
-    record(11, "Hashes hardcodeados en la documentación", ok, detail)
+    record(10, "Hashes hardcodeados en la documentación", ok, detail)
 
 
-# ─── CHECK 12 · comandos citados en la documentación ─────────────────────────
+# ─── CHECK 11 · comandos citados en la documentación ─────────────────────────
 
 def check_commands(repo):
     """Todo `python <script>.py --flag` citado en un bloque bash de un .md tiene
     que existir y aceptar ese flag.
 
-    Es el chequeo que faltaba: CHECK 8 mira rutas entre backticks, así que un
+    Es el chequeo que faltaba: CHECK 7 mira rutas entre backticks, así que un
     nombre de script desnudo dentro de un bloque de código y un flag que el
     script no acepta se le escapan. Los dos rompen a quien copia y pega.
 
     Los flags se leen de la MISMA línea lógica del comando — uniendo las
     continuaciones con barra invertida — y no del resto del bloque, que puede
     traer otros comandos.
+
+    `prereg/` queda fuera: son registros fechados de corridas ya ejecutadas y sus
+    comandos se conservan tal como se corrieron, no se reescriben cuando un script
+    se renombra. Cada uno declara el renombre en una nota fechada al principio, y
+    esa nota sí la cubre CHECK 7 porque cita la ruta nueva entre backticks.
     """
     import re
     from pathlib import PurePosixPath
@@ -429,6 +409,8 @@ def check_commands(repo):
 
     detail, ok, seen = [], True, 0
     for doc in sorted(repo.rglob("*.md")):
+        if doc.relative_to(repo).parts[0] == "prereg":
+            continue
         raw = doc.read_text(errors="replace").replace("\\\n", " ")  # une continuaciones
         for logical in raw.splitlines():
             m = invoke.search(logical)
@@ -450,10 +432,10 @@ def check_commands(repo):
     if ok:
         detail.append(f"{seen} invocaciones citadas; todos los scripts existen y "
                       f"aceptan los flags que se les pasan")
-    record(12, "Comandos citados en la documentación", ok, detail)
+    record(11, "Comandos citados en la documentación", ok, detail)
 
 
-# ─── CHECK 13 · sin rutas absolutas de una máquina ───────────────────────────
+# ─── CHECK 12 · sin rutas absolutas de una máquina ───────────────────────────
 
 def check_no_local_paths(repo):
     """Ninguna ruta `/home/<usuario>/` en el paquete, salvo las declaradas.
@@ -482,7 +464,254 @@ def check_no_local_paths(repo):
     if ok:
         detail.append("ninguna ruta absoluta de una máquina, salvo el default "
                       f"declarado de {ALLOWED_ENV_DEFAULT}")
-    record(13, "Sin rutas absolutas de una máquina", ok, detail)
+    record(12, "Sin rutas absolutas de una máquina", ok, detail)
+
+
+# ─── CHECK 13 · todo número del paper sale de un JSON de data/ ───────────────
+
+def check_numbers_have_data(repo):
+    """La regla del paquete: **todo número decimal citado en el paper tiene que
+    existir en algún JSON de `data/`**.
+
+    No verifica que el número signifique lo que el paper dice que significa —eso
+    lo hacen los CHECK 2 a 4, que saben qué celda mirar— sino que ninguna cifra
+    haya entrado al texto sin un archivo detrás. Es el chequeo que detecta la
+    cifra tipeada a mano, la heredada de un borrador y la que quedó cuando su
+    fuente salió del paquete.
+
+    La tolerancia es media unidad del último decimal **citado**, así que un
+    +0.117 del paper acepta un 0.11657 del JSON y rechaza un 0.118.
+    """
+    import re
+    vals = set()
+
+    def walk(o):
+        if isinstance(o, dict):
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+        elif isinstance(o, (int, float)) and not isinstance(o, bool):
+            vals.add(round(float(o), 6))
+
+    files = sorted((repo / "data").rglob("*.json"))
+    for f in files:
+        try:
+            walk(json.loads(f.read_text(encoding="utf-8")))
+        except Exception as exc:  # un JSON ilegible es un fallo, no un skip
+            return record(13, "Números del paper respaldados por data/", False,
+                          [f"{f.relative_to(repo)}: no se pudo leer ({exc})"])
+
+    # Lo que NO es una cita de un resultado y por eso no se busca en data/.
+    # Cada exención va con su motivo; la lista es corta a propósito.
+    EXEMPT = {
+        "9.999": "mantisa de 9.999×10⁻⁵ escrita en notación científica; el valor "
+                 "completo sí está en derived_stats.json",
+    }
+
+    doc = repo / "paper" / "arxiv_lsgot_4.md"
+    if not doc.exists():
+        return record(13, "Números del paper respaldados por data/", None,
+                      ["paper ausente"])
+
+    num = re.compile(r"[\u2212+-]?\d+\.\d+")
+    detail, bad, seen, exempted = [], [], 0, 0
+    for i, line in enumerate(doc.read_text(encoding="utf-8").split("\n"), 1):
+        for m in num.finditer(line):
+            tok = m.group(0).replace("\u2212", "-")
+            if not re.fullmatch(r"[-+]?\d+\.\d+", tok):
+                continue
+            x = float(tok)
+            if abs(x) > 1000:          # años, tamaños de modelo, conteos
+                continue
+            seen += 1
+            key = tok.lstrip("+-")
+            if key in EXEMPT:
+                exempted += 1
+                continue
+            tol = 0.5 * 10 ** (-len(tok.split(".")[1])) + 1e-9
+            if not any(abs(x - v) <= tol or abs(-x - v) <= tol for v in vals):
+                bad.append(f"L{i}: {tok} — en ninguna JSON de data/")
+
+    detail.append(f"JSON leídos: {len(files)} · valores distintos: {len(vals)}")
+    detail.append(f"números citados en el paper: {seen} "
+                  f"({exempted} exentos y declarados)")
+    if bad:
+        detail += bad[:40]
+        if len(bad) > 40:
+            detail.append(f"… y {len(bad) - 40} más")
+    else:
+        detail.append("todos tienen un archivo detrás")
+    record(13, "Números del paper respaldados por data/", not bad, detail)
+
+
+# ─── CHECK 14 · p-valores contra su JSON y contra el piso 1/n ────────────────
+#
+# Un test de permutación con n remuestreos no puede producir un p arbitrariamente
+# chico, y los dos pipelines del paquete usan estimadores distintos:
+#
+#   panel      `scripts/shared/statistical_tests.py`  p = #{null ≥ obs}/n, sin
+#              corrección. Devuelve 0.0 cuando ninguna permutación alcanza el
+#              estadístico, y el enunciado más fuerte que ese 0.0 autoriza es
+#              "p < 1/n". Con n=1000: p<0.001, nunca p<0.0001.
+#   t0_native  `scripts/t0_native/e1_vhat_nativa_t0.py`  p = (1+k)/(1+n), dos
+#              colas. El piso 1/(n+1) es un valor ALCANZADO y se puede escribir.
+#              Con n=10000: 9.999e-05, que sí es < 1e-4.
+#
+# Cada fila ancla por el TEXTO citado en el paper, no por número de línea: las
+# líneas se mueven con cada edición y un ancla que se rompe sola no sirve.
+
+FRAC, ADD1 = "frac", "add1"
+
+PCLAIMS = [
+    # (texto tal como aparece en el paper, archivo, ruta en el JSON, n, estimador)
+    ("d=+5.75, W₁=0.0884, p<0.001", "data/panel_results/EL_results.json",
+     "key_pairs_t0.axis_pec_only_vs_automata_neutro.permutation_test", 1000, FRAC),
+    ("d=+0.88, p=0.005", "data/panel_results/EL_results.json",
+     "key_pairs_t0.axis_vs_axis_pec_only.permutation_test", 1000, FRAC),
+    ("p=0.072", "data/panel_results/berg_controls_t0_results.json",
+     "key_pairs.axis_berg_vs_axis.t0", 1000, FRAC),
+    ("p=0.43", "data/panel_results/berg_controls_t0_results.json",
+     "key_pairs.axis_bergwitness_vs_axis_berg.t0", 1000, FRAC),
+    ("p=0.23", "data/panel_results/berg_controls_t0_results.json",
+     "key_pairs.axis_nowit_vs_axis_berg.t0", 1000, FRAC),
+    ("d=−0.88, p=0.004", "data/panel_results/berg_controls_t0_results.json",
+     "key_pairs.axis_nowit_vs_axis_berg.trest", 1000, FRAC),
+    ("d=+0.50, p=0.069", "data/panel_results/t2_free_results.json",
+     "pairs.soul_jarvis_vs_automata_neutro.proj_t0", 1000, FRAC),
+    ("d=+0.22, p=0.262", "data/panel_results/t2_free_results.json",
+     "pairs.soul_elena_financial_vs_automata_neutro.proj_t0", 1000, FRAC),
+    ("d=−0.46, p=0.070", "data/panel_results/t2_free_results.json",
+     "pairs.soul_solidity_auditor_vs_automata_neutro.proj_t0", 1000, FRAC),
+    ("d=+1.9 to +2.5, p<0.001", "data/panel_results/t2_free_results.json",
+     "pairs.soul_jarvis_vs_automata_neutro.proj_mean", 1000, FRAC),
+    ("p = 0.013", "data/t0_native/e1_vhat_nativa_t0.json",
+     "contrasts.v_t0.axis_pec_only_vs_automata_neutro.t_rest", 10000, ADD1),
+    ("p = 0.099", "data/t0_native/e1_vhat_nativa_t0.json",
+     "contrasts.v_t0.axis_pec_only_vs_automata_neutro.frac_pos", 10000, ADD1),
+    ("d = +0.63 (p = 0.051)", "data/t0_native/e1_vhat_nativa_t0.json",
+     "contrasts.v_canon.witness_soul_md_vs_automata_neutro_v2.t0", 10000, ADD1),
+    ("p<0.0001 at n=10,000", "data/t0_native/e1c_equivalencia_operadores.json",
+     "v_canon.witness_soul_md_vs_axis_pec_only", 10000, ADD1),
+]
+
+# e1c/e1d/e1e importan NPERM de e1_vhat_nativa_t0.py y no lo reescriben en su
+# salida; su n lo declara el JSON de ese script.
+_N_INHERITS = {"data/t0_native/": "data/t0_native/e1_vhat_nativa_t0.json"}
+
+
+def _dig(obj, path):
+    for key in path.split("."):
+        if not isinstance(obj, dict) or key not in obj:
+            return None
+        obj = obj[key]
+    return obj
+
+
+def _leaf_p(node):
+    """`p_value` en el pipeline del panel, `p` en t0_native."""
+    if isinstance(node, (int, float)) and not isinstance(node, bool):
+        return float(node)
+    if isinstance(node, dict):
+        for k in ("p_value", "p"):
+            if isinstance(node.get(k), (int, float)):
+                return float(node[k])
+    return None
+
+
+def _declared_n(repo, docs, rel, doc, path):
+    """El n_permutations más cercano: en el nodo, en un ancestro, en la raíz, o
+    en el archivo del que esa corrida hereda el n."""
+    parts = path.split(".")
+    for cut in range(len(parts), -1, -1):
+        node = _dig(doc, ".".join(parts[:cut])) if cut else doc
+        if isinstance(node, dict) and isinstance(node.get("n_permutations"), int):
+            return node["n_permutations"], rel
+    for prefix, owner in _N_INHERITS.items():
+        if rel.startswith(prefix) and rel != owner and (repo / owner).exists():
+            src = docs.setdefault(owner, json.loads((repo / owner).read_text(encoding="utf-8")))
+            if isinstance(src.get("n_permutations"), int):
+                return src["n_permutations"], owner
+    return None, None
+
+
+def _parse_p(text):
+    """De 'd=+5.75, …, p<0.001' saca ('<', 0.001, decimales citados)."""
+    import re
+    m = re.search(r"p\s*([<=])\s*(\d*\.\d+)", text)
+    if not m:
+        return None
+    num = m.group(2)
+    return m.group(1), float(num), len(num.split(".")[1])
+
+
+def check_pvalues(repo):
+    doc = repo / "paper" / "arxiv_lsgot_4.md"
+    if not doc.exists():
+        return record(14, "p-valores vs JSON y vs el piso 1/n", None, ["paper ausente"])
+    text = doc.read_text(encoding="utf-8")
+
+    detail, ok, docs = [], True, {}
+    for quoted, rel, path, n_exp, est in PCLAIMS:
+        # el ancla: si el texto citado ya no está, el chequeo quedó obsoleto y
+        # eso es un fallo, no un silencio
+        if quoted not in text:
+            ok = False
+            detail.append(f"{quoted!r}: ya no aparece en el paper — ancla obsoleta")
+            continue
+        f = repo / rel
+        if not f.exists():
+            ok = False
+            detail.append(f"{quoted!r}: falta {rel}")
+            continue
+        d = docs.setdefault(rel, json.loads(f.read_text(encoding="utf-8")))
+        pj = _leaf_p(_dig(d, path))
+        if pj is None:
+            ok = False
+            detail.append(f"{quoted!r}: sin p en {rel}:{path}")
+            continue
+
+        n_dec, n_src = _declared_n(repo, docs, rel, d, path)
+        floor = 1.0 / n_exp if est == FRAC else 1.0 / (n_exp + 1)
+        parsed = _parse_p(quoted)
+        if parsed is None:
+            detail.append(f"{quoted!r}: sin p legible en la cita; solo se comprueba el archivo")
+            continue
+        op, cited, dec = parsed
+        notes, good = [], True
+
+        if n_dec is None:
+            good = False
+            notes.append(f"el JSON no declara n_permutations (se esperaba {n_exp})")
+        elif n_dec != n_exp:
+            good = False
+            notes.append(f"n declarado {n_dec} ≠ {n_exp}")
+        elif n_src != rel:
+            notes.append(f"n heredado de {n_src}")
+
+        if op == "<":
+            if cited < floor:
+                good = False
+                notes.append(f"inalcanzable: piso {floor:.5g} > {cited:g}; "
+                             f"lo más fuerte posible es p<{floor:.5g}")
+            elif pj > 0.0 and pj >= cited:
+                good = False
+                notes.append(f"json p={pj:.5g} no es < {cited:g}")
+        else:
+            if abs(pj - cited) > 10 ** (-dec):
+                good = False
+                notes.append(f"json p={pj:.6g} ≠ {cited:g}")
+            elif abs(pj - cited) > 0.5 * 10 ** (-dec) + 1e-9:
+                notes.append(f"redondeo: {pj:.6g} redondea a {round(pj, dec):g}")
+
+        ok &= good
+        detail.append(f"{quoted[:34]:36s} json={pj:<9.6g} n={n_dec} piso={floor:.5g} "
+                      f"-> {'PASS' if good else 'FAIL'}"
+                      + ("  · " + "; ".join(notes) if notes else ""))
+
+    detail.append(f"claims anclados por su texto: {len(PCLAIMS)}")
+    record(14, "p-valores vs JSON y vs el piso 1/n", ok, detail)
 
 
 def main():
@@ -495,7 +724,6 @@ def main():
     check_manifest(repo)
     check_t0(repo)
     check_berg_t0(repo)
-    check_egrav(repo)
     check_eh2(repo)
     check_responses(repo)
     check_vhat(repo)
@@ -505,6 +733,8 @@ def main():
     check_doc_hashes(repo)
     check_commands(repo)
     check_no_local_paths(repo)
+    check_numbers_have_data(repo)
+    check_pvalues(repo)
 
     fails = [r for r in results if r[2] == "FAIL"]
     skips = [r for r in results if r[2] == "SKIP"]

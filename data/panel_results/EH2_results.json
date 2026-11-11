@@ -1,4 +1,6 @@
 {
+  "n_permutations": 1000,
+  "_n_permutations_provenance": "Declarado el 2026-11-11, no escrito por la corrida original. Fundamento: (a) `statistical_tests.py` trae n_permutations=1000 por defecto y §3.5 lo declara; (b) todos los p de este archivo son múltiplos exactos de 0.001 y el menor no nulo es 0.001, que es la granularidad de k/n con n=1000. Se anota acá para que un `p<X` de este archivo sea verificable contra su piso 1/n sin inferir nada.",
   "experiment": "E-H2",
   "v_hat_source": "/home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_v4/scripts/perturbation/v_identidad.npy",
   "series_metrics": {

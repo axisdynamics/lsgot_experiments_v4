@@ -1,6 +1,6 @@
 # Replicating LSGOT 4.0
 
-A clean clone, an A100 or H100 with 80 GB, and about 35 minutes of GPU. Every path below is
+A clean clone, an A100 or H100 with 80 GB, and about 15 minutes of GPU. Every path below is
 relative to the repository root.
 
 This file is the short path for someone who wants to **reproduce the result**.
@@ -11,13 +11,13 @@ This file is the short path for someone who wants to **reproduce the result**.
 ## 0 · What you can check with no GPU at all, in one second
 
 ```bash
-sha256sum -c MANIFEST_SHA256.sha256          # integrity of the 77 files
-python3 scripts/shared/selfaudit.py          # traceability: 13 checks, exits non-zero on failure
+sha256sum -c MANIFEST_SHA256.sha256          # integrity of every file in the manifest
+python3 scripts/shared/selfaudit.py          # traceability: 14 checks, exits non-zero on failure
 ```
 
 The second one checks that **every number cited in the paper comes out of the file the paper
 says it comes from**. It needs the Python standard library and nothing else. The package as
-released passes 13/13.
+released passes 14/14.
 
 ## 1 · Environment
 
@@ -33,51 +33,44 @@ Attention implementation is `eager` for Gemma — see §3.2 of the paper for why
 
 ## 2 · Generate and extract
 
-The E-GRAV run covers the ontological battery, so **it reproduces the paper's headline contrast
-at the same time** as the gradient.
-
 ```bash
-cd scripts/egrav/
+cd scripts/extraction/
 mkdir -p prompts && cp ../../data/sia/prompts/*.txt prompts/
 cp ../../data/v_identidad.npy .
 
-python extract_egrav.py --smoke \
+python extract_trajectories.py --smoke \
   --conditions axis_pec_only vanilla automata_neutro \
-  --batteries b_onto b_tarea b_meta \
-  --out /workspace/egrav_results            # 2 prompts per cell, a few minutes
+  --out /workspace/lsgot_extraction         # 2 questions per condition, a few minutes
 
-python extract_egrav.py \
+python extract_trajectories.py \
   --conditions axis_pec_only vanilla automata_neutro \
-  --batteries b_onto b_tarea b_meta \
-  --out /workspace/egrav_results            # 180 generations, ~35 min on an A100
+  --out /workspace/lsgot_extraction         # 60 generations, ~12 min on an A100
 ```
+
+The three conditions above give the paper's headline contrast and its baseline. The other six
+panel conditions run the same way: add their prompt file to `prompts/` and name them in
+`CONDITIONS`.
 
 ## 3 · Analyse on CPU
 
-```bash
-python analyze_egrav.py --results-dir /workspace/egrav_results/
+The extraction writes one NPZ per condition, with `embeddings` of shape (N, T_max, 5376) and
+`lengths` of shape (N,). t=0 is index 0 of each trajectory, projected onto v̂:
+
+```python
+import numpy as np
+v = np.load("data/v_identidad.npy")                     # (5376,), unit norm
+z = np.load("/workspace/lsgot_extraction/axis_pec_only_b_onto_embeddings.npz")
+h = z["embeddings"][:, 0, :]                            # (N, 5376) — el estado de t=0
+p0 = (h @ v) / np.linalg.norm(h, axis=1)                # cosine, per question
+print(p0.mean())                                        # +0.1166
 ```
 
-`v_identidad.npy` must be in the working directory. The script prints the full profile, the
-per-battery permutation tests and the automatic H-GRAV verdict, and writes `egrav_results.json`.
+`REPRODUCIBILITY.md` gives the same for every other number in the paper, including the
+permutation tests, against the JSON this package ships.
 
 ## 4 · The numbers you should get
 
-**frac_pos** — the fraction of tokens whose projection on v̂ is positive. This is Figure 1 and
-§4.5 of the paper:
-
-| Condition | B-ONTO | B-META | B-TAREA |
-|---|---|---|---|
-| `axis_pec_only` | 0.869 | 0.788 | 0.724 |
-| `vanilla` | 0.743 | 0.672 | 0.626 |
-| `automata_neutro` | **0.493** | 0.655 | 0.601 |
-
-The verdict should come out **H-GRAV-2**: the B-TAREA < B-META < B-ONTO gradient holds in
-`vanilla` and `axis_pec_only` (all p < 0.001), and `automata_neutro` inverts below chance on the
-ontological battery only.
-
-**t=0** — the projection at the final prompt token, on the ontological battery. This is §4.1,
-the paper's headline:
+**t=0** — the projection at the final prompt token. This is §4.1, the paper's headline:
 
 | Condition | t=0 |
 |---|---|
@@ -88,15 +81,22 @@ the paper's headline:
 Contrast `axis_pec_only` vs `automata_neutro`: **d = +5.75**.
 
 Agreement to three decimals is what we expect from a clean replication; greedy decoding is
-deterministic, but tokenizer versions and attention kernels move the last digits.
+deterministic, but tokenizer versions and attention kernels move the last digits. The
+trajectory statistics (`t_rest`, `frac_pos`, bursts) move further than that between library
+versions, which is one of the reasons §5.1 of the paper claims nothing on them.
 
-## 5 · Regenerating Figure 1
+## 5 · Figures
+
+Both figures render on CPU from the JSON the package ships, with no GPU and no re-run:
 
 ```bash
-python scripts/egrav/plot_fig1_egrav.py     # writes paper/figures/fig1_egrav_frac_pos.{png,pdf}
+python scripts/figures/plot_fig1_t0_three_models.py
+python scripts/figures/plot_fig2_direction_geometry.py
 ```
 
-Reads the stored `data/egrav/egrav_results.json`, so it needs no GPU and no re-run.
+They write `paper/figures/fig{1,2}_*.{png,pdf}`. Figure 2 recomputes ρ and the 3.71× ratio
+from the data instead of copying them from the paper, so a mismatch shows up as a different
+number on the figure.
 
 ## 6 · What is not in the package, and why
 
@@ -109,7 +109,7 @@ Reads the stored `data/egrav/egrav_results.json`, so it needs no GPU and no re-r
 ## 7 · If something does not match
 
 The audit of step 0 tells you whether the discrepancy is in your run or in the package. If it
-passes 13/13 and your numbers still differ, it is your run — start with the tokenizer version
+passes 14/14 and your numbers still differ, it is your run — start with the tokenizer version
 and the attention implementation, which are the two things §3.2 and limitation 9 flag.
 
 ---

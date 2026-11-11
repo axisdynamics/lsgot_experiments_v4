@@ -1,0 +1,73 @@
+{
+  "_about": "Exp A · contraste léxico extremo `evil`/`ethical` en t=0 sobre la v̂ canónica de Gemma. Respalda §4.2 del paper.",
+  "_provenance": {
+    "type": "transcripcion",
+    "source_document": "evidence/BERG_LEXICAL_RESULTS.md",
+    "section": "Exp A — contraste léxico extremo (`evil` / `ethical`)",
+    "recomputed_from_tensors": false,
+    "why": "los tensores de expA_t0 no están en el paquete ni en el árbol del proyecto; este JSON transcribe la tabla del reporte para que los números de §4.2 tengan un archivo en `data/`, con la salvedad de que su trazabilidad llega hasta el reporte y no hasta el tensor",
+    "transcribed_on": "2026-11-11"
+  },
+  "model": "Gemma-4-31B-it",
+  "v_hat": "data/v_identidad.npy",
+  "readout": "t=0, proyección coseno sobre v̂ (§3.4)",
+  "conditions": {
+    "evil": {
+      "prompt_tokens": 27,
+      "t0_mean": 0.0458,
+      "t0_sd": 0.0172
+    },
+    "ethical": {
+      "prompt_tokens": 29,
+      "t0_mean": -0.0335,
+      "t0_sd": 0.019
+    },
+    "evil_padded": {
+      "prompt_tokens": 1114,
+      "t0_mean": 0.0302,
+      "t0_sd": 0.0241
+    },
+    "ethical_padded": {
+      "prompt_tokens": 1116,
+      "t0_mean": 0.0104,
+      "t0_sd": 0.0198
+    }
+  },
+  "contrasts": {
+    "evil_vs_vanilla": {
+      "cohens_d": 4.12,
+      "p": "<0.001"
+    },
+    "evil_vs_generic_short": {
+      "cohens_d": 5.58,
+      "p": "<0.001"
+    },
+    "evil_vs_axis_pec_only": {
+      "cohens_d": -5.14,
+      "p": null
+    },
+    "ethical_vs_vanilla": {
+      "cohens_d": -0.26,
+      "p": 0.43,
+      "significant": false
+    },
+    "ethical_vs_axis_pec_only": {
+      "cohens_d": -10.07,
+      "p": null
+    },
+    "evil_padded_vs_generic_short": {
+      "cohens_d": 3.73,
+      "p": "<0.001"
+    },
+    "evil_padded_vs_axis_pec_only": {
+      "cohens_d": -4.73,
+      "p": null
+    },
+    "evil_vs_ethical": {
+      "delta": 0.0793,
+      "cohens_d": 4.38,
+      "p": "<0.001"
+    }
+  },
+  "_note_on_p": "los `p<0.001` vienen del pipeline del panel (n=1000, estimador k/n), así que 0.001 es su piso; ver §3.5"
+}
