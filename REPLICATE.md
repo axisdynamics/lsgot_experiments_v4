@@ -87,8 +87,16 @@ versions, which is one of the reasons §5.1 of the paper claims nothing on them.
 
 ## 5 · Figures
 
-The preprint ships without figures. The one figure earlier drafts carried belonged to the
-retired trajectory analysis and left the package with it.
+Both figures render on CPU from the JSON the package ships, with no GPU and no re-run:
+
+```bash
+python scripts/figures/plot_fig1_t0_three_models.py
+python scripts/figures/plot_fig2_direction_geometry.py
+```
+
+They write `paper/figures/fig{1,2}_*.{png,pdf}`. Figure 2 recomputes ρ and the 3.71× ratio
+from the data instead of copying them from the paper, so a mismatch shows up as a different
+number on the figure.
 
 ## 6 · What is not in the package, and why
 

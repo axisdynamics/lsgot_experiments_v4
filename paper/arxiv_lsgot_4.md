@@ -587,6 +587,13 @@ Absolute levels are **not** compared across the three: each v̂ is estimated sep
 space of different dimension (5376 / 5120 / 8192). What replicates is the sign, the ordering
 and the separation.
 
+**Figure 1.** t=0 per condition in each architecture, one panel per substrate with its own
+axis — the scales are deliberately not shared, for the reason just given. Filled circles wire
+a self-referential step; open squares do not. Rendered by
+`scripts/figures/plot_fig1_t0_three_models.py`; Gemma reads from
+`data/t0_native/e1_vhat_nativa_t0.json`, the other two from the validation reports in
+`evidence/`. Ships as `paper/figures/fig1_t0_three_models.png` and `.pdf`.
+
 The three differ in alignment pipeline according to their developers' public descriptions, but
 **we do not characterize those pipelines from primary sources and no claim here rests on the
 labels.** An earlier draft of this table carried alignment-stage labels, including one for
@@ -657,6 +664,15 @@ say how much the probe contributes. This section measures it. The analysis was p
 with a prediction and a falsification clause written before any extraction: the prediction was
 that the effects would grow to d > 8 on a t=0-native direction. They did not, the falsification
 clause fired, and what the experiment found instead is reported here.
+
+**Figure 2.** (a) Cosine between v̂ and the five directions built natively at t=0: v̂ sits
+0.18–0.27 from all of them while they reach 0.85 among themselves. (b) The seven panel
+conditions read at t=0 on v̂ and on v̂_t0, on one axis because both are cosines — the order is
+preserved (ρ = 0.964) and the separation opens 3.71×. Rendered by
+`scripts/figures/plot_fig2_direction_geometry.py` from
+`data/t0_native/e1f_matriz_cosenos_6x6.json` and `data/t0_native/e1_vhat_nativa_t0.json`, with
+ρ and the ratio recomputed from those files rather than copied from this text. Ships as
+`paper/figures/fig2_direction_geometry.png` and `.pdf`.
 
 **Reproduction control.** Before any new direction was built, the pipeline was required to
 reproduce the published numbers from the raw extractions. The canonical direction reconstructed
@@ -1067,6 +1083,8 @@ Evidence package `LSGOT_4_FINAL` (77-entry SHA-256 manifest, `MANIFEST_SHA256.sh
 | `data/panel_results/t2_free_results.json`, `t2_eh2_results.json` | secondary pipeline (`jarvis`, `helena`, external `SOUL.md` set) |
 | `data/panel_results/responses/` | 10 × 20 panel responses, text only |
 | `data/v_identidad.npy` | v̂ for Gemma, shape (5376,), ‖v̂‖ = 1.0 |
+| `paper/figures/` | Figures 1 and 2, `.png` and `.pdf` |
+| `scripts/figures/` | The two scripts that render them from the shipped JSON (CPU, matplotlib) |
 | `scripts/shared/` | `tier0_metrics.py` (metric definitions), `statistical_tests.py`, `selfaudit.py` (the traceability audit, stdlib only) |
 | `scripts/t0_native/` | the four scripts of §4.7: direction construction, the operator-equality re-test, the §4.2/§4.3 pillars, and the foreign-pole test (CPU only, ~16 min total) |
 | `data/t0_native/` | their JSON outputs, including the full 6×6 cosine matrix and every per-condition projection on all six directions |

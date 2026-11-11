@@ -44,7 +44,7 @@ exclusiones y verifica que no estén listadas.
 Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
 
 [PASS] CHECK 1 — Integridad del MANIFEST_SHA256
-         entradas en el MANIFEST: 60
+         entradas en el MANIFEST: 66
          hashes que no coinciden: 0
          archivos declarados y ausentes: 0
          archivos en el árbol y fuera del MANIFEST: 0
@@ -121,7 +121,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          REPRODUCIBILITY.md: paper/arxiv_lsgot_4.md -> PASS
 
 [PASS] CHECK 11 — Comandos citados en la documentación
-         12 invocaciones citadas; todos los scripts existen y aceptan los flags que se les pasan
+         14 invocaciones citadas; todos los scripts existen y aceptan los flags que se les pasan
 
 [PASS] CHECK 12 — Sin rutas absolutas de una máquina
          ninguna ruta absoluta de una máquina, salvo el default declarado de LSGOT_TRAJ_ROOT
