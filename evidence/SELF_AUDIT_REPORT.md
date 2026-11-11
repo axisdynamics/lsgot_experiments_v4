@@ -130,7 +130,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
 
 [PASS] CHECK 13 — Números del paper respaldados por data/
          JSON leídos: 26 · valores distintos: 3521
-         números citados en el paper: 689 (1 exentos y declarados)
+         números citados en el paper: 694 (1 exentos y declarados)
          todos tienen un archivo detrás
 
 [PASS] CHECK 14 — p-valores vs JSON y vs el piso 1/n

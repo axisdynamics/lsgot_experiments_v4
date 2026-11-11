@@ -149,9 +149,9 @@ def derive_axis_pec(e31):
     neutro, auto = t0["axis_pec_neutro"], t0["automata_neutro"]
     total = only - auto
     parts = {
-        "declared_identity_blocks": neutro - auto,
-        "self_description_no_step": none - neutro,
-        "four_wired_steps": only - none,
+        "self_reference_as_standing_state": neutro - auto,
+        "self_reference_as_description": none - neutro,
+        "self_reference_as_mandatory_procedure": only - none,
     }
     return {
         "t0_by_arm": t0,
@@ -162,7 +162,13 @@ def derive_axis_pec(e31):
         "sums_to": sum(parts.values()) / total,
         "_note": "`axis_pec_neutro` es post-hoc: nació tras ver el resultado del "
                  "brazo de base firmado, así que los dos últimos componentes no "
-                 "están pre-registrados y la regla de corte no se les aplica.",
+                 "están pre-registrados y la regla de corte no se les aplica. "
+                 "La partición NO es aditiva ni es una receta: ninguno de los tres "
+                 "componentes es necesario. `berg_experimental` no declara identidad "
+                 "alguna y ancla en +0.081 solo con el procedimiento recursivo; "
+                 "`axis_pec_neutro` tiene solo el estado permanente y ancla en "
+                 "+0.0710. El primer componente es un piso, no una estimación, "
+                 "porque ningún brazo de este control lo quita.",
     }
 
 

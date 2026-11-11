@@ -541,26 +541,41 @@ and 0.67, with `axis_pec_none` as the declared base. It returns **r = 0.20, 95% 
 reading. We report it as the rule requires.
 
 **What the arms show without the ratio.** Our own file with every wired step deleted still
-anchors at +0.0710, well clear of pure restriction, so the null above does not generalize to
-it: a declared identity anchors without any step at all. And the three gaps partition the
-0.0884 between `axis_pec_only` and `automata_neutro` exactly:
+anchors at +0.0710, well clear of pure restriction. The three gaps partition the 0.0884
+between `axis_pec_only` and `automata_neutro` exactly, and what they separate is **three ways
+of putting self-reference into a prompt**:
 
-| Component | Δ at t=0 | share |
-|---|---|---|
-| the declared identity blocks, held fixed in all four arms | +0.0428 | 48.4% |
-| describing the self, with no step executed | +0.0344 | 38.9% |
-| the four wired steps | +0.0112 | 12.6% |
+| Self-reference as… | carried by | Δ at t=0 | share |
+|---|---|---|---|
+| **standing state** | `witness_mode: always_on`, `testigo_de_sí`, `presencia_continua` — held fixed in all four arms | +0.0428 | 48.4% |
+| **description** | prose about the model's own manner, executing nothing | +0.0344 | 38.9% |
+| **mandatory procedure** | the four wired steps | +0.0112 | 12.6% |
 
 Describing the self without executing anything is worth three times the steps themselves
 (d = +1.52 for that gap).
 
+**The partition is not a recipe, and two conditions already in this panel prove it.**
+`berg_experimental` declares no identity whatsoever — no name, no values, no archetype, no
+standing state — and anchors at +0.081 on a recursive procedure alone, above the arm that has
+the standing state and nothing else. `axis_pec_neutro` has the standing state and neither of
+the other two, and anchors at +0.0710. **None of the three rows is necessary; each loads the
+read-out on its own.** They are partially substitutable forms of the same thing, which is what
+§4.2 found for vocabulary and §5.3 calls a subspace of moderate width.
+
+**That is also why the externally authored files do not anchor.** What `soul_jarvis`,
+`soul_elena_financial` and `soul_solidity_auditor` lack is not declared identity — they have
+names, values and biographies — but any of the three forms above: no standing self-observation
+state, no prose about their own manner, no step the model executes on itself. `witness_soul_md`
+is the control from the other side: an external file, written by other people, that does carry
+one of the three ("Before responding, I ask myself") and does anchor, at +0.051. The factor is
+self-reference, not persona.
+
 **Two caveats, and neither is small.** `axis_pec_neutro` is **post-hoc** — it was built after
-the first base arm's result was known, so the bottom two rows of that partition are not
-pre-registered and the declared cut is not applied to them. And the identity blocks are held
-fixed in all four arms by design, so the first row is a floor on "declared identity" rather
-than an estimate of it. What this control establishes is narrower than the partition suggests:
-the wired step is not the only thing in the file that loads the anchor, and on this evidence
-it is not the largest.
+the first base arm's result was known, so the bottom two rows of the partition are not
+pre-registered and the declared cut is not applied to them. And the standing-state row is a
+**floor**, not an estimate: those blocks are held fixed in all four arms by design, so no arm
+in this control removes them, and what bounds them from below is `berg_experimental`, which
+has none and still anchors.
 
 The mean-trajectory projection, by contrast, *does* separate these prompts from
 `automata_neutro` (d=+1.9 to +2.5, p<0.001). The null is therefore specific to t=0: a

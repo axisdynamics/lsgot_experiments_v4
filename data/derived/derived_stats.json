@@ -379,24 +379,24 @@
     },
     "total_distance_only_minus_automata": 0.08840588898418361,
     "decomposition": {
-      "declared_identity_blocks": {
+      "self_reference_as_standing_state": {
         "delta_t0": 0.04282036967429389,
         "fraction_of_total": 0.4843610552002337,
         "percent_of_total": 48.43610552002337
       },
-      "self_description_no_step": {
+      "self_reference_as_description": {
         "delta_t0": 0.0344276429013121,
         "fraction_of_total": 0.389427031353889,
         "percent_of_total": 38.942703135388896
       },
-      "four_wired_steps": {
+      "self_reference_as_mandatory_procedure": {
         "delta_t0": 0.011157876408577627,
         "fraction_of_total": 0.1262119134458774,
         "percent_of_total": 12.62119134458774
       }
     },
     "sums_to": 1.0,
-    "_note": "`axis_pec_neutro` es post-hoc: nació tras ver el resultado del brazo de base firmado, así que los dos últimos componentes no están pre-registrados y la regla de corte no se les aplica."
+    "_note": "`axis_pec_neutro` es post-hoc: nació tras ver el resultado del brazo de base firmado, así que los dos últimos componentes no están pre-registrados y la regla de corte no se les aplica. La partición NO es aditiva ni es una receta: ninguno de los tres componentes es necesario. `berg_experimental` no declara identidad alguna y ancla en +0.081 solo con el procedimiento recursivo; `axis_pec_neutro` tiene solo el estado permanente y ancla en +0.0710. El primer componente es un piso, no una estimación, porque ningún brazo de este control lo quita."
   },
   "permutation_floors": {
     "panel": {
