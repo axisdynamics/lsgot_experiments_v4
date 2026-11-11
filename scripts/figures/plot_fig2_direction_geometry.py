@@ -133,6 +133,18 @@ def panel_b(ax, panel):
     order = sorted(range(len(conds)), key=lambda i: -a[i])
     ys = list(range(len(order)))[::-1]
 
+    # banda sobre las filas que cablean el paso: codificación posicional, no de
+    # color, así que la distinción sobrevive al gris y a la impresión. Se
+    # calcula, no se cablea: cuenta cuántas filas de arriba son del grupo.
+    n_top = 0
+    for i in order:
+        if conds[i] not in WIRED:
+            break
+        n_top += 1
+    if n_top:
+        ax.axhspan(len(order) - n_top - 0.5, len(order) - 0.3,
+                   color=ACCENT, alpha=0.055, lw=0, zorder=0)
+
     for y, i in zip(ys, order):
         wired = conds[i] in WIRED
         ax.plot([a[i], b[i]], [y, y], color=GRID, lw=1.4, zorder=1,
