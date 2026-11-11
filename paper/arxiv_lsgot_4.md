@@ -368,8 +368,16 @@ Three readings:
    elaborated third-party personas with names, declared values and biographies, and the
    strongest baseline (`vanilla`) — stays below +0.040. The main contrast
    `axis_pec_only` vs `automata_neutro` gives **d=+5.75, W₁=0.0884, p<0.001** (permutation,
-   n=1000); `axis` vs `axis_pec_only` is **n.s.** (p=0.229). The difference between having
-   the wired step and not having it is resolved in the first token, before content.
+   n=1000). The difference between having the wired step and not having it is resolved in
+   the first token, before content. Within the anchoring group the full scaffold does sit
+   above the minimal step — `axis` vs `axis_pec_only` is **d=+0.88, p=0.005**, not null —
+   but that contrast is six times smaller than the one separating the groups, it does not
+   replicate (Qwen3 d=+0.51, p=0.062; Command R d=−0.10, p=0.364), and in every substrate
+   `axis` is the positive pole v̂ was built from (§3.3), so some in-sample advantage is
+   expected. The ordering also **reverses during generation**, where the two become
+   indistinguishable: d=−0.25 on the trajectory mean, p=0.427 at n=10,000. What the first
+   token separates is the presence of the wired step, not how much identity material
+   carries it.
 2. **t_rest rises in every condition except one.** `vanilla` goes from −0.029 to +0.099
    during generation: with no system prompt at all, the model converges toward the identity
    direction while producing text. `automata_neutro` is the only condition that *falls*
@@ -604,10 +612,16 @@ labels.** An earlier draft of this table carried alignment-stage labels, includi
 Command R sourced to a technical report for a different model; they are removed rather than
 left unsourced. Limitation 5 states what follows from this.
 
-**Replicates 3/3:** the double dissociation at t=0; `axis` ≈ `axis_pec_only` (n.s. in all
-three: p=0.229 / 0.062 / 0.364); identity↔restriction as the largest subspace angle of the
-panel (Gemma; Qwen3 40.7°; Command R 38.3° vs 27.6° for generic↔restriction); and `helena`
-not anchoring (d = 0.22 / — / 0.28, n.s.).
+**Replicates 3/3:** the double dissociation at t=0; identity↔restriction as the largest
+subspace angle of the panel (Gemma; Qwen3 40.7°; Command R 38.3° vs 27.6° for
+generic↔restriction); and `helena` not anchoring (d = 0.22 / — / 0.28, n.s.).
+
+**Replicates 2/3:** `axis` ≈ `axis_pec_only` at t=0. The two are indistinguishable in
+Command R (d=−0.10, p=0.364) and marginally so in Qwen3 (d=+0.51, p=0.062), but in Gemma the
+full scaffold anchors above the minimal step (d=+0.88, p=0.005). The contrast is small
+wherever it appears and it changes sign between substrates, so what this row supports is that
+*the amount* of identity material does not govern the anchor — not that it makes no
+difference at all (§4.1).
 
 **Does not generalize:**
 
