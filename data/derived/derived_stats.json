@@ -1,0 +1,387 @@
+{
+  "_about": "Cantidades que el paper deriva de otros archivos del paquete. Regenerar con scripts/derived/compute_derived.py.",
+  "_inputs": [
+    "data/t0_native/e1_vhat_nativa_t0.json",
+    "data/panel_results/EH2_results.json",
+    "data/panel_results/berg_controls_t0_results.json"
+  ],
+  "direction_comparison": {
+    "conditions": [
+      "axis",
+      "axis_short",
+      "axis_pec_only",
+      "automata_neutro",
+      "vanilla",
+      "generic_long",
+      "generic_short"
+    ],
+    "n_conditions": 7,
+    "readouts": {
+      "t0": {
+        "spearman_rho_vhat_vs_vt0": 0.9642857142857143,
+        "range_on_vhat": 0.17018936884184,
+        "range_on_vt0": 0.631174888462591,
+        "ratio_vt0_over_vhat": 3.7086622552149717,
+        "direction": "wider",
+        "factor_as_stated": 3.7086622552149717,
+        "per_condition": {
+          "axis": {
+            "v_hat": 0.12491897655400766,
+            "v_t0": 0.17264203579017506
+          },
+          "axis_short": {
+            "v_hat": 0.11698685135213582,
+            "v_t0": 0.014114984674769144
+          },
+          "axis_pec_only": {
+            "v_hat": 0.11657621104749441,
+            "v_t0": 0.0032215692250231465
+          },
+          "automata_neutro": {
+            "v_hat": 0.02817032206331079,
+            "v_t0": -0.3200754391952451
+          },
+          "vanilla": {
+            "v_hat": -0.028617211603530025,
+            "v_t0": -0.4083682702391962
+          },
+          "generic_long": {
+            "v_hat": -0.0251383742125919,
+            "v_t0": -0.4578007048519714
+          },
+          "generic_short": {
+            "v_hat": -0.04527039228783235,
+            "v_t0": -0.4585328526724159
+          }
+        }
+      },
+      "t_rest": {
+        "spearman_rho_vhat_vs_vt0": 0.75,
+        "range_on_vhat": 0.20674153483891508,
+        "range_on_vt0": 0.032590899400114545,
+        "ratio_vt0_over_vhat": 0.15764079252632085,
+        "direction": "narrower",
+        "factor_as_stated": 6.343535730658248,
+        "per_condition": {
+          "axis": {
+            "v_hat": 0.2051570192788589,
+            "v_t0": -0.03157855823118734
+          },
+          "axis_short": {
+            "v_hat": 0.20206375484251696,
+            "v_t0": -0.03242108753725242
+          },
+          "axis_pec_only": {
+            "v_hat": 0.21257296850888782,
+            "v_t0": -0.03180028264813161
+          },
+          "automata_neutro": {
+            "v_hat": 0.0058314336699727505,
+            "v_t0": -0.047179802743603026
+          },
+          "vanilla": {
+            "v_hat": 0.0986796904807789,
+            "v_t0": -0.05654412056648267
+          },
+          "generic_long": {
+            "v_hat": 0.06698152628852488,
+            "v_t0": -0.06359368143202147
+          },
+          "generic_short": {
+            "v_hat": 0.0481452319026474,
+            "v_t0": -0.06416945763130188
+          }
+        }
+      },
+      "frac_pos": {
+        "spearman_rho_vhat_vs_vt0": 0.7142857142857143,
+        "range_on_vhat": 0.3757686781609195,
+        "range_on_vt0": 0.1318359375,
+        "ratio_vt0_over_vhat": 0.3508433383677137,
+        "direction": "narrower",
+        "factor_as_stated": 2.8502750106428265,
+        "per_condition": {
+          "axis": {
+            "v_hat": 0.8484375,
+            "v_t0": 0.2447265625
+          },
+          "axis_short": {
+            "v_hat": 0.85,
+            "v_t0": 0.244140625
+          },
+          "axis_pec_only": {
+            "v_hat": 0.8689453125,
+            "v_t0": 0.2451171875
+          },
+          "automata_neutro": {
+            "v_hat": 0.49317663433908043,
+            "v_t0": 0.19571055067418214
+          },
+          "vanilla": {
+            "v_hat": 0.7443359375,
+            "v_t0": 0.14765625
+          },
+          "generic_long": {
+            "v_hat": 0.698828125,
+            "v_t0": 0.11328125
+          },
+          "generic_short": {
+            "v_hat": 0.6486328125,
+            "v_t0": 0.1177734375
+          }
+        }
+      },
+      "burst_mean": {
+        "spearman_rho_vhat_vs_vt0": 0.1071428571428571,
+        "range_on_vhat": 6.03514100665537,
+        "range_on_vt0": 0.3990087316513631,
+        "ratio_vt0_over_vhat": 0.06611423514568233,
+        "direction": "narrower",
+        "factor_as_stated": 15.12533568295097,
+        "per_condition": {
+          "axis": {
+            "v_hat": 7.877327833083013,
+            "v_t0": 1.6740038867981977
+          },
+          "axis_short": {
+            "v_hat": 7.8081067089374425,
+            "v_t0": 1.708192505795493
+          },
+          "axis_pec_only": {
+            "v_hat": 8.810990875322068,
+            "v_t0": 1.6758739585353346
+          },
+          "automata_neutro": {
+            "v_hat": 2.7758498686666977,
+            "v_t0": 1.7985071116253621
+          },
+          "vanilla": {
+            "v_hat": 4.615871365577435,
+            "v_t0": 1.5194663445873742
+          },
+          "generic_long": {
+            "v_hat": 4.175433393507984,
+            "v_t0": 1.399498379973999
+          },
+          "generic_short": {
+            "v_hat": 3.4033628060321903,
+            "v_t0": 1.4481381786275163
+          }
+        }
+      }
+    }
+  },
+  "panel_t0_to_trest": {
+    "axis": {
+      "t0": 0.12491897655400766,
+      "t_rest": 0.2051570192788589,
+      "delta_t0_to_t_rest": 0.08023804272485124,
+      "group": "panel"
+    },
+    "axis_short": {
+      "t0": 0.11698685135213582,
+      "t_rest": 0.20206375484251696,
+      "delta_t0_to_t_rest": 0.08507690349038113,
+      "group": "panel"
+    },
+    "axis_pec_only": {
+      "t0": 0.11657621104749441,
+      "t_rest": 0.21257296850888782,
+      "delta_t0_to_t_rest": 0.09599675746139341,
+      "group": "panel"
+    },
+    "automata_neutro": {
+      "t0": 0.02817032206331079,
+      "t_rest": 0.0058314336699727505,
+      "delta_t0_to_t_rest": -0.022338888393338037,
+      "group": "panel"
+    },
+    "vanilla": {
+      "t0": -0.028617211603530025,
+      "t_rest": 0.0986796904807789,
+      "delta_t0_to_t_rest": 0.12729690208430894,
+      "group": "panel"
+    },
+    "generic_long": {
+      "t0": -0.0251383742125919,
+      "t_rest": 0.06698152628852488,
+      "delta_t0_to_t_rest": 0.09211990050111679,
+      "group": "panel"
+    },
+    "generic_short": {
+      "t0": -0.04527039228783235,
+      "t_rest": 0.0481452319026474,
+      "delta_t0_to_t_rest": 0.09341562419047975,
+      "group": "panel"
+    },
+    "axis_pec_only_v2": {
+      "t0": 0.12337020173545261,
+      "t_rest": 0.2101400874671045,
+      "delta_t0_to_t_rest": 0.08676988573165188,
+      "group": "t2"
+    },
+    "automata_neutro_v2": {
+      "t0": 0.03671217027919416,
+      "t_rest": -0.011984718773171024,
+      "delta_t0_to_t_rest": -0.04869688905236519,
+      "group": "t2"
+    },
+    "witness_soul_md": {
+      "t0": 0.051222628852036614,
+      "t_rest": 0.16363189720616178,
+      "delta_t0_to_t_rest": 0.11240926835412517,
+      "group": "t2"
+    },
+    "soul_jarvis": {
+      "t0": 0.0393818450486569,
+      "t_rest": 0.10371821848932965,
+      "delta_t0_to_t_rest": 0.06433637344067275,
+      "group": "t2"
+    },
+    "soul_elena_financial": {
+      "t0": 0.03207578810465724,
+      "t_rest": 0.09429296490925666,
+      "delta_t0_to_t_rest": 0.06221717680459942,
+      "group": "t2"
+    },
+    "soul_solidity_auditor": {
+      "t0": 0.019796540245419696,
+      "t_rest": 0.088924195467011,
+      "delta_t0_to_t_rest": 0.0691276552215913,
+      "group": "t2"
+    },
+    "axis_berg": {
+      "t0": 0.11672549042874773,
+      "t_rest": 0.22804066266391282,
+      "delta_t0_to_t_rest": 0.11131517223516509,
+      "group": "berg"
+    },
+    "axis_bergwitness": {
+      "t0": 0.11527539362462773,
+      "t_rest": 0.2309903920632434,
+      "delta_t0_to_t_rest": 0.11571499843861567,
+      "group": "berg"
+    },
+    "axis_nowit": {
+      "t0": 0.11189940907639775,
+      "t_rest": 0.19661272116770656,
+      "delta_t0_to_t_rest": 0.0847133120913088,
+      "group": "berg"
+    },
+    "berg_experimental": {
+      "t0": 0.08127525459684688,
+      "t_rest": 0.24486420203333945,
+      "delta_t0_to_t_rest": 0.16358894743649255,
+      "group": "berg"
+    },
+    "berg_history_control": {
+      "t0": 0.05267066286007336,
+      "t_rest": 0.044837307275227126,
+      "delta_t0_to_t_rest": -0.007833355584846234,
+      "group": "berg"
+    },
+    "berg_conceptual_control": {
+      "t0": 0.014003916570087446,
+      "t_rest": 0.09257114158162609,
+      "delta_t0_to_t_rest": 0.07856722501153865,
+      "group": "berg"
+    }
+  },
+  "burst_ratios_and_percentages": {
+    "axis": {
+      "burst_mean": 7.877327833083013,
+      "burst_max": 29.9,
+      "max_over_mean": 3.7957033950557055,
+      "frac_pos": 0.8484375,
+      "frac_pos_percent": 84.84375
+    },
+    "generic_long": {
+      "burst_mean": 4.175433393507984,
+      "burst_max": 17.85,
+      "max_over_mean": 4.275005327052613,
+      "frac_pos": 0.698828125,
+      "frac_pos_percent": 69.8828125
+    },
+    "generic_short": {
+      "burst_mean": 3.4033628060321903,
+      "burst_max": 15.7,
+      "max_over_mean": 4.6130844387712635,
+      "frac_pos": 0.6486328125,
+      "frac_pos_percent": 64.86328125
+    },
+    "vanilla": {
+      "burst_mean": 4.615871365577435,
+      "burst_max": 18.6,
+      "max_over_mean": 4.029575030774971,
+      "frac_pos": 0.7443359375,
+      "frac_pos_percent": 74.43359375
+    },
+    "axis_short": {
+      "burst_mean": 7.8081067089374425,
+      "burst_max": 26.0,
+      "max_over_mean": 3.329872524697883,
+      "frac_pos": 0.85,
+      "frac_pos_percent": 85.0
+    },
+    "automata_neutro": {
+      "burst_mean": 2.7758498686666977,
+      "burst_max": 11.8,
+      "max_over_mean": 4.250950360535097,
+      "frac_pos": 0.49317663433908043,
+      "frac_pos_percent": 49.317663433908045
+    },
+    "axis_pec_only": {
+      "burst_mean": 8.810990875322068,
+      "burst_max": 34.65,
+      "max_over_mean": 3.9325883422542347,
+      "frac_pos": 0.8689453125,
+      "frac_pos_percent": 86.89453125
+    }
+  },
+  "berg_pairs_not_in_key_pairs": {
+    "_note": "`d` recalculado desde el_table; `p` no almacenado para estos pares",
+    "n_permutations_of_source": 1000,
+    "pairs": {
+      "berg_experimental_vs_berg_conceptual_control": {
+        "mean_a": 0.08127525471746216,
+        "mean_b": 0.014003916590869742,
+        "n_a": 20,
+        "n_b": 20,
+        "sd_a_sample": 0.014646919628673401,
+        "sd_b_sample": 0.0135458456924126,
+        "pooled_sd_rms": 0.014107129228363068,
+        "cohens_d": 4.768605790562982,
+        "p_value": null,
+        "p_status": "no almacenado en el paquete — ver limitación de trazabilidad"
+      },
+      "berg_history_control_vs_vanilla": {
+        "mean_a": 0.05267066293823845,
+        "mean_b": -0.028617211645998963,
+        "n_a": 20,
+        "n_b": 20,
+        "sd_a_sample": 0.010116619592983352,
+        "sd_b_sample": 0.01888374236968164,
+        "pooled_sd_rms": 0.015148295578606264,
+        "cohens_d": 5.366139983368109,
+        "p_value": null,
+        "p_status": "no almacenado en el paquete — ver limitación de trazabilidad"
+      }
+    }
+  },
+  "permutation_floors": {
+    "panel": {
+      "estimator": "k/n (sin add-one, una cola en la dirección observada)",
+      "n_permutations": 1000,
+      "smallest_nonzero_p": 0.001,
+      "strongest_claim_from_zero": "p<0.001",
+      "source": "scripts/shared/statistical_tests.py"
+    },
+    "t0_native": {
+      "estimator": "(1+k)/(1+n) (add-one, dos colas sobre |diferencia de medias|)",
+      "n_permutations": 10000,
+      "floor_attained": 9.999000099990002e-05,
+      "strongest_claim": "p<0.0001",
+      "source": "scripts/t0_native/e1_vhat_nativa_t0.py"
+    }
+  }
+}

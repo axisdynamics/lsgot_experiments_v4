@@ -125,7 +125,7 @@ Two commands, no dependencies, no GPU, from the repository root:
 
 ```bash
 sha256sum -c MANIFEST_SHA256.sha256          # integrity of every file in the manifest
-python3 scripts/shared/selfaudit.py          # traceability: 12 checks
+python3 scripts/shared/selfaudit.py          # traceability: 13 checks
 ```
 
 The second one is the one that matters. It does not check hashes: it checks that **every
@@ -135,10 +135,12 @@ norm; and it further checks that every repository path cited in backticks exists
 command quoted in a code block names a script that exists and accepts that flag, that every
 condition has a canonical name in `NOMENCLATURA.md`, that every report in `evidence/` is
 cited by the paper, that the hand-written sha256 values in the documentation are still
-current, and that no absolute path from somebody's machine was shipped.
+current, that no absolute path from somebody's machine was shipped, and — the rule this
+package is built on — that **every decimal number printed in the paper exists in some JSON
+under `data/`**, within half a unit of its last cited digit.
 
 It uses the Python standard library only and **exits non-zero** on any failure, so it runs as
-is in CI. The package as released passes **12/12**; the output is reproduced in
+is in CI. The package as released passes **13/13**; the output is reproduced in
 `evidence/SELF_AUDIT_REPORT.md`.
 
 A failure does not say which of the two sides is wrong — the data or the document — only that

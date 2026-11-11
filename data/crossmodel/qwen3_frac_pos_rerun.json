@@ -1,0 +1,30 @@
+{
+  "_about": "frac_pos de `vanilla` en la batería ontológica, Qwen3-32B, en las dos corridas que existen. Deriva §4.4 y §4.5 del paper.",
+  "_script": "scripts/derived/recompute_qwen3_frac_pos.py",
+  "model": "Qwen/Qwen3-32B",
+  "v_hat": {
+    "source": "LSGOT_v4/scripts/fase3_qwen3/v_identidad_qwen3.npy",
+    "dim": 5120,
+    "norm": 1.0
+  },
+  "convention": "p_t = <h_t, v̂> / ||h_t||; frac_pos incluye p_0 (§3.4)",
+  "runs": {
+    "original_panel": {
+      "npz": "LSGOT_v4/scripts/fase3_qwen3/results_local/qwen3_fase0/vanilla_qwen3.npz",
+      "fecha": "2026-09-04",
+      "nota": "la corrida que el paper reporta en §4.5",
+      "status": "tensor ausente en este árbol"
+    },
+    "rerun_2026_11_01": {
+      "npz": "tier1_assistant_axis/egrav_qwen3/vanilla_b_onto_embeddings.npz",
+      "fecha": "2026-11-01",
+      "nota": "re-extracción con transformers 5.22.1",
+      "frac_pos_mean": 0.7426576540657834,
+      "frac_pos_sd": 0.13447117460131666,
+      "n_trajectories": 20,
+      "n_tokens_total": 4657,
+      "mean_length": 232.85,
+      "status": "ok"
+    }
+  }
+}

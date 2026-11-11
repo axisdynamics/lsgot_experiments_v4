@@ -44,7 +44,7 @@ exclusiones y verifica que no estén listadas.
 Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geometría/LSGOT_4_FINAL
 
 [PASS] CHECK 1 — Integridad del MANIFEST_SHA256
-         entradas en el MANIFEST: 66
+         entradas en el MANIFEST: 74
          hashes que no coinciden: 0
          archivos declarados y ausentes: 0
          archivos en el árbol y fuera del MANIFEST: 0
@@ -112,6 +112,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
          alias ambiguo axis_nowit     desambiguado -> PASS
 
 [PASS] CHECK 9 — Cada evidence/ citado por un paper
+         BERG_LEXICAL_RESULTS.md: citado por arxiv_lsgot_4.md
          COMMAND_R_VALIDATION_REPORT.md: citado por arxiv_lsgot_4.md
          QWEN3_VALIDATION_REPORT.md: citado por arxiv_lsgot_4.md
          SELF_AUDIT_REPORT.md: citado por arxiv_lsgot_4.md
@@ -126,6 +127,11 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
 [PASS] CHECK 12 — Sin rutas absolutas de una máquina
          ninguna ruta absoluta de una máquina, salvo el default declarado de LSGOT_TRAJ_ROOT
 
+[PASS] CHECK 13 — Números del paper respaldados por data/
+         JSON leídos: 25 · valores distintos: 3460
+         números citados en el paper: 670 (1 exentos y declarados)
+         todos tienen un archivo detrás
+
 ── RESUMEN ───────────────────────────────────────────────────────
   PASS  CHECK  1  Integridad del MANIFEST_SHA256
   PASS  CHECK  2  t=0 del panel vs t2_free_results.json
@@ -139,8 +145,9 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
   PASS  CHECK 10  Hashes hardcodeados en la documentación
   PASS  CHECK 11  Comandos citados en la documentación
   PASS  CHECK 12  Sin rutas absolutas de una máquina
+  PASS  CHECK 13  Números del paper respaldados por data/
 
-  12/12 PASS · 0 FAIL · 0 SKIP
+  13/13 PASS · 0 FAIL · 0 SKIP
 ```
 
 ---
@@ -161,6 +168,7 @@ Auto-auditoría LSGOT_4_FINAL — repo: /home/plaxius/Escritorio/Buscando_la_geo
 | 10 | Los sha256 hardcodeados en la documentación siguen coincidiendo | el árbol |
 | 11 | Los comandos citados: el script existe y acepta ese flag (`prereg/` exento, son registros fechados) | el árbol |
 | 12 | Ninguna ruta absoluta de una máquina en un archivo entregado | el árbol |
+| 13 | Todo número decimal citado en el paper existe en algún JSON de `data/` | `data/**/*.json` |
 
 Los valores esperados están declarados en el script con su fuente documental
 (sección del paper que los cita). Un FAIL no dice cuál de los dos lados está

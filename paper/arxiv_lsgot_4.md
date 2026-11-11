@@ -661,7 +661,7 @@ difference at all (§4.1).
 | Graph curvature (Δκ/W₁) | does curvature carry the signal? | simple baselines beat it 4/4, with both Forman-Ricci and genuine Ollivier-Ricci; no clean pattern in any of the three substrates | excluded from the framework |
 | RQA determinism | recurrence to similar states? | below the detection floor of the ε=10% threshold outside Gemma (no recurrent pair in 160 of 160 Command R trajectories); measurable in all three substrates at a fixed recurrence rate, but orders recovery failure only in Gemma (AUC 1.000, n=9) and not at all in Command R (ρ = 0.00 to +0.05, n=8) | excluded as a cross-model instrument |
 | First-token lexical control | do the effects survive controlling for the first generated word? | Jaccard down to 0.00, effect survives and strengthens | reassuring, not definitive |
-| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 12/12 checks pass on the package as released, all diffs < 0.005 | the numbers are the files' numbers |
+| Traceability self-audit | can every number cited in this paper be traced to a file in the package? | 13/13 checks pass on the package as released, all diffs < 0.005; the last of them holds every decimal in the text against the JSON in `data/` | the numbers are the files' numbers |
 
 Perturbation and recovery (τ, recovery_rate, Fréchet path fidelity) are **outside the scope
 of this paper**. In Gemma, seven of nine conditions recover to ~100% with or without the wired
@@ -1105,8 +1105,12 @@ Evidence package `LSGOT_4_FINAL` (77-entry SHA-256 manifest, `MANIFEST_SHA256.sh
 | `data/panel_results/t2_free_results.json`, `t2_eh2_results.json` | secondary pipeline (`jarvis`, `helena`, external `SOUL.md` set) |
 | `data/panel_results/responses/` | 10 × 20 panel responses, text only |
 | `data/v_identidad.npy` | v̂ for Gemma, shape (5376,), ‖v̂‖ = 1.0 |
+| `data/crossmodel/` | the Qwen3 and Command R phase-0 result files (§4.5), plus the recomputed `frac_pos` of the Qwen3 re-run (§4.4) |
+| `data/derived/derived_stats.json` | every quantity the paper *derives* rather than reads — rank correlations, ranges, ratios, percentages, the two Berg `d` values and the permutation floors |
+| `data/lexical/berg_lexical_expA.json` | the `evil`/`ethical` contrast of §4.2, transcribed from the report with its provenance declared |
 | `paper/figures/` | Figures 1 and 2, `.png` and `.pdf` |
 | `scripts/figures/` | The two scripts that render them from the shipped JSON (CPU, matplotlib) |
+| `scripts/derived/` | `compute_derived.py` (stdlib only) and `recompute_qwen3_frac_pos.py`, which regenerate the two files above |
 | `scripts/shared/` | `tier0_metrics.py` (metric definitions), `statistical_tests.py`, `selfaudit.py` (the traceability audit, stdlib only) |
 | `scripts/t0_native/` | the four scripts of §4.7: direction construction, the operator-equality re-test, the §4.2/§4.3 pillars, and the foreign-pole test (CPU only, ~16 min total) |
 | `data/t0_native/` | their JSON outputs, including the full 6×6 cosine matrix and every per-condition projection on all six directions |
@@ -1117,11 +1121,12 @@ Hidden-state tensors (hundreds of MB per run) are not redistributed; they are re
 the prompts and the question set on one A100/H100 80 GB. Analysis is CPU-only given the NPZ
 files.
 
-**Outside the curated package.** One section draws on a report that lives in the project tree
-but not in `LSGOT_4_FINAL`: `BERG_LEXICAL_RESULTS.md`, the source for §4.2 (the `evil`/`ethical`
-contrast, the shared-direction and cosine analysis, the t=0 convention check). Its raw files
-(the `expA_t0` and `berg_free` tensors) are not in the release either. Those should be added,
-or §4.2's lexical material cut back to what the package supports.
+**One source is a transcription, and it is labelled as one.** §4.2's `evil`/`ethical` contrast
+comes from `evidence/BERG_LEXICAL_RESULTS.md`, now shipped with the package, and its figures are
+in `data/lexical/berg_lexical_expA.json`. That JSON is a transcription of the report's table, not
+a recomputation: the `expA_t0` tensors are not in the release and are not in the project tree
+either, so the chain of custody for those four numbers ends at the report rather than at a
+tensor. The file says so in its own `_provenance` field.
 
 Also not included, and cited as prior work rather than evidence:
 `CURVATURE_SELF_AUDIT_REPORT.md`, `T2_REPLICATION_REPORT.md`, `LSGOT_v2_5.md` (the original
@@ -1212,7 +1217,7 @@ d=−1.87, p<0.001 at n=1,000).
 
 Every number cited in this paper is checked against the file it comes from by `scripts/shared/selfaudit.py`, which uses only the Python standard library (no
 numpy, no GPU) and exits non-zero on any failure, so it can run in CI. The package as released
-passes **12/12**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
+passes **13/13**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
 
 | # | Check | Source of truth |
 |---|---|---|
@@ -1228,15 +1233,16 @@ passes **12/12**; the output is reproduced in `evidence/SELF_AUDIT_REPORT.md`.
 | 10 | Every sha256 written by hand into the documentation still matches its file | the tree |
 | 11 | Every `python <script> --flag` quoted in a bash block of a `.md` exists and accepts that flag | the tree |
 | 12 | No absolute local path appears in any shipped file | the tree |
+| 13 | Every decimal number cited in the paper exists in some JSON under `data/` | `data/**/*.json` |
 
 Expected values are declared in the script together with the document section that cites them,
 so a failure says the two sides disagree without deciding which one is wrong.
 
-**Why checks 7 to 12 exist.** An earlier version of this audit was a hand-written transcript
+**Why checks 7 to 13 exist.** An earlier version of this audit was a hand-written transcript
 of terminal commands. It reported 56 manifest entries when the manifest held 61, and the output
 it quoted as evidence named a documentation path absent from the whole package — a path four
 documents cited, one of them inside a command a reader would copy and run. Both are now checks
-rather than prose, so the same class of drift fails the build. Checks 9 to 12 extend the same
+rather than prose, so the same class of drift fails the build. Checks 9 to 13 extend the same
 principle from the documentation to the contents: an evidence report no paper cites does not
 ship, and a checksum written by hand into a reproduction command has to still match — that last
 one had already gone stale for the paper's own hash, inside a command a reader would copy. Two exclusions are declared rather than

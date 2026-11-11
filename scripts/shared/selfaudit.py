@@ -467,6 +467,85 @@ def check_no_local_paths(repo):
     record(12, "Sin rutas absolutas de una máquina", ok, detail)
 
 
+# ─── CHECK 13 · todo número del paper sale de un JSON de data/ ───────────────
+
+def check_numbers_have_data(repo):
+    """La regla del paquete: **todo número decimal citado en el paper tiene que
+    existir en algún JSON de `data/`**.
+
+    No verifica que el número signifique lo que el paper dice que significa —eso
+    lo hacen los CHECK 2 a 4, que saben qué celda mirar— sino que ninguna cifra
+    haya entrado al texto sin un archivo detrás. Es el chequeo que detecta la
+    cifra tipeada a mano, la heredada de un borrador y la que quedó cuando su
+    fuente salió del paquete.
+
+    La tolerancia es media unidad del último decimal **citado**, así que un
+    +0.117 del paper acepta un 0.11657 del JSON y rechaza un 0.118.
+    """
+    import re
+    vals = set()
+
+    def walk(o):
+        if isinstance(o, dict):
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+        elif isinstance(o, (int, float)) and not isinstance(o, bool):
+            vals.add(round(float(o), 6))
+
+    files = sorted((repo / "data").rglob("*.json"))
+    for f in files:
+        try:
+            walk(json.loads(f.read_text(encoding="utf-8")))
+        except Exception as exc:  # un JSON ilegible es un fallo, no un skip
+            return record(13, "Números del paper respaldados por data/", False,
+                          [f"{f.relative_to(repo)}: no se pudo leer ({exc})"])
+
+    # Lo que NO es una cita de un resultado y por eso no se busca en data/.
+    # Cada exención va con su motivo; la lista es corta a propósito.
+    EXEMPT = {
+        "9.999": "mantisa de 9.999×10⁻⁵ escrita en notación científica; el valor "
+                 "completo sí está en derived_stats.json",
+    }
+
+    doc = repo / "paper" / "arxiv_lsgot_4.md"
+    if not doc.exists():
+        return record(13, "Números del paper respaldados por data/", None,
+                      ["paper ausente"])
+
+    num = re.compile(r"[\u2212+-]?\d+\.\d+")
+    detail, bad, seen, exempted = [], [], 0, 0
+    for i, line in enumerate(doc.read_text(encoding="utf-8").split("\n"), 1):
+        for m in num.finditer(line):
+            tok = m.group(0).replace("\u2212", "-")
+            if not re.fullmatch(r"[-+]?\d+\.\d+", tok):
+                continue
+            x = float(tok)
+            if abs(x) > 1000:          # años, tamaños de modelo, conteos
+                continue
+            seen += 1
+            key = tok.lstrip("+-")
+            if key in EXEMPT:
+                exempted += 1
+                continue
+            tol = 0.5 * 10 ** (-len(tok.split(".")[1])) + 1e-9
+            if not any(abs(x - v) <= tol or abs(-x - v) <= tol for v in vals):
+                bad.append(f"L{i}: {tok} — en ninguna JSON de data/")
+
+    detail.append(f"JSON leídos: {len(files)} · valores distintos: {len(vals)}")
+    detail.append(f"números citados en el paper: {seen} "
+                  f"({exempted} exentos y declarados)")
+    if bad:
+        detail += bad[:40]
+        if len(bad) > 40:
+            detail.append(f"… y {len(bad) - 40} más")
+    else:
+        detail.append("todos tienen un archivo detrás")
+    record(13, "Números del paper respaldados por data/", not bad, detail)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", default=None)
@@ -486,6 +565,7 @@ def main():
     check_doc_hashes(repo)
     check_commands(repo)
     check_no_local_paths(repo)
+    check_numbers_have_data(repo)
 
     fails = [r for r in results if r[2] == "FAIL"]
     skips = [r for r in results if r[2] == "SKIP"]
